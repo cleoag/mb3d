@@ -82,7 +82,7 @@ implementation
 uses Mand, DivUtils, LightAdjust, Math, Calc, ImageProcess, MMSystem, CalcSR,
      CustomFormulas, DOF, Paint, CalcHardShadow, Interpolation, Maps, MapSequences;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TAniPreviewForm.WmThreadReady(var Msg: TMessage);
 begin

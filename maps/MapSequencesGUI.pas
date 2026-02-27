@@ -73,7 +73,7 @@ implementation
 uses
   Math, FileHandling;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TMapSequencesFrm.FirstImageEditExit(Sender: TObject);
 var

@@ -132,7 +132,7 @@ implementation
 uses FileHandling, Mand, HeaderTrafos, DivUtils, Math, LightAdjust, ImageProcess,
   BRInfoWindow;
 
-{$R *.dfm}
+{$R *.lfm}
 
 function MakeFilePointIndizes(P: TPoint; decimals: Integer; const BigRenderData: TBigRenderData): String;
 var s: String;

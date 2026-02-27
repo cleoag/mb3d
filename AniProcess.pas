@@ -86,7 +86,7 @@ implementation
 uses Animation, DivUtils, Mand, LightAdjust, TypeDefinitions,
   PostProcessForm, Math, Math3D;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TAniProcessForm.Button1Click(Sender: TObject);
 begin

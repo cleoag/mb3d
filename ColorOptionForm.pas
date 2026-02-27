@@ -34,7 +34,7 @@ var
 
 implementation
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TFColorOptions.Button1Click(Sender: TObject);
 begin

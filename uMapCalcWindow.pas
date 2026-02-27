@@ -38,7 +38,7 @@ implementation
 
 uses DivUtils, HeaderTrafos, Math, Calc, Maps, Mand;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TMapCalcWindow.Button1Click(Sender: TObject);
 begin

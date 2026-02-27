@@ -24,7 +24,7 @@ var
 
 implementation
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TBRInfoForm.FormShow(Sender: TObject);
 begin

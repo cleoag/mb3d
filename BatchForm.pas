@@ -55,7 +55,7 @@ implementation
 
 uses Mand, TypeDefinitions, FileHandling, CustomFormulas;
 
-{$R *.dfm}
+{$R *.lfm}
 
 const
   Caption_Start_Rendering = 'Start batch rendering';

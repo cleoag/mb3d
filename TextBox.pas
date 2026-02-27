@@ -28,7 +28,7 @@ implementation
 
 uses Mand, FileHandling, LightAdjust, Math;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TFTextBox.Button1Click(Sender: TObject);
 begin

@@ -189,7 +189,7 @@ implementation
 uses Mand, DOF, DivUtils, ImageProcess, DoubleSize, CalcPart, HeaderTrafos,
  CalcMonteCarlo, CalcSR, Math3D, Tiling, LightAdjust, FileHandling;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TPostProForm.HardShadowsBtnClick(Sender: TObject);
 begin

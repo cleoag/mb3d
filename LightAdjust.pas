@@ -407,7 +407,7 @@ uses Mand, CalcThread, DivUtils, Math, PaintThread, FileHandling, ImageProcess,
      Animation, ColorPick, Interpolation, Undo, PostProcessForm, HeaderTrafos,
      Maps, Navigator;
 
-{$R *.dfm}
+{$R *.lfm}
 
 {
     Loption:    Byte;              // bit1: 0: On  1: Off;  bit2: lightmap;  bit3 = bPosLight, bit4+5 = poslight visible+func, bit6 = global light rel to object, bit7 = HSon

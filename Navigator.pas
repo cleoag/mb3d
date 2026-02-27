@@ -346,7 +346,7 @@ uses NaviCalcThread, DivUtils, HeaderTrafos, Mand, Math, CustomFormulas,
   LightAdjust, FileHandling, Animation, FormulaGUI, Calc, ThreadUtils,
   MapSequences;
 
-{$R *.dfm}
+{$R *.lfm}
 
 {procedure TFNavigator.WndProc(var Message: TMessage);
 begin

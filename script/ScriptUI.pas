@@ -50,7 +50,7 @@ implementation
 
 uses Mand, Math3D, FileHandling, ScriptCompiler, CompilerUtil, DateUtils;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TScriptEditorForm.Compile( const DoRun: Boolean );
 var

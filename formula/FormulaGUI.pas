@@ -237,7 +237,7 @@ implementation
 uses Mand, CustomFormulas, DivUtils, Math, HeaderTrafos, FileHandling, formulas,
   PostProcessForm, Math3D, FormulaNames, JITFormulaEditGUI;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TFormulaGUIForm.UpdateFromHeader(Header: TPMandHeader10);
 begin

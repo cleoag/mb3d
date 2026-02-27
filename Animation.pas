@@ -220,7 +220,7 @@ uses Math, DivUtils, AniPreviewWindow, Calc, ImageProcess, AniProcess, CalcSR,
      CustomFormulas, DOF, Paint, CalcHardShadow, Interpolation, PaintThread,
      Navigator, Maps, MapSequences;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TAnimationForm.WmThreadReady(var Msg: TMessage);
 begin

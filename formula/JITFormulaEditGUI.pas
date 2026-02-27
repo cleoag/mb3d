@@ -143,7 +143,7 @@ var
 
 implementation
 
-{$R *.dfm}
+{$R *.lfm}
 uses
   CustomFormulas, FileHandling, ParamValueEditGUI, DivUtils, TypeDefinitions,
   FormulaCompiler, CompilerUtil;

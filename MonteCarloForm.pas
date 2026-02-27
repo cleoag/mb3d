@@ -218,7 +218,7 @@ uses Mand, Math3D, PaintThread, ImageProcess, HeaderTrafos, Tiling, CommDlg,
   PostProcessForm, DivUtils, CalcMonteCarlo, CustomFormulas, FileHandling,
   LightAdjust, Maps, Math, ColorOptionForm, DateUtils;
 
-{$R *.dfm}
+{$R *.lfm}
 
 const
   BatchPnlWidth = 262;

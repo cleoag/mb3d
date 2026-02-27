@@ -29,7 +29,7 @@ var
 
 implementation
 
-{$R *.dfm}
+{$R *.lfm}
 
 { Note: Vcl.Themes / TStyleManager is not available in LCL (Lazarus).
   LCL applications use native OS widget themes automatically.

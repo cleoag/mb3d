@@ -53,7 +53,7 @@ var
 
 implementation
 
-{$R *.dfm}
+{$R *.lfm}
 
 uses DivUtils, FileHandling, Mand, LightAdjust, Animation, FormulaGUI,
   Tiling, VoxelExport, MonteCarloForm, BulbTracer2UI;

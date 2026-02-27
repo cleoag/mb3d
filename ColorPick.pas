@@ -113,7 +113,7 @@ implementation
 
 uses Mand, LightAdjust, Math, Math3D, DivUtils, Interpolation, HeaderTrafos;
 
-{$R *.dfm}
+{$R *.lfm}
 
 function GetIntensity(var StartI: Integer): LongBool;
 var s: String;

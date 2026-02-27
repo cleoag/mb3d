@@ -556,7 +556,7 @@ uses Math, DivUtils, ImageProcess, ClipBrd, ShellAPI, FileCtrl, formulas,
      MapSequencesGUI, MapSequences, BulbTracer2UI, ScriptUI, HeightMapGenUI,
      ZBuf16BitGenUI;
 
-{$R *.dfm}
+{$R *.lfm}
 
 function TMand3DForm.GetCalcRect: TRect;
 var //TileRect: TRect;
