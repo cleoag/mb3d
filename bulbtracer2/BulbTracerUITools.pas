@@ -20,7 +20,7 @@ unit BulbTracerUITools;
 interface
 
 uses
-  Vcl.ComCtrls, BulbTracer2Config;
+  ComCtrls, BulbTracer2Config;
 
 type
   TMeshSaveType = (stMeshAsPly, stMeshAsObj, stBTracer2Data, stNoSave);

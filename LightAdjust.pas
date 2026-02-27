@@ -8,7 +8,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ComCtrls, ExtCtrls, Buttons, TypeDefinitions, Math3D,
-  Menus, TrackBarEx, Vcl.ImgList, Vcl.ExtDlgs;
+  Menus, TrackBarEx, ImgList, ExtDlgs;
 
 type
   TLightAdjustForm = class(TForm)

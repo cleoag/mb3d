@@ -5,7 +5,7 @@ unit ZBuf16BitGen;
 interface
 
 uses
-  Windows, SysUtils, Classes, Vcl.Graphics, Math;
+  Windows, SysUtils, Classes, Graphics, Math;
 
 type
   TZBufInfo = packed record

@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, StdCtrls, Buttons, TypeDefinitions, Menus, Vcl.ComCtrls;
+  Dialogs, ExtCtrls, StdCtrls, Buttons, TypeDefinitions, Menus, ComCtrls;
 
 type
   TTilingForm = class(TForm)

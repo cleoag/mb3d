@@ -20,7 +20,7 @@ unit OpenGLPreviewUtil;
 interface
 
 uses
-  SysUtils, Classes, Windows, dglOpenGL, Vcl.Graphics, VertexList, VectorMath;
+  SysUtils, Classes, Windows, dglOpenGL, Graphics, VertexList, VectorMath;
 
 type
   TDisplayStyle = (dsPoints, dsWireframe, dsFlatSolid, dsFlatSolidWithEdges, dsSmoothSolid, dsSmoothSolidWithEdges);

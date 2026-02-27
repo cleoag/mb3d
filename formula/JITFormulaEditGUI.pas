@@ -20,9 +20,9 @@ unit JITFormulaEditGUI;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
-  JITFormulas, Vcl.Buttons;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, Dialogs, StdCtrls, ComCtrls, ExtCtrls,
+  JITFormulas, Buttons;
 
 type
   TEditMode = (emNew, emEdit, emError);

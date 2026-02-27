@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, TypeDefinitions, StdCtrls, Buttons, Vcl.ComCtrls,
+  Dialogs, ExtCtrls, TypeDefinitions, StdCtrls, Buttons, ComCtrls,
   TrackBarEx;
 
 type

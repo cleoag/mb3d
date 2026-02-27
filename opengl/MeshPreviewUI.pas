@@ -20,9 +20,9 @@ unit MeshPreviewUI;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, MeshPreview, VertexList, Vcl.ExtCtrls,
-  Vcl.Buttons, Vcl.StdCtrls, VectorMath, Vcl.ComCtrls, JvExExtCtrls,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, Dialogs, MeshPreview, VertexList, ExtCtrls,
+  Buttons, StdCtrls, VectorMath, ComCtrls, JvExExtCtrls,
   JvExtComponent, JvOfficeColorButton, JvExControls, JvColorBox, JvColorButton,
   SpeedButtonEx, BulbTracerUITools;
 

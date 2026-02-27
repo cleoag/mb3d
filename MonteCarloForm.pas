@@ -6,8 +6,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, M3Iregister,
-  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, TypeDefinitions, Vcl.ExtDlgs,
-  Vcl.ImgList, Vcl.Grids, Contnrs;
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, TypeDefinitions, ExtDlgs,
+  ImgList, Grids, Contnrs;
 
 type
   TBatchEntry = class;

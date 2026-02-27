@@ -6,8 +6,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, TypeDefinitions, ComCtrls, Vcl.ImgList,
-  Vcl.Buttons;
+  Dialogs, StdCtrls, ExtCtrls, TypeDefinitions, ComCtrls, ImgList,
+  Buttons;
 
 type
   TPostProForm = class(TForm)

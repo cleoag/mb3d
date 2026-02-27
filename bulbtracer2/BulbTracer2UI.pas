@@ -22,7 +22,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, Buttons, TypeDefinitions, ComCtrls,
-  Contnrs, VertexList, BulbTracer2Config, Vcl.Tabs, BulbTracerUITools,
+  Contnrs, VertexList, BulbTracer2Config, Tabs, BulbTracerUITools,
   JvExStdCtrls, JvGroupBox, TrackBarEx, ObjectScanner2, Generics.Collections,
   SyncObjs, MeshIOUtil;
 

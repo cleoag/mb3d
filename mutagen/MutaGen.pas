@@ -20,7 +20,7 @@ unit MutaGen;
 interface
 
 uses
-  Windows, SysUtils, Classes, Vcl.ExtCtrls, Vcl.Graphics, MB3DFacade, FormulaNames;
+  Windows, SysUtils, Classes, ExtCtrls, Graphics, MB3DFacade, FormulaNames;
 
 type
 
