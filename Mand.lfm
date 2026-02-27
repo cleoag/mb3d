@@ -438,7 +438,6 @@ object Mand3DForm: TMand3DForm
       Font.Height = -12
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      HotTrack = True
       MultiLine = True
       ParentBiDiMode = False
       ParentFont = False
@@ -446,7 +445,7 @@ object Mand3DForm: TMand3DForm
       OnChange = PageControl1Change
       object TabSheet2: TTabSheet
         Caption = 'Calculation'
-        Highlighted = True
+
         ImageIndex = 1
         object Label16: TLabel
           Left = 4

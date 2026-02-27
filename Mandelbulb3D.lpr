@@ -3,6 +3,7 @@ program Mandelbulb3D;
 {$mode delphi}
 
 uses
+  SysUtils,
   Interfaces, // LCL widgetset
   Forms,
   Mand in 'Mand.pas' {Mand3DForm},
@@ -95,37 +96,45 @@ uses
 {$R *.res}
 
 begin
-  Application.Initialize;
-  Application.Title := 'Mandelbulb 3D';
-  Application.CreateForm(TMand3DForm, Mand3DForm);
-  Application.CreateForm(TLightAdjustForm, LightAdjustForm);
-  Application.CreateForm(TFNavigator, FNavigator);
-  Application.CreateForm(TAnimationForm, AnimationForm);
-  Application.CreateForm(TAniPreviewForm, AniPreviewForm);
-  Application.CreateForm(TAniProcessForm, AniProcessForm);
-  Application.CreateForm(TMapSequencesFrm, MapSequencesFrm);
-  Application.CreateForm(TFormulaGUIForm, FormulaGUIForm);
-  Application.CreateForm(TColorForm, ColorForm);
-  Application.CreateForm(TBatchForm1, BatchForm1);
-  Application.CreateForm(TBulbTracer2Frm, BulbTracer2Frm);
-  Application.CreateForm(TFormulaEditor, FormulaEditor);
-  Application.CreateForm(TTilingForm, TilingForm);
-  Application.CreateForm(TMCForm, MCForm);
-  Application.CreateForm(TFTextBox, FTextBox);
-  Application.CreateForm(TBRInfoForm, BRInfoForm);
-  Application.CreateForm(TScriptEditorForm, ScriptEditorForm);
-  Application.CreateForm(TFColorOptions, FColorOptions);
-  Application.CreateForm(TMapCalcWindow, MapCalcWindow);
-  Application.CreateForm(TMutaGenFrm, MutaGenFrm);
-  Application.CreateForm(TIniDirForm, IniDirForm);
-  Application.CreateForm(TVisualThemesFrm, VisualThemesFrm);
-  Application.CreateForm(TJITFormulaEditorForm, JITFormulaEditorForm);
-  Application.CreateForm(TParamValueEditFrm, ParamValueEditFrm);
-  Application.CreateForm(TFVoxelExport, FVoxelExport);
-  Application.CreateForm(TMeshPreviewFrm, MeshPreviewFrm);
-  Application.CreateForm(THeightMapGenFrm, HeightMapGenFrm);
-  Application.CreateForm(TPostProForm, PostProForm);
-  Application.CreateForm(TZBuf16BitGenFrm, ZBuf16BitGenFrm);
-  //SuppressMessageBoxes := True;
-  Application.Run;
+  try
+    Application.Initialize;
+    Application.Title := 'Mandelbulb 3D';
+    Application.CreateForm(TMand3DForm, Mand3DForm);
+    Application.CreateForm(TLightAdjustForm, LightAdjustForm);
+    Application.CreateForm(TFNavigator, FNavigator);
+    Application.CreateForm(TAnimationForm, AnimationForm);
+    Application.CreateForm(TAniPreviewForm, AniPreviewForm);
+    Application.CreateForm(TAniProcessForm, AniProcessForm);
+    Application.CreateForm(TMapSequencesFrm, MapSequencesFrm);
+    Application.CreateForm(TFormulaGUIForm, FormulaGUIForm);
+    Application.CreateForm(TColorForm, ColorForm);
+    Application.CreateForm(TBatchForm1, BatchForm1);
+    Application.CreateForm(TBulbTracer2Frm, BulbTracer2Frm);
+    Application.CreateForm(TFormulaEditor, FormulaEditor);
+    Application.CreateForm(TTilingForm, TilingForm);
+    Application.CreateForm(TMCForm, MCForm);
+    Application.CreateForm(TFTextBox, FTextBox);
+    Application.CreateForm(TBRInfoForm, BRInfoForm);
+    Application.CreateForm(TScriptEditorForm, ScriptEditorForm);
+    Application.CreateForm(TFColorOptions, FColorOptions);
+    Application.CreateForm(TMapCalcWindow, MapCalcWindow);
+    Application.CreateForm(TMutaGenFrm, MutaGenFrm);
+    Application.CreateForm(TIniDirForm, IniDirForm);
+    Application.CreateForm(TVisualThemesFrm, VisualThemesFrm);
+    Application.CreateForm(TJITFormulaEditorForm, JITFormulaEditorForm);
+    Application.CreateForm(TParamValueEditFrm, ParamValueEditFrm);
+    Application.CreateForm(TFVoxelExport, FVoxelExport);
+    Application.CreateForm(TMeshPreviewFrm, MeshPreviewFrm);
+    Application.CreateForm(THeightMapGenFrm, HeightMapGenFrm);
+    Application.CreateForm(TPostProForm, PostProForm);
+    Application.CreateForm(TZBuf16BitGenFrm, ZBuf16BitGenFrm);
+    //SuppressMessageBoxes := True;
+    Application.Run;
+  except
+    on E: Exception do
+    begin
+      Application.ShowException(E);
+      Halt(1);
+    end;
+  end;
 end.

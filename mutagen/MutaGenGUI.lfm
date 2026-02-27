@@ -454,7 +454,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -487,7 +486,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_2: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -520,7 +518,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_1: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -553,7 +550,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_2_2: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -586,7 +582,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_2_1: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -619,7 +614,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_1_2: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -652,7 +646,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_1_1: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -685,7 +678,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_2_2_2: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -718,7 +710,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_2_2_1: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -751,7 +742,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_1_2_2: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -784,7 +774,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_1_2_1: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -817,7 +806,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_1_1_1: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -850,7 +838,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_1_1_2: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -883,7 +870,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_2_1_2: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38
@@ -916,7 +902,6 @@ object MutaGenFrm: TMutaGenFrm
       VerticalAlignment = taAlignBottom
       OnDblClick = Panel_1DblClick
       object Image_1_2_1_1: TImage
-        AlignWithMargins = True
         Left = 6
         Top = 6
         Width = 38

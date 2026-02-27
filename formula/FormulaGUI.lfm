@@ -902,7 +902,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Width = 293
       Height = 369
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Font.Charset = DEFAULT_CHARSET
@@ -967,7 +966,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -994,7 +992,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1017,7 +1014,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1040,7 +1036,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1063,7 +1058,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1092,7 +1086,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1121,7 +1114,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1150,7 +1142,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1179,7 +1170,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1208,7 +1198,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1237,7 +1226,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
@@ -1266,7 +1254,6 @@ object FormulaGUIForm: TFormulaGUIForm
       Style = lbOwnerDrawFixed
       AutoComplete = False
       BevelInner = bvSpace
-      BevelKind = bkFlat
       BevelOuter = bvRaised
       BorderStyle = bsNone
       Enabled = False
