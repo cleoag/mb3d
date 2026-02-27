@@ -323,8 +323,8 @@ end;
 asm                      //eax                     edx
     push esi                          //ecx can be changed in functions!
     push ebx                          //the whale2 testpars were bad
-    lea  esi, eax + 136
-    lea  ebx, edx + 180
+    lea  esi, [eax + 136]
+    lea  ebx, [edx + 180]
     cmp  dword [esi + TIteration3Dext.DEoption - 136], 20   //TMCTparameter
     jnz  @1
     fld  dword [ebx + TMCTparameter.msDEstop - 180]
@@ -333,7 +333,7 @@ asm                      //eax                     edx
     fstp qword [esi + TIteration3Dext.RStopD - 136]
     mov  eax, [ebx + TMCTparameter.bInsideRendering - 180]
     mov  [esi + TIteration3Dext.bIsInsideRender - 136], eax
-@1: lea  eax, esi + TIteration3Dext.C1 - 136
+@1: lea  eax, [esi + TIteration3Dext.C1 - 136]
     call dword [ebx + TMCTparameter.mMandFunctionDE - 180]
     fmul dword [ebx + TMCTparameter.dDEscale - 180]
     mov  eax, [esi + TIteration3Dext.MaxIt - 136]
@@ -1129,7 +1129,7 @@ asm
     push edx
     cvtpi2pd xmm7, [esp]  //xx,yy
     mov  ecx, dword [eax + TMCTparameter.pIt3Dext - $78]  //+68
-    lea  edx, eax + $78   //TMCTparameter.Ystart
+    lea  edx, [eax + $78]   //TMCTparameter.Ystart
     movapd   xmm6, xmm7
     unpckhpd xmm7, xmm7   //yy,yy
     unpcklpd xmm6, xmm6   //xx,xx
@@ -1155,7 +1155,7 @@ asm
     push edx
     fild dword [esp]  //xx,yy
     mov  ecx, dword [eax + TMCTparameter.pIt3Dext - $78]  //+68
-    lea  edx, eax + $78 //TMCTparameter.Ystart
+    lea  edx, [eax + $78] //TMCTparameter.Ystart
     fld  qword [eax + TMCTparameter.Vgrads - $78]
     fmul st, st(1)
     fld  qword [eax + TMCTparameter.Vgrads - $78 + 24]
@@ -1226,7 +1226,7 @@ asm
     push ebx
     push esi
     push edx  //to store ix in [esp] and fiload  (esp := esp-4)
-    lea  ebx, eax + $1a0
+    lea  ebx, [eax + $1a0]
     fild dword [esp]  //ix
     fsubr dword [ebx + TMCTparameter.FOVXoff - $1a0]
     fmul dword [ebx + TMCTparameter.FOVXmul - $1a0]
@@ -1478,7 +1478,7 @@ begin
     xor  esi, esi
     mov  [edx], esi
     mov  [edx+4], esi
-    lea  ebx, eax+TMCTparameter.iCutOptions
+    lea  ebx, [eax+TMCTparameter.iCutOptions]
     cmp  ebx, 0
     jle  @@1
     mov  esi, eax
@@ -1535,7 +1535,7 @@ asm
     add esp, -24
     mov edi, [eax+TMCTparameter.mPsiLight] //PSL
     mov esi, edx   //cutplane
-    lea ebx, eax + 128   //MCTparas
+    lea ebx, [eax + 128]   //MCTparas
     test esi, esi  //if cutplane>0
     jle @@1
     fld1
@@ -1706,7 +1706,7 @@ asm
   push ebp
   add  esp, -8
   mov  edi, edx  //@dTmp
-  lea  esi, eax+$38 //@MCTParas (was:qTMandCalcThread)
+  lea  esi, [eax+$38] //@MCTParas (was:qTMandCalcThread)
   mov  ebx, [esi+TMCTparameter.pIt3Dext-$38]
 {  mov  eax, [esi+TMCTparameter.iMaxit-$38]
   mov  [esp+8], eax
@@ -1734,8 +1734,8 @@ asm
   fstp qword [esi+TMCTparameter.mZZ-$38] //+$68
  { push dword [esp+4]
   push dword [esp+4]
-  lea  edx, esi+TMCTparameter.mVgradsFOV-$38
-  lea  eax, ebx+TIteration3Dext.C1       //+$68
+  lea  edx, [esi+TMCTparameter.mVgradsFOV-$38]
+  lea  eax, [ebx+TIteration3Dext.C1]       //+$68
   call mAddVecWeight  }
     fld  qword [esi+TMCTparameter.mVgradsFOV-$38]
     fld  qword [esi+TMCTparameter.mVgradsFOV-$38 + 8]
@@ -1760,9 +1760,9 @@ asm
   dec  ebp
   test ebp, ebp
   jle  @@3
-  lea  edx, esi-$38
+  lea  edx, [esi-$38]
   mov  eax, ebx
-  call esi+TMCTparameter.CalcDE-$38
+  call [esi+TMCTparameter.CalcDE-$38]  // FPC: indirect call requires brackets
   fstp qword [edi]  //dTmp
  { mov  eax, [ebx+TIteration3Dext.ItResultI]
   cmp  eax, [esi+TMCTparameter.MaxItsResult-$38]

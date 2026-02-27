@@ -433,9 +433,9 @@ begin
                         mov   esi, PATL
                         lea   edi, zp4
                         cvtsi2ss xmm4, RadS
-                        movzx ax, [esi]
+                        movzx ax, byte [esi]
                         rsqrtss  xmm4, xmm4
-                        movzx bx, [esi + 2]
+                        movzx bx, byte [esi + 2]
                         mulss   xmm7, xmm4
                         sub   eax, [edi]
                         sub   ebx, [edi + 4]
@@ -443,8 +443,8 @@ begin
                         shufps   xmm4, xmm4, 0
                         cvtsi2ss xmm0, eax
                         cvtsi2ss xmm1, ebx
-                        movzx ax, [esi + 4]
-                        movzx bx, [esi + 6]
+                        movzx ax, byte [esi + 4]
+                        movzx bx, byte [esi + 6]
                         sub   eax, [edi + 8]
                         sub   ebx, [edi + 12]
                         cvtsi2ss xmm2, eax
@@ -503,16 +503,16 @@ begin
                         mov   esi, PATL
                         lea   edi, zp4
                         cvtsi2ss xmm4, RadS
-                        movzx ax, [esi]
+                        movzx ax, byte [esi]
                         sqrtss  xmm4, xmm4
-                        movzx bx, [esi + 2]
+                        movzx bx, byte [esi + 2]
                         sub   eax, [edi]
                         sub   ebx, [edi + 4]
                         shufps   xmm4, xmm4, 0
                         cvtsi2ss xmm0, eax
                         cvtsi2ss xmm1, ebx
-                        movzx ax, [esi + 4]
-                        movzx bx, [esi + 6]
+                        movzx ax, byte [esi + 4]
+                        movzx bx, byte [esi + 6]
                         sub   eax, [edi + 8]
                         sub   ebx, [edi + 12]
                         cvtsi2ss xmm2, eax

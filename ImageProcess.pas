@@ -707,7 +707,7 @@ begin
           dec   ebx
           mov   y2, ebx
           mov   edi, PC1
-          lea   eax, ebx * 4 - 1
+          lea   eax, [ebx * 4 - 1]   // FPC: lea requires brackets
           mov   itmp, eax
    @@0:   mov   ecx, wid
           mov   w2, ecx
@@ -769,7 +769,7 @@ begin
           mov   ebx, wid
           mov   w2, ebx
           shl   ebx, 2
-          lea   ebx, ebx * 2 + ebx
+          lea   ebx, [ebx * 2 + ebx]  // FPC: lea requires brackets
           mov   edi, PBh
    @ll:   mov   ecx, y2
           mov   esi, edx
@@ -2220,7 +2220,7 @@ begin
       mov  eax, s1p
       mov  edx, s1r
       mov  esi, ps
-      lea  ebx, eax + 2 * eax     //ebx = 3 * s1p
+      lea  ebx, [eax + 2 * eax]   //ebx = 3 * s1p  // FPC: lea requires brackets
       lea  edi, outs
       mov  ecx, [esi + eax]
       mov  [edi], ecx             //outs[0] := ps[+1pix]^

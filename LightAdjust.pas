@@ -809,7 +809,7 @@ begin //new function for tabs[0..(127)255]  (62)122 is midpoint=0 of DotP
       mov edx, Tnr
       shl edx, 7
       add edx, ip
-      lea eax, DiffCosTabNsmall + edx * 4
+      lea eax, [DiffCosTabNsmall + edx * 4]  // FPC: lea requires brackets
       movups xmm2, w
       movups xmm0, [eax]
       movups xmm1, [eax + $800]
@@ -862,7 +862,7 @@ begin //new function for tabs[0..127]  62 is midpoint=0 of DotP
       mov edx, Tnr
       shl edx, 7
       add edx, ip
-      lea eax, DiffCosTabNsmall + edx * 4
+      lea eax, [DiffCosTabNsmall + edx * 4]  // FPC: lea requires brackets
       movups xmm2, w
       movups xmm0, [eax]
       movups xmm1, [eax + $800]

@@ -26,6 +26,7 @@
 unit CRC32Stream;
 
 {$mode delphi}
+{$asmmode intel}
 
 interface
 
@@ -139,7 +140,11 @@ asm
   xor al, dl
   // calculate offset in crc-table
   shl  eax, 2
+{$IFDEF FPC}
+  lea  ebx, CrcTable           // FPC: OFFSET not supported, use lea instead
+{$ELSE}
   mov  ebx, OFFSET CrcTable
+{$ENDIF}
   add  ebx, eax
   // get crc data
   mov  eax, [ebx]

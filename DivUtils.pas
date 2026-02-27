@@ -130,7 +130,11 @@ implementation
 
 uses SysUtils, Math, formulas, Forms, HeaderTrafos, Mand, Graphics, Maps;
 
-{$CODEALIGN 16}
+{$IFDEF FPC}
+  {$CODEALIGN PROC=16}
+{$ELSE}
+  {$CODEALIGN 16}
+{$ENDIF}
 
 procedure SaveHeaderPointers(Header: TPMandHeader10; var p6: TP6);
 var i: Integer;
@@ -1574,7 +1578,7 @@ asm
 @@LargeDone:
   ret
 @@M01:
-  movzx   ecx, [eax]
+  movzx   ecx, byte [eax]  // FPC: explicit size specifier needed for movzx
   mov     [edx], cl
   ret
 @@M02:

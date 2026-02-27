@@ -2658,7 +2658,7 @@ asm
   push  edi                   //x = edi-32  y = edi-24 ..  Rold = edi - 48, Rstop = edi - 40, (i = edi + 212 = btmp = esi - 44)
   add   esp, -72
   mov   edi, eax              //was: Rold = esp, Rstop = esp + 8, aligned16: esp + 16,  X1 = a16  X2 = a16+8..  Y1 = a16+32 ..
-  lea   esi, eax + 256
+  lea   esi, [eax + 256]
   mov   eax, esp
   add   eax, 35
   and   eax, $FFFFFFF0
@@ -2704,10 +2704,10 @@ asm
   movapd  [eax], xmm0
   movapd  [eax + 16], xmm1
 
-  lea   eax, edi - 32         // x
-  lea   edx, edi - 24         // y
-  lea   ecx, edi - 16         // z
-  lea   ebx, edi - 8          // w
+  lea   eax, [edi - 32]         // x
+  lea   edx, [edi - 24]         // y
+  lea   ecx, [edi - 16]         // z
+  lea   ebx, [edi - 8]          // w
   push  ebx
   push  edi
   call  [edi + 124]           //fHybrid[0] of ThybridIteration2
@@ -2724,10 +2724,10 @@ asm
 
   mov   ebx, [edi + 104]      //fHPVar[1]
   mov   [edi + 48], ebx       //PVars:    +48
-  lea   eax, edi - 32         // x
-  lea   edx, edi - 24         // y
-  lea   ecx, edi - 16         // z
-  lea   ebx, edi - 8          // w
+  lea   eax, [edi - 32]         // x
+  lea   edx, [edi - 24]         // y
+  lea   ecx, [edi - 16]         // z
+  lea   ebx, [edi - 8]          // w
   push  ebx
   push  edi
   call  [edi + 128]           //fHybrid[1] of ThybridIteration2
@@ -2874,7 +2874,7 @@ asm
   push  edi                   //x = edi-32  y = edi-24 ..  Rold = edi - 48, Rstop = edi - 40, i = edi + 212 = btmp = esi - 44
   add   esp, -72
   mov   edi, eax              //was: Rold = esp, Rstop = esp + 8, aligned16: esp + 16,  X1 = a16  X2 = a16+8..  Y1 = a16+32 ..
-  lea   esi, eax + 256
+  lea   esi, [eax + 256]
   mov   eax, esp
   add   eax, 35              
   and   eax, $FFFFFFF0
@@ -2931,10 +2931,10 @@ asm
   movapd  [eax], xmm0
   movapd  [eax + 16], xmm1
 
-  lea   eax, edi - 32         // x
-  lea   edx, edi - 24         // y
-  lea   ecx, edi - 16         // z
-  lea   ebx, edi - 8          // w
+  lea   eax, [edi - 32]         // x
+  lea   edx, [edi - 24]         // y
+  lea   ecx, [edi - 16]         // z
+  lea   ebx, [edi - 8]          // w
   push  ebx
   push  edi
   call  [edi + 124]           //fHybrid[0] of ThybridIteration2
@@ -2951,10 +2951,10 @@ asm
 
   mov   ebx, [edi + 104]      //fHPVar[1]
   mov   [edi + 48], ebx       //PVars:    +48
-  lea   eax, edi - 32         // x
-  lea   edx, edi - 24         // y
-  lea   ecx, edi - 16         // z
-  lea   ebx, edi - 8          // w
+  lea   eax, [edi - 32]         // x
+  lea   edx, [edi - 24]         // y
+  lea   ecx, [edi - 16]         // z
+  lea   ebx, [edi - 8]          // w
   push  ebx
   push  edi
   call  [edi + 128]           //fHybrid[1] of ThybridIteration2
@@ -3218,12 +3218,12 @@ asm
     push  edx
     push  esi
     push  edi                   //x = esi-128  y = esi-120 .. btmp = esi+116  (eax+212)
-    lea   esi, eax + 88         
+    lea   esi, [eax + 88]         
     movupd  xmm0, [eax]         
     movsd   xmm1, [eax + 16]
     movupd  [eax - 32], xmm0    //X=Cx
     movsd   [eax - 16], xmm1
-    lea   edx, esi + 128
+    lea   edx, [esi + 128]
     cmp   dword [esi + 64], 0   //DoJulia:+152
     jz    @sjup
     movupd  xmm0, [edx + 104]   //J=Ju  +320  -88=+232 -128=104
@@ -3271,7 +3271,7 @@ asm
     mov   eax, [esi - 24]
     ucomisd xmm0, [esi + 104]   // memorize the smallest DE for itresult
     jnc   @skip
-    lea   edx, esi + 104
+    lea   edx, [esi + 104]
     mov   [esi + 124], eax      //  bTmp:       Integer;    //+212
     fld   qword [edx + TIteration3Dext.Dfree1 - 144-104]  //+128
     movsd [edx], xmm0           //result DE output
@@ -3308,7 +3308,7 @@ asm
     push  edx
     push  esi
     push  edi                   //x = esi-128  y = esi-120 .. btmp = esi+116  (eax+212)
-    lea   esi, eax + 88         //
+    lea   esi, [eax + 88]         //
     xor   ebx, ebx              //n:=0
     mov   eax, [esi + 296]
     mov   [esi + 120], ebx      //bFirstIt  := 0; +208
@@ -3350,7 +3350,7 @@ asm
     mov   eax, [esi - 24]
     ucomisd xmm0, [esi + 104]   // memorize the smallest DE for itresult
     jnc   @skip
-    lea   edx, esi + 104
+    lea   edx, [esi + 104]
     mov   [esi + 124], eax      //  bTmp:       Integer;    //+212
     fld   qword [edx + TIteration3Dext.Dfree1 - 144-104]  //+128   otrap color option
     movsd [edx], xmm0           //result DE output
@@ -3589,9 +3589,9 @@ asm
   push  esi
   push  edi                   //x = edi-32  y = edi-24 ..  Rold = edi - 48, Rstop = edi - 40, i = edi + 212 = btmp = esi - 44
   mov   edi, eax
-  lea   esi, eax + 256
+  lea   esi, [eax + 256]
 
-  lea   edx, edi -32
+  lea   edx, [edi -32]
   mov   ecx, esi
   call  Rotate4Dex            //(@C1, @x, SMatrix4);   C1=It3D=eax
 
@@ -3646,11 +3646,11 @@ asm
   mov   eax, [edi + ebx * 4 + 100]  //fHPVar:array[0..5] of Pointer;
   mov   [edi + 48], eax       //PVars: +48
 @up2:
-  lea   eax, edi - 8          //was: esp + 24   w
+  lea   eax, [edi - 8]          //was: esp + 24   w
   push  eax
   push  edi
-  lea   edx, edi - 24         //was: esp + 16   y
-  lea   ecx, edi - 16         //was: esp + 24   z
+  lea   edx, [edi - 24]         //was: esp + 16   y
+  lea   ecx, [edi - 16]         //was: esp + 24   z
   add   eax, -24              // x
   call  [edi + ebx * 4 + 124] //fHybrid[0..5] of ThybridIteration2; //+124
   dec   [esi - 44]            //Dec(i)   write at addr... false dIFS??
@@ -3751,7 +3751,7 @@ asm
   push  esi
   push  edi                   //x = edi-32  y = edi-24 ..  Rold = edi - 48, Rstop = edi - 40, (i = edi + 212 = btmp = esi - 44)
   mov   edi, eax              //  = [edi - 32]
-  lea   esi, eax + 256
+  lea   esi, [eax + 256]
   movupd  xmm6, [edi]         //Iteration3D by calcMissed not aligned16?!
   movsd   xmm7, [edi + 16]
   movupd  [edi - 32], xmm6         //X=C
@@ -3803,11 +3803,11 @@ asm
   mov   eax, [edi + ebx * 4 + 100]  //fHPVar:array[0..5] of Pointer;
   mov   [edi + 48], eax       //PVars: +48
 @up2:
-  lea   eax, edi - 8          // w
+  lea   eax, [edi - 8]          // w
   push  eax
   push  edi
-  lea   edx, edi - 24
-  lea   ecx, edi - 16
+  lea   edx, [edi - 24]
+  lea   ecx, [edi - 16]
   add   eax, -24
   call  [edi + ebx * 4 + 124] //fHybrid[0..5] of ThybridIteration2; //+124   fp overflow: it3dex.z > 1eXXX !
   dec   [esi - 44]            //Dec(i)
@@ -3856,7 +3856,7 @@ asm
   push  esi
   push  edi                   //x = edi-32  y = edi-24 ..  Rold = edi - 48, Rstop = edi - 40, (i = edi + 212 = btmp = esi - 44)
   mov   edi, eax
-  lea   esi, eax + 256
+  lea   esi, [eax + 256]
   movupd  xmm6, [edi]         //Iteration3D by calcMissed not aligned16?!
   movsd   xmm7, [edi + 16]
   movupd  [edi - 32], xmm6    //X=C
@@ -3929,11 +3929,11 @@ asm
   mov   eax, [edi + ebx * 4 + 100]  //fHPVar:array[0..5] of Pointer;
   mov   [edi + 48], eax       //PVars: +48
 @up2:
-  lea   eax, edi - 8          //was: esp + 24   w
+  lea   eax, [edi - 8]          //was: esp + 24   w
   push  eax
   push  edi
-  lea   edx, edi - 24         //was: esp + 16   y
-  lea   ecx, edi - 16         //was: esp + 24   z
+  lea   edx, [edi - 24]         //was: esp + 16   y
+  lea   ecx, [edi - 16]         //was: esp + 24   z
   add   eax, -24              // x
   call  [edi + ebx * 4 + 124] //fHybrid[0..5] of ThybridIteration2; //+124   error in called function sometimes!!!
   dec   [esi - 44]            //Dec(i)    //Write off...??? bug in call... of mandbox or menger??!  abox as testhybrid! esi has changed?
