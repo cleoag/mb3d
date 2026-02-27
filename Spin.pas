@@ -57,15 +57,23 @@ type
     property Align;
     property Anchors;
     property Constraints;
+{$IFNDEF FPC}
+    { Ctl3D is not available in LCL }
     property Ctl3D;
+{$ENDIF}
     property DownGlyph: TBitmap read GetDownGlyph write SetDownGlyph;
     property DownNumGlyphs: TNumGlyphs read GetDownNumGlyphs write SetDownNumGlyphs default 1;
     property DragCursor;
+{$IFNDEF FPC}
+    { DragKind is not available in LCL }
     property DragKind;
+{$ENDIF}
     property DragMode;
     property Enabled;
     property FocusControl: TWinControl read FFocusControl write FFocusControl;
+{$IFNDEF FPC}
     property ParentCtl3D;
+{$ENDIF}
     property ParentShowHint;
     property PopupMenu;
     property ShowHint;
@@ -77,11 +85,16 @@ type
     property OnDownClick: TNotifyEvent read FOnDownClick write FOnDownClick;
     property OnDragDrop;
     property OnDragOver;
+{$IFNDEF FPC}
+    { OnEndDock/OnStartDock are not available in LCL }
     property OnEndDock;
+{$ENDIF}
     property OnEndDrag;
     property OnEnter;
     property OnExit;
+{$IFNDEF FPC}
     property OnStartDock;
+{$ENDIF}
     property OnStartDrag;
     property OnUpClick: TNotifyEvent read FOnUpClick write FOnUpClick;
   end;
@@ -124,7 +137,9 @@ type
     property AutoSize;
     property Color;
     property Constraints;
+{$IFNDEF FPC}
     property Ctl3D;
+{$ENDIF}
     property DragCursor;
     property DragMode;
     property EditorEnabled: Boolean read FEditorEnabled write FEditorEnabled default True;
@@ -135,7 +150,9 @@ type
     property MaxValue: LongInt read FMaxValue write FMaxValue;
     property MinValue: LongInt read FMinValue write FMinValue;
     property ParentColor;
+{$IFNDEF FPC}
     property ParentCtl3D;
+{$ENDIF}
     property ParentFont;
     property ParentShowHint;
     property PopupMenu;
@@ -184,7 +201,9 @@ type
 
 implementation
 
+{$IFNDEF FPC}
 {$R SPIN}
+{$ENDIF}
 
 { TSpinButton }
 
@@ -192,7 +211,7 @@ constructor TSpinButton.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   ControlStyle := ControlStyle - [csAcceptsControls, csSetCaption] +
-    [csFramed, csOpaque];
+    [{$IFNDEF FPC}csFramed, {$ENDIF}csOpaque];
 
   FUpButton := CreateButton;
   FDownButton := CreateButton;
@@ -292,7 +311,7 @@ begin
   if Button = mbLeft then
   begin
     SetFocusBtn (TTimerSpeedButton (Sender));
-    if (FFocusControl <> nil) and FFocusControl.TabStop and 
+    if (FFocusControl <> nil) and FFocusControl.TabStop and
         FFocusControl.CanFocus and (GetFocus <> FFocusControl.Handle) then
       FFocusControl.SetFocus
     else if TabStop and (GetFocus <> Handle) and CanFocus then
@@ -316,7 +335,7 @@ begin
   begin
     FFocusedButton.TimeBtnState := FFocusedButton.TimeBtnState - [tbFocusRect];
     FFocusedButton := Btn;
-    if (GetFocus = Handle) then 
+    if (GetFocus = Handle) then
     begin
        FFocusedButton.TimeBtnState := FFocusedButton.TimeBtnState + [tbFocusRect];
        Invalidate;
@@ -352,7 +371,12 @@ begin
     FUpButton.Glyph := Value
   else
   begin
+{$IFDEF FPC}
+    { LCL: resource file not available, leave glyph empty }
+    FUpButton.Glyph.SetSize(0, 0);
+{$ELSE}
     FUpButton.Glyph.Handle := LoadBitmap(HInstance, 'SpinUp');
+{$ENDIF}
     FUpButton.NumGlyphs := 1;
     FUpButton.Invalidate;
   end;
@@ -379,8 +403,13 @@ begin
     FDownButton.Glyph := Value
   else
   begin
+{$IFDEF FPC}
+    { LCL: resource file not available, leave glyph empty }
+    FDownButton.Glyph.SetSize(0, 0);
+{$ELSE}
     FDownButton.Glyph.Handle := LoadBitmap(HInstance, 'SpinDown');
     FUpButton.NumGlyphs := 1;
+{$ENDIF}
     FDownButton.Invalidate;
   end;
 end;
@@ -403,7 +432,7 @@ begin
   FButton := TSpinButton.Create (Self);
   FButton.Width := 15;
   FButton.Height := 17;
-  FButton.Visible := True;  
+  FButton.Visible := True;
   FButton.Parent := Self;
   FButton.FocusControl := Self;
   FButton.OnUpClick := UpClick;
@@ -443,7 +472,7 @@ end;
 
 function TSpinEdit.IsValidChar(Key: Char): Boolean;
 begin
-  Result := (Key in [DecimalSeparator, '+', '-', '0'..'9']) or
+  Result := (Key in [FormatSettings.DecimalSeparator, '+', '-', '0'..'9']) or
     ((Key < #32) and (Key <> Chr(VK_RETURN)));
   if not FEditorEnabled and Result and ((Key >= #32) or
       (Key = Char(VK_BACK)) or (Key = Char(VK_DELETE))) then
@@ -467,13 +496,13 @@ procedure TSpinEdit.SetEditRect;
 var
   Loc: TRect;
 begin
-  SendMessage(Handle, EM_GETRECT, 0, LongInt(@Loc));
+  SendMessage(Handle, EM_GETRECT, 0, {$IFDEF FPC}LPARAM{$ELSE}LongInt{$ENDIF}(@Loc));
   Loc.Bottom := ClientHeight + 1;  {+1 is workaround for windows paint bug}
   Loc.Right := ClientWidth - FButton.Width - 2;
-  Loc.Top := 0;  
-  Loc.Left := 0;  
-  SendMessage(Handle, EM_SETRECTNP, 0, LongInt(@Loc));
-  SendMessage(Handle, EM_GETRECT, 0, LongInt(@Loc));  {debug}
+  Loc.Top := 0;
+  Loc.Left := 0;
+  SendMessage(Handle, EM_SETRECTNP, 0, {$IFDEF FPC}LPARAM{$ELSE}LongInt{$ENDIF}(@Loc));
+  SendMessage(Handle, EM_GETRECT, 0, {$IFDEF FPC}LPARAM{$ELSE}LongInt{$ENDIF}(@Loc));  {debug}
 end;
 
 procedure TSpinEdit.WMSize(var Message: TWMSize);
@@ -484,13 +513,18 @@ begin
   MinHeight := GetMinHeight;
     { text edit bug: if size to less than minheight, then edit ctrl does
       not display the text }
-  if Height < MinHeight then   
+  if Height < MinHeight then
     Height := MinHeight
   else if FButton <> nil then
   begin
+{$IFDEF FPC}
+    { LCL: always use the 3D-style offset (NewStyleControls/Ctl3D not available) }
+    FButton.SetBounds(Width - FButton.Width - 5, 0, FButton.Width, Height - 5);
+{$ELSE}
     if NewStyleControls and Ctl3D then
       FButton.SetBounds(Width - FButton.Width - 5, 0, FButton.Width, Height - 5)
     else FButton.SetBounds (Width - FButton.Width, 1, FButton.Width, Height - 3);
+{$ENDIF}
     SetEditRect;
   end;
 end;
@@ -525,13 +559,13 @@ begin
   else Value := Value - FIncrement;
 end;
 
-procedure TSpinEdit.WMPaste(var Message: TWMPaste);   
+procedure TSpinEdit.WMPaste(var Message: TWMPaste);
 begin
   if not FEditorEnabled or ReadOnly then Exit;
   inherited;
 end;
 
-procedure TSpinEdit.WMCut(var Message: TWMPaste);   
+procedure TSpinEdit.WMCut(var Message: TWMPaste);
 begin
   if not FEditorEnabled or ReadOnly then Exit;
   inherited;
@@ -639,4 +673,3 @@ begin
 end;
 
 end.
-
