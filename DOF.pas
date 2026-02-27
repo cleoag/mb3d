@@ -274,7 +274,28 @@ begin
 end; }
 
 procedure QuickSortInt(count: Integer; var List: array of TSortItem);
-procedure QuickSort(const L, R: Integer; List: TPSortItem);  //L:eax  R:edx  List:ecx
+procedure QuickSort(const L, R: Integer; List: TPSortItem);
+{$IFDEF FPC}
+type TSortArray = array[0..MaxInt div SizeOf(TSortItem) - 1] of TSortItem;
+var LPos, RPos, ListR: Integer;
+    Tmp: TSortItem;
+    A: ^TSortArray;
+begin
+    A := Pointer(List);
+    LPos  := L - 1;
+    RPos  := R;
+    ListR := A^[R].iZ;
+    repeat
+      repeat Inc(LPos) until (A^[LPos].iZ >= ListR);
+      repeat Dec(RPos) until (RPos <= LPos) or (A^[RPos].iZ <= ListR);
+      if LPos >= RPos then Break;
+      Tmp := A^[LPos];  A^[LPos] := A^[RPos];  A^[RPos] := Tmp;
+    until False;
+    Tmp := A^[LPos];  A^[LPos] := A^[R];  A^[R] := Tmp;
+    if LPos - 1 > L then QuickSort(L, LPos - 1, List);
+    if R > LPos + 1 then QuickSort(LPos + 1, R, List);
+end;
+{$ELSE}
 asm
    push ebx
    push esi
@@ -335,31 +356,9 @@ asm
    pop  esi
    pop  ebx
 end;
-
-{var LPos, RPos, ListR: Integer;
-    Tmp: TSortItem;
-begin
-    LPos  := L - 1;
-    RPos  := R;
-    ListR := List[R].iZ;
-    repeat
-      repeat Inc(LPos) until (List[LPos].iZ >= ListR);
-      repeat Dec(RPos) until (RPos <= LPos) or (List[RPos].iZ <= ListR);
-      if LPos >= RPos then Break;
-      Tmp := List[LPos];  List[LPos] := List[RPos];  List[RPos] := Tmp;
-    until False;
-    Tmp := List[LPos];  List[LPos] := List[R];  List[R] := Tmp;
-    if LPos - 1 > L then QuickSort(L, LPos - 1, List);
-    if R > LPos + 1 then QuickSort(LPos + 1, R, List);
-end;    }
+{$ENDIF}
 begin
    QuickSort(0, count - 1, @List[0]);
-{asm
-   mov  edx, eax
-   xor  eax, eax
-   mov  ecx, edx
-   dec  edx
-   call QuickSort  } 
 end;
 
 procedure doDOFsortT(DoFrec: TDoFrec);

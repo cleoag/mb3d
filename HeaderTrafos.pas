@@ -757,6 +757,7 @@ begin                                //calcHybridFormulas -> usage of own calcfo
                 VirtualFree(calcHybridCustoms[x].pCodePointer, 4096, MEM_DECOMMIT);
               ThybridIteration(calcHybridCustoms[x].pCodePointer) := EmptyFormula;
               calcHybridCustoms[x].bCPmemReserved := False;
+              fHybrid[x] := ThybridIteration2(calcHybridCustoms[x].pCodePointer);
             end;
           end;
           for x := i52 + 1 to 5 do
@@ -765,7 +766,16 @@ begin                                //calcHybridFormulas -> usage of own calcfo
               VirtualFree(calcHybridCustoms[x].pCodePointer, 4096, MEM_DECOMMIT);
             ThybridIteration(calcHybridCustoms[x].pCodePointer) := EmptyFormula;
             calcHybridCustoms[x].bCPmemReserved := False;
+            fHybrid[x] := ThybridIteration2(calcHybridCustoms[x].pCodePointer);
           end;
+          { Safety: ensure no null function pointers in active formula slots }
+          for x := 0 to 5 do
+            if not Assigned(fHybrid[x]) then
+            begin
+              ThybridIteration(calcHybridCustoms[x].pCodePointer) := EmptyFormula;
+              fHybrid[x] := ThybridIteration2(calcHybridCustoms[x].pCodePointer);
+              nHybrid[x] := 0;
+            end;
           if (bIsDEcomb or (itmp = 0)) and (n > 0) and (DEoption2 <> 20) then
           begin
             if bIsInterpolHybrid then n := 1;
