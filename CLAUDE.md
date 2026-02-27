@@ -21,7 +21,8 @@ Mandelbulb 3D (MB3D) is a Windows desktop application for generating 3D fractal 
 - Large Address Aware flag set (`{$SetPEFlags $20}`)
 - Weak RTTI / minimal RTTI reflection (`{$RTTI EXPLICIT METHODS([]) FIELDS([]) PROPERTIES([])}`)
 - I/O checking OFF, range checking OFF, overflow checking OFF (performance-critical math)
-- Active defines (Release): `USE_PAX_COMPILER`, `PARAMS_PER_THREAD`, `JIT_FORMULA_PREPROCESSING`, `DEBUG_MESHEXP`
+- Active defines (Release): `PARAMS_PER_THREAD`, `JIT_FORMULA_PREPROCESSING`, `DEBUG_MESHEXP`
+- Disabled defines: `USE_PAX_COMPILER` (commercial PAX Compiler dependency removed; all PAX code is guarded by `{$IFDEF USE_PAX_COMPILER}`)
 
 ## Architecture
 

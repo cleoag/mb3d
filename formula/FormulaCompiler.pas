@@ -492,6 +492,8 @@ function TFormulaCompiler.PreprocessCode(const Code: String; const Formula: TJIT
 begin
 {$ifdef USE_PAX_COMPILER}
   Result := FDelegate.PreprocessCode( Code, Formula );
+{$else}
+  Result := Code;
 {$endif}
 end;
 {$endif}
@@ -500,6 +502,8 @@ function TFormulaCompiler.CompileFormula(const Formula: TJITFormula): TCompiledA
 begin
 {$ifdef USE_PAX_COMPILER}
   Result := FDelegate.CompileFormula( Formula );
+{$else}
+  Result := nil;
 {$endif}
 end;
 

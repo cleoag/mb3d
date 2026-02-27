@@ -147,6 +147,8 @@ function TScriptCompiler.CompileScript(const Script: String): TCompiledArtifact;
 begin
 {$ifdef USE_PAX_COMPILER}
    Result := FDelegate.CompileScript( Script );
+{$else}
+   Result := nil;
 {$endif}
 end;
 
