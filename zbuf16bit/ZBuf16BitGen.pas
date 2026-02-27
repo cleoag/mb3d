@@ -41,8 +41,8 @@ begin
       GetTilingInfosFromHeader(@Mand3DForm.MHeader, TileRect, Crop);
       Result.SetSize((TileRect.Right - TileRect.Left + 1 - Crop * 2) div ImageScale,
         (TileRect.Bottom - TileRect.Top + 1 - Crop * 2) div ImageScale);
-      Result.Canvas.CopyRect(Rect(0, 0, Result.Width, Result.Height), Mand3DForm.Image1.Picture.Bitmap.Canvas,
-           Rect(Crop div ImageScale, Crop div ImageScale,
+      Result.Canvas.CopyRect(Types.Rect(0, 0, Result.Width, Result.Height), Mand3DForm.Image1.Picture.Bitmap.Canvas,
+           Types.Rect(Crop div ImageScale, Crop div ImageScale,
                 Crop div ImageScale + Result.Width, Crop div ImageScale + Result.Height));
     end
     else Result.SetSize(Mand3DForm.Image1.Picture.Width, Mand3DForm.Image1.Picture.Height);

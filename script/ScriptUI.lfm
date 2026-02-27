@@ -183,7 +183,7 @@ object ScriptEditorForm: TScriptEditorForm
           BevelOuter = bvNone
           BorderWidth = 8
           TabOrder = 0
-          object CodeEdit: TRichEdit
+          object CodeEdit: TMemo
             Left = 8
             Top = 8
             Width = 610
@@ -226,7 +226,7 @@ object ScriptEditorForm: TScriptEditorForm
           BevelOuter = bvNone
           BorderWidth = 8
           TabOrder = 0
-          object SupportedFunctionsEdit: TRichEdit
+          object SupportedFunctionsEdit: TMemo
             Left = 8
             Top = 8
             Width = 610

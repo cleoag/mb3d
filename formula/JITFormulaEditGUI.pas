@@ -38,9 +38,9 @@ type
     CodeSheet: TTabSheet;
     DescriptionSheet: TTabSheet;
     CodePnl: TPanel;
-    CodeEdit: TRichEdit;
+    CodeEdit: TMemo;
     Panel7: TPanel;
-    DescriptionEdit: TRichEdit;
+    DescriptionEdit: TMemo;
     Panel3: TPanel;
     Panel5: TPanel;
     FormulanameEdit: TEdit;
@@ -84,10 +84,10 @@ type
     OpenDialog: TOpenDialog;
     PreprocessedCodeSheet: TTabSheet;
     Panel22: TPanel;
-    PreprocessedCodeEdit: TRichEdit;
+    PreprocessedCodeEdit: TMemo;
     SupportedFunctionsSheet: TTabSheet;
     Panel23: TPanel;
-    SupportedFunctionsEdit: TRichEdit;
+    SupportedFunctionsEdit: TMemo;
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);

@@ -26,10 +26,10 @@ type
     MainPageControl: TPageControl;
     CodeSheet: TTabSheet;
     CodePnl: TPanel;
-    CodeEdit: TRichEdit;
+    CodeEdit: TMemo;
     SupportedFunctionsSheet: TTabSheet;
     Panel23: TPanel;
-    SupportedFunctionsEdit: TRichEdit;
+    SupportedFunctionsEdit: TMemo;
     OpenDialog: TOpenDialog;
     CompileBtn: TSpeedButton;
     procedure CompileBtnClick(Sender: TObject);

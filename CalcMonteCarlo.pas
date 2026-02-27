@@ -108,7 +108,7 @@ var
 implementation
 
 uses Mand, Math, DivUtils, formulas, CustomFormulas, LightAdjust, Calc,
-  HeaderTrafos, PaintThread, Maps, MonteCarloForm, SysUtils;
+  HeaderTrafos, PaintThread, MB3DMaps, MonteCarloForm, SysUtils, Types;
 
 procedure PreComputeSinCos;
 var i: Integer;
@@ -202,7 +202,7 @@ begin
     bDiffReflectsBigEnough := PLightVals.bBackBMP and (M3DBackGroundPic.LMWidth * Header.MCdiffReflects > 5000);
     sRI := Header.sTRIndex;
     sAMBmaxL := MinCS(MCTparas.DEAOmaxL * LengthOfSize(Header) * 3, MCTparas.Zend * 255 / 1.75);
-    PCTS.ctCalcRect := Rect(0, Header.MClastY, Header.Width - 1, Header.Height - 1);
+    PCTS.ctCalcRect := Types.Rect(0, Header.MClastY, Header.Width - 1, Header.Height - 1);
     MCTparas.CalcRect := PCTS.ctCalcRect;
     CalcReflects := (Header.bCalcSRautomatic and 1) <> 0;
     for x := 1 to ThreadCount do

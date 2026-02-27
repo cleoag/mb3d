@@ -921,7 +921,7 @@ begin
       SpeedButton35.Caption := '1:' + IntToStr(ImageScale);
       UpDown1.Position := 11 - ImageScale;
       mFSIoffset := w * 4;
-      DrawRect := Rect(MHeader.Width, MHeader.Height, 0, 0);
+      DrawRect := Types.Rect(MHeader.Width, MHeader.Height, 0, 0);
     end;
 end;
 
@@ -1170,7 +1170,7 @@ begin
     //  GetTilingInfosFromHeader(Header, TileRect, Crop);
       CalcR := Mand3DForm.GetCalcRect
     else
-      CalcR := Rect(0, 0, Header.Width - 1, Header.Height - 1);
+      CalcR := Types.Rect(0, 0, Header.Width - 1, Header.Height - 1);
     w := CalcR.Right - CalcR.Left + 1;
     h := CalcR.Bottom - CalcR.Top + 1;
     StepWidth := Header.dStepWidth;

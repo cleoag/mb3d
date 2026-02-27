@@ -13,7 +13,7 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
-    RichEdit1: TRichEdit;
+    RichEdit1: TMemo;
     TabControl1: TTabControl;
     Label1: TLabel;
     StaticText1: TStaticText;

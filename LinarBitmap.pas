@@ -208,6 +208,8 @@ function ExtractFileExtNoDotUpper(const FileName: string): string;
 
 implementation
 
+uses Types;
+
 function ExtractFileExtNoDotUpper(const FileName: string): string;
 var I : Integer;
 begin
@@ -952,7 +954,7 @@ var
   SrcLine, DestLine : PByte;
 begin
   if PixelFormat<>Source.PixelFormat then raise ELinearBitmap.Create(rsInvalidPixelFormat);
-  if not IntersectRect(DestRect,Rect(0,0,Width,Height),Bounds(X,Y,Source.Width,Source.Height)) then Exit;
+  if not IntersectRect(DestRect,Types.Rect(0,0,Width,Height),Bounds(X,Y,Source.Width,Source.Height)) then Exit;
   SrcLine:=Source.Pixel[Max(0,-X),Max(0,-Y)];
   DestLine:=Pixel[DestRect.Left,DestRect.Top];
   CopySize:=(DestRect.Right-DestRect.Left)*PixelSize;

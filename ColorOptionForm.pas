@@ -34,6 +34,8 @@ var
 
 implementation
 
+uses Types;
+
 {$R *.lfm}
 
 procedure TFColorOptions.Button1Click(Sender: TObject);
@@ -51,7 +53,7 @@ begin
       can.Brush.Color := clBtnFace;
       can.FillRect(can.ClipRect);
       can.Brush.Color := 0;
-      can.FillRect(Rect(1, 0, 63, 13));
+      can.FillRect(Types.Rect(1, 0, 63, 13));
     end;
 end;
 

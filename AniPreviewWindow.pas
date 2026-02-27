@@ -80,7 +80,8 @@ var
 implementation
 
 uses Mand, DivUtils, LightAdjust, Math, Calc, ImageProcess, MMSystem, CalcSR,
-     CustomFormulas, DOF, Paint, CalcHardShadow, Interpolation, Maps, MapSequences;
+     CustomFormulas, DOF, Paint, CalcHardShadow, Interpolation, MB3DMaps, MapSequences,
+     Types;
 
 {$R *.lfm}
 
@@ -102,7 +103,7 @@ begin
       CalcThreadStats.iAllProcessingOptions and 1;
     bGetMCTPverbose := False;
     if CalcMandT(@InterpolHeader, @InterpolLightVals, @CalcThreadStats,
-                 @siLight[0], InterpolHeader.Width * 18, aFSIstart, aFSIoffset, Rect(0, 0, InterpolHeader.Width - 1, InterpolHeader.Height - 1)) then
+                 @siLight[0], InterpolHeader.Width * 18, aFSIstart, aFSIoffset, Types.Rect(0, 0, InterpolHeader.Width - 1, InterpolHeader.Height - 1)) then
     begin
       iActiveThreads := CalcThreadStats.iTotalThreadCount;
       Timer2.Enabled := True;
@@ -157,7 +158,7 @@ begin
     begin
    //   SetBkMode(Handle, 0);
       Canvas.Brush.Color := clBtnFace; //still black??
-      Canvas.FillRect(Rect(iBMPleft, 8, iBMPleft + iWidth + 1, iHeight + 9));
+      Canvas.FillRect(Types.Rect(iBMPleft, 8, iBMPleft + iWidth + 1, iHeight + 9));
     end;
 end;
 
@@ -473,7 +474,7 @@ begin
 
     if n = 0 then
     begin
-      R := Rect(0, 0, InterpolHeader.Width - 1, InterpolHeader.Height - 1);
+      R := Types.Rect(0, 0, InterpolHeader.Width - 1, InterpolHeader.Height - 1);
       sloff := InterpolHeader.Width * 18;
       Timer2.Enabled := False;
       iActiveThreads := 0;

@@ -324,7 +324,7 @@ begin
       SIMDlevel := 0;
       dDEscale  := ds[f];
       dADEscale := 1;
-      if f = 0 then dSIpow := Min(8, Max(2, dOptionValues[0])) else
+      if f = 0 then dSIpow := Math.Min(Double(8), Math.Max(Double(2), dOptionValues[0])) else
       if f in [1, 9] then dSIpow := NonZero(dOptionValues[0]) else dSIpow := 2;
       dRstop      := 16;
       iConstCount := 0;
@@ -463,9 +463,9 @@ begin
              end;
           7: begin //Scale/Sqr(MinR), Sqr(MinR)
                Dec(p, 2);
-               PDouble(p)^ := dOptionValues[i - 1] / Sqr(Max(1e-40, dOptionValues[i]));
+               PDouble(p)^ := dOptionValues[i - 1] / Sqr(Math.Max(Double(1e-40), dOptionValues[i]));
                Dec(p, 2);
-               PDouble(p)^ := Sqr(Max(1e-40, dOptionValues[i]));
+               PDouble(p)^ := Sqr(Math.Max(Double(1e-40), dOptionValues[i]));
              end;
           8: begin  //Folding R,2R,-R,-2R
                Dec(p, 2);

@@ -1,4 +1,4 @@
-unit Maps;
+unit MB3DMaps;
 
 {$mode delphi}
 
@@ -6,7 +6,7 @@ unit Maps;
 
 interface
 
-uses Windows, LightAdjust, SysUtils, Graphics, jpeg, TypeDefinitions,
+uses Windows, LightAdjust, SysUtils, Graphics, TypeDefinitions,
      SyncObjs, Classes, Math3D;
 
 type
@@ -69,7 +69,7 @@ var
 
 implementation
 
-uses FileHandling, DivUtils, Mand, Math, Forms, HeaderTrafos, Calc,
+uses FileHandling, DivUtils, Mand, Math, Forms, Controls, HeaderTrafos, Calc,
   MapSequences, PNMReader;
 
 function VolLightMapPosPas(vd: TPVec3D): LongBool;
@@ -935,7 +935,7 @@ end;
 
 function LoadLightMap(var LM: TLightMap; FileName: String; Smooth, Convert2Spherical, SetHGCursor: LongBool; fitBorder: Integer): LongBool;
 var BMP: TBitmap;
-    PNG: TPngObject;
+    {$IFNDEF FPC}PNG: TPngObject;{$ENDIF}
     Pic: TPicture;
     x, y, xx: Integer;
     pc, pc2, pca: PCardinal;
@@ -956,6 +956,7 @@ begin
   try
     if SetHGCursor then Screen.Cursor := crHourGlass;
     x := Length(FileName);
+    {$IFNDEF FPC}
     if CompareText(Copy(FileName, x - 3, 4), '.png') = 0 then
     begin
       PNG := TPngObject.Create;
@@ -1014,6 +1015,10 @@ begin
       end;
       PNG.Free;
     end
+    {$ELSE}
+    if CompareText(Copy(FileName, x - 3, 4), '.png') = 0 then
+      x := 0  // FPC: 16-bit PNG not supported, fallback to TPicture path
+    {$ENDIF}
     else if CompareText(Copy(FileName, x - 3, 4), '.pgm') = 0 then
     begin
       PGM16Reader := TPGM16Reader.Create;
@@ -1111,7 +1116,6 @@ end;
 
 procedure LoadEmptyLightMap(var LM: TLightMap; Smooth, Convert2Spherical, SetHGCursor: LongBool; fitBorder: Integer);
 var BMP: TBitmap;
-    PNG: TPngObject;
     Pic: TPicture;
     x, y, xx: Integer;
     pc, pc2, pca: PCardinal;

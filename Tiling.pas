@@ -130,7 +130,7 @@ var
 implementation
 
 uses FileHandling, Mand, HeaderTrafos, DivUtils, Math, LightAdjust, ImageProcess,
-  BRInfoWindow;
+  BRInfoWindow, Types;
 
 {$R *.lfm}
 
@@ -196,14 +196,14 @@ begin
       ya := brActPos.Y;
       ye := BigRenderData.brTileCountV;
     end;
-    Result := Point(0, 0);
+    Result := Types.Point(0, 0);
     for y := ya to ye do
     begin
       if y = ya then xa := brActPos.X else xa := 1;
       for x := xa to BigRenderData.brTileCountH do
         if not TileRendered(x, y) then
         begin
-          Result := Point(x, y);
+          Result := Types.Point(x, y);
           Exit;
         end;
     end;
@@ -251,7 +251,7 @@ begin
         Result.X := StrToInt(Copy(FileName, l - 4, 2));
       end;
     except
-      Result := Point(0, 0);
+      Result := Types.Point(0, 0);
     end;
 end;
 
@@ -339,7 +339,7 @@ begin
               begin
                 x := ((j - 1) * w) div tcH;
                 y := ((i - 1) * h) div tcV;
-                FillRect(Rect(x, y, x + tw, y + th));
+                FillRect(Types.Rect(x, y, x + tw, y + th));
               end;
         end;
         Brush.Color := $404040;
@@ -735,7 +735,7 @@ begin
     with Mand3DForm do
     begin
       AssignHeader(@MHeader, @OrigHeader);
-      SetTilingInfosInHeader(@MHeader, BigRenderData, Point(brActTile.X - 1, brActTile.Y - 1));
+      SetTilingInfosInHeader(@MHeader, BigRenderData, Types.Point(brActTile.X - 1, brActTile.Y - 1));
   //    MHeader.bStereoMode := 0;
       if TilingForm.CheckBox1.Checked then
         MHeader.sDEstop := MHeader.sDEstop * MHeader.Width / OrigHeader.Width;
@@ -757,7 +757,7 @@ begin
       CreateDir(SaveDirectory);
       ScanProjectFolder;
     end;
-    brActTile := Point(0, 0);
+    brActTile := Types.Point(0, 0);
     brActTile := GetNextTilePos(brActTile);
     bOnlyThisTile := False;
     RenderActualTile;
@@ -825,7 +825,7 @@ begin
         Renderthistile1.Caption := 'Render this tile';
         Deletethistilesfiles1.Enabled := False;
       end;
-      p2 := Image1.ClientToScreen(Point(X, Y));
+      p2 := Image1.ClientToScreen(Types.Point(X, Y));
       PopupMenu1.Popup(p2.X, p2.Y);
     end;
 end;

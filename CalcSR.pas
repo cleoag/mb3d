@@ -54,7 +54,7 @@ function CalcSRT(Header: TPMandHeader10; PLightVals: TPLightVals; PCTS: TPCalcTh
 implementation
 
 uses Mand, Math, DivUtils, formulas, Forms, ImageProcess, CustomFormulas,
-     HeaderTrafos, LightAdjust, PaintThread, Calc, CalcAmbShadowDE, Maps;
+     HeaderTrafos, LightAdjust, PaintThread, Calc, CalcAmbShadowDE, MB3DMaps;
 
 function CalcSRT(Header: TPMandHeader10; PLightVals: TPLightVals; PCTS: TPCalcThreadStats;
                  PsiLight5: TPsiLight5; FSIstart, FSIoffset: Integer; CalcR: TRect): Boolean;

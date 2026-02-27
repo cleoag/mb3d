@@ -65,7 +65,7 @@ type
     ZWEdit: TEdit;
     Label26: TLabel;
     SpeedButton2: TSpeedButton;
-    RichEdit1: TRichEdit;
+    RichEdit1: TMemo;
     Button3: TButton;
     Button4: TButton;
     Timer4: TTimer;
@@ -235,7 +235,7 @@ var
 implementation
 
 uses Mand, CustomFormulas, DivUtils, Math, HeaderTrafos, FileHandling, formulas,
-  PostProcessForm, Math3D, FormulaNames, JITFormulaEditGUI;
+  PostProcessForm, Math3D, FormulaNames, JITFormulaEditGUI, Types;
 
 {$R *.lfm}
 
@@ -338,7 +338,7 @@ function TFormulaGUIForm.FNormalPos(Formula: THAformula): TPoint;
 var i: Integer;
     L: TLabel;
 begin
-    Result := Point(-1, 0);
+    Result := Types.Point(-1, 0);
     i := 0;
     repeat
       if Formula.iOptionCount <= i then Break;
@@ -868,7 +868,7 @@ end;
 function ScreenPosInListBox(const LB: TListBoxEx; const sp: TPoint): Boolean;
 var sap: TPoint;
 begin
-    sap := LB.ClientToScreen(Point(0, 0));
+    sap := LB.ClientToScreen(Types.Point(0, 0));
     Result := (sp.X >= sap.X) and (sp.Y >= sap.Y - 2) and (sp.X < sap.X + LB.Width)
                               and (sp.Y < sap.Y + LB.Height);
 end;
@@ -876,7 +876,7 @@ end;
 function ScreenPosInSButton(const SB: TSpeedButtonEx; const sp: TPoint): Boolean;
 var sap: TPoint;
 begin
-    sap := SB.ClientToScreen(Point(0, 0));
+    sap := SB.ClientToScreen(Types.Point(0, 0));
     Result := (sp.X >= sap.X) and (sp.Y >= sap.Y - 2) and (sp.X < sap.X + SB.Width)
                               and (sp.Y < sap.Y + SB.Height);
 end;
@@ -1013,7 +1013,7 @@ begin
       begin
         Timer4.Enabled := False;
         HideAllListBoxExPopupsButNot(t);
-        if LB <> nil then ListboxPopup(LB, Point(SB.Left - 2, SB.Top + SB.Height));
+        if LB <> nil then ListboxPopup(LB, Types.Point(SB.Left - 2, SB.Top + SB.Height));
         SB.Down := True;
       end
       else if (LB <> nil) and (not LB.Visible) then SB.Down := False;
@@ -1103,7 +1103,7 @@ begin
         if HighlightedFormula > '' then
         begin
           Hidethisformula1.Visible := True;
-          p := LB.ClientToScreen(Point(X, Y));
+          p := LB.ClientToScreen(Types.Point(X, Y));
           PopupMenu1.Popup(p.X + 3, p.Y);
         end;
       end;
@@ -1254,7 +1254,7 @@ begin
         if HighlightedFormula > '' then
         begin
           Hidethisformula1.Visible := False;
-          p := ListBoxEx15.ClientToScreen(Point(X, Y));
+          p := ListBoxEx15.ClientToScreen(Types.Point(X, Y));
           PopupMenu1.Popup(p.X + 3, p.Y);
         end;
       end;
@@ -1325,7 +1325,7 @@ begin
         if ListBoxEx11.Items.Count > 0 then
         begin
           SetListBoxWidth(ListBoxEx11);
-          ListboxPopup(ListBoxEx11, Point(ComboEdit1.Left, ComboEdit1.Top + ComboEdit1.Height));
+          ListboxPopup(ListBoxEx11, Types.Point(ComboEdit1.Left, ComboEdit1.Top + ComboEdit1.Height));
         end
         else ShowListBox(ListBoxEx11, False);
       end;

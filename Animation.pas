@@ -218,7 +218,7 @@ implementation
 
 uses Math, DivUtils, AniPreviewWindow, Calc, ImageProcess, AniProcess, CalcSR,
      CustomFormulas, DOF, Paint, CalcHardShadow, Interpolation, PaintThread,
-     Navigator, Maps, MapSequences;
+     Navigator, MB3DMaps, MapSequences, Types;
 
 {$R *.lfm}
 
@@ -239,7 +239,7 @@ begin
     CalcThreadStats.iProcessingType := 1;
     CalcThreadStats.iAllProcessingOptions := AllAutoProcessings(@InterpolHeader);
     if CalcMandT(@InterpolHeader, @InterpolLightVals, @CalcThreadStats,
-                 @siLight5[0], InterpolHeader.Width * 18, aFSIstart, aFSIoffset, Rect(0, 0, InterpolHeader.Width - 1, InterpolHeader.Height - 1)) then
+                 @siLight5[0], InterpolHeader.Width * 18, aFSIstart, aFSIoffset, Types.Rect(0, 0, InterpolHeader.Width - 1, InterpolHeader.Height - 1)) then
     begin
       iActiveThreads := CalcThreadStats.iTotalThreadCount;
       Timer3.Enabled := True;
@@ -949,7 +949,7 @@ begin
         if (i2 >= 0) and (i2 < HeaderCount) then
           PaintBox1.Canvas.Draw(i3, i4, KeyFrames[KFposLUT[i2]].PrevBMP)
         else
-          PaintBox1.Canvas.FillRect(Rect(i3, i4, i3 + 101, i4 + 80));
+          PaintBox1.Canvas.FillRect(Types.Rect(i3, i4, i3 + 101, i4 + 80));
       end;
     end;
 end;
@@ -1334,7 +1334,7 @@ begin
       c := CalcThreadStats.iProcessingType;
       if not bCalcStop then
       begin
-        R := Rect(0, 0, InterpolHeader.Width - 1, InterpolHeader.Height - 1);
+        R := Types.Rect(0, 0, InterpolHeader.Width - 1, InterpolHeader.Height - 1);
         sloff := 18 * InterpolHeader.Width;
         //after processings
         case c of  //0: not calculating, 1: main calculation, 2: hard shadow, 3: AO1, 4: AO2, 5: AO3, 6: Reflects, 7: DOF

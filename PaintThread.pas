@@ -87,7 +87,7 @@ var
 implementation
 
 uses LightAdjust, Mand, HeaderTrafos, DivUtils, Math, ImageProcess, Tiling,
-     Interpolation, MonteCarloForm, Graphics, SysUtils;
+     Interpolation, MonteCarloForm, Graphics, SysUtils, Types;
 
 
 {function Nz(Nx, Ny: Single): Single;
@@ -1835,7 +1835,7 @@ begin
       ppWidth   := MHeader.Width;
       ppHeight  := MHeader.Height;
       GetPaintTileSizes(@MHeader, ppPaintWidth, ppPaintHeight, ppXplus, ppYplus);
-      PaintRectThread.PaintRect := Rect(Max(0, R.Left), Max(0, R.Top),
+      PaintRectThread.PaintRect := Types.Rect(Max(0, R.Left), Max(0, R.Top),
         Min(R.Right, ppPaintWidth - 1), Min(R.Bottom, ppPaintHeight - 1));
       ppPLoffset := ppPaintWidth * SizeOf(TsiLight5);
     end;

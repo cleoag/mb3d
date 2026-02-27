@@ -34,7 +34,7 @@ type
 
 implementation
 
-uses Mand, Math, DivUtils, formulas, CustomFormulas, LightAdjust, Calc, Maps;
+uses Mand, Math, DivUtils, formulas, CustomFormulas, LightAdjust, Calc, MB3DMaps;
 
 //{$CODEALIGN 8}
 

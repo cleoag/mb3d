@@ -258,7 +258,7 @@ object FormulaEditor: TFormulaEditor
     Align = alRight
     TabOrder = 2
   end
-  object RichEdit1: TRichEdit
+  object RichEdit1: TMemo
     Left = 0
     Top = 65
     Width = 579

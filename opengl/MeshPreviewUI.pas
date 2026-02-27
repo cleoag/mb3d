@@ -391,7 +391,7 @@ procedure TMeshPreviewFrm.SurfaceColorBtnClick(Sender: TObject);
 begin
   if (Sender<>nil) and (Sender is TColorButton)  then begin
     ColorDialog.Color := TColorButton(Sender).ButtonColor;
-    if ColorDialog.Execute(Self.Handle) then begin
+    if ColorDialog.Execute then begin
       TColorButton(Sender).ButtonColor := ColorDialog.Color;
       UIToAppearance;
     end;

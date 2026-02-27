@@ -15,7 +15,7 @@ var
 
 implementation
 
-uses Maps, DivUtils;
+uses MB3DMaps, DivUtils;
 
 procedure fill0bytes(const p: Pointer; const anz: Integer; const useSSE: Boolean);
 var x, offs, x4: Integer;

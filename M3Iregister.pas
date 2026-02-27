@@ -29,7 +29,7 @@ type
   public
     OrigFileSize: TPoint;
     constructor Create(AOwner: TComponent); override;
-    function Execute(ParentWnd: HWND): Boolean; override;
+    function Execute: Boolean; override;
   end;
 
   TM3IGraphic = Class(TBitmap)  //TGraphic.. image width <> bitmap width
@@ -53,7 +53,7 @@ var
 
 implementation
 
-uses FileHandling, Math3D, DivUtils;
+uses FileHandling, Math3D, DivUtils, Types;
 
 {procedure Register;
 begin
@@ -122,7 +122,7 @@ begin
           Proportional := True;
           Stretch := True;
           Center := True;
-          IncrementalDisplay := True;
+          {$IFNDEF FPC}IncrementalDisplay := True;{$ENDIF}
         end;
       end;
     end;
@@ -170,8 +170,11 @@ begin
 end;
 
 procedure TOpenPictureDialogM3D.DoShow;
+{$IFNDEF FPC}
 var PreviewRect, StaticRect: TRect;
+{$ENDIF}
 begin
+    {$IFNDEF FPC}
     { Set preview area to entire dialog }
     GetClientRect(Handle, PreviewRect);
     StaticRect := GetStaticRect;
@@ -183,15 +186,23 @@ begin
     FSavedFilename := '';
     FPaintPanel.Caption := '';//srNone;
     FPicturePanel.ParentWindow := Handle;
+    {$ENDIF}
     inherited DoShow;
 end;
 
+{$IFDEF FPC}
+function TOpenPictureDialogM3D.Execute: Boolean;
+begin
+    Result := inherited Execute;
+end;
+{$ELSE}
 function TOpenPictureDialogM3D.Execute(ParentWnd: HWND): Boolean;
 begin
     if NewStyleControls and not (ofOldStyleDialog in Options) then
       Template := 'DLGTEMPLATEM3D' else Template := nil;
     Result := inherited Execute(ParentWnd);
 end;
+{$ENDIF}
 
 function TOpenPictureDialogM3D.IsFilterStored: Boolean;
 begin
@@ -271,7 +282,7 @@ var FileStream: TFileStream;
 begin
     if not FileExists(Filename) then
     begin
-      ISize := Point(0, 0);
+      ISize := Types.Point(0, 0);
       Exit;
     end;
     FileStream := TFileStream.Create(Filename, fmOpenRead);
@@ -506,7 +517,7 @@ var FileStream: TFileStream;
 begin
     if not FileExists(Filename) then
     begin
-      ISize := Point(0, 0);
+      ISize := Types.Point(0, 0);
       Exit;
     end;
     FileStream := TFileStream.Create(Filename, fmOpenRead);

@@ -344,7 +344,7 @@ implementation
 
 uses NaviCalcThread, DivUtils, HeaderTrafos, Mand, Math, CustomFormulas,
   LightAdjust, FileHandling, Animation, FormulaGUI, Calc, ThreadUtils,
-  MapSequences;
+  MapSequences, Types;
 
 {$R *.lfm}
 
@@ -700,7 +700,7 @@ var notValid: LongBool;
 begin
     with NaviHeader do
     begin
-      OriginalSize := Point(Width, Height);
+      OriginalSize := Types.Point(Width, Height);
       SetHeaderSize;
       bStepsafterDEStop := Min(7, bStepsafterDEStop);
       sDEstop := MaxCS(0.01, sDEstop);
@@ -1721,11 +1721,11 @@ var TestRect: TRect;
 begin
     if Screen.Cursor = crDefault then
     begin
-      P0 := Image1.ClientToScreen(Point(0, 0));
-      P1 := Image1.ClientToScreen(Point(Image1.Width, Image1.Height));
-      TestRect := Rect(P0.X, P0.Y, P1.X, P1.Y);
+      P0 := Image1.ClientToScreen(Types.Point(0, 0));
+      P1 := Image1.ClientToScreen(Types.Point(Image1.Width, Image1.Height));
+      TestRect := Types.Rect(P0.X, P0.Y, P1.X, P1.Y);
       ClipCursor(@TestRect);
-      NMouseStartPos := Point((P0.X + P1.X) div 2, (P0.Y + P1.Y) div 2);
+      NMouseStartPos := Types.Point((P0.X + P1.X) div 2, (P0.Y + P1.Y) div 2);
       SetCursorPos(NMouseStartPos.X, NMouseStartPos.Y);
       Screen.Cursor := crNone;
     end else begin
@@ -1794,7 +1794,7 @@ begin
     begin
       Singleclicktochangethenavimode1.Checked := not bDoubleClick;
       Doubleclicktochangethenavimode1.Checked := bDoubleClick;
-      p1 := ClientToScreen(Point(X, Y));
+      p1 := ClientToScreen(Types.Point(X, Y));
       PopupMenu1.Popup(p1.X, p1.Y);
     end;
 end;
@@ -1951,7 +1951,7 @@ begin  //adjustment panel open/close
       if AdjustPanelFirstShow then
       begin
         AdjustPanelFirstShow := False;
-        CurrentFindex := Point(0, 0);
+        CurrentFindex := Types.Point(0, 0);
         ResetJuliaPos0Vals;
         Reset4dRotVals;
         for i := 0 to 13 do

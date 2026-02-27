@@ -86,7 +86,7 @@ var
 
 implementation
 
-uses MeshReader, Maps;
+uses MeshReader, MB3DMaps;
 
 {$R *.lfm}
 const

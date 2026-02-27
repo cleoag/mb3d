@@ -102,7 +102,7 @@ procedure AdjustSaturationGamma(Image: TLinearBitmap; Saturation: Double; GammaR
 
 implementation
 
-uses MemUtils, Math;
+uses MemUtils, Math, Types;
 
 function CountColorsUsed(Image: TLinearBitmap): Integer;
 type
@@ -155,7 +155,7 @@ begin
   if (AnalyzeRect.Right>=Image.Width) then AnalyzeRect.Right:=Image.Width-1;
   if (AnalyzeRect.Bottom>=Image.Height) then AnalyzeRect.Bottom:=Image.Height-1;
   if (AnalyzeRect.Left<0) or (AnalyzeRect.Top<0) or (AnalyzeRect.Right-AnalyzeRect.Left<2) or (AnalyzeRect.Bottom-AnalyzeRect.Top<2) then
-    AnalyzeRect:=Rect(0,0,Image.Width-1,Image.Height-1);
+    AnalyzeRect:=Types.Rect(0,0,Image.Width-1,Image.Height-1);
 
   if Image.PixelFormat=pf8bit then // 8 bit
   begin

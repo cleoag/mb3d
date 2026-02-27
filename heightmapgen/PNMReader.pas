@@ -52,21 +52,24 @@ end;
 
 procedure TPGM16Reader.LoadFromFile( const Filename: String);
 var
-  Reader: TStreamReader;
+  Lines: TStringList;
   Line: String;
   MaxValue: Integer;
-  I, J: Integer;
+  I, J, LineIdx: Integer;
   Lst: TStringList;
   CurrPGMBuffer: PWord;
 begin
-  Reader := TStreamReader.Create( Filename, TEncoding.ANSI);
+  Lines := TStringList.Create;
   try
-    Line := Trim( Reader.ReadLine );
+    Lines.LoadFromFile( Filename );
+    LineIdx := 0;
+    Line := Trim( Lines[LineIdx] ); Inc(LineIdx);
     if Line <> 'P2' then
       raise Exception.Create('Unexpected Header <'+Line+'>');
-    Line := Trim( Reader.ReadLine );
-    if ( Length(Line) > 0 ) and ( Line[1] = '#' ) then // ignore comment
-      Line := Trim( Reader.ReadLine );
+    Line := Trim( Lines[LineIdx] ); Inc(LineIdx);
+    if ( Length(Line) > 0 ) and ( Line[1] = '#' ) then begin // ignore comment
+      Line := Trim( Lines[LineIdx] ); Inc(LineIdx);
+    end;
      Lst := TStringList.Create;
      try
        I := Pos(' ', Line );
@@ -74,26 +77,26 @@ begin
        FHeight := StrToInt( Copy( Line, I + 1, Length(Line) - I ) );
        if ( FWidth < 1 ) or ( FHeight < 1 ) then
          raise Exception.Create('Invalid Size <'+Line+'>');
-       MaxValue := StrToInt( Trim( Reader.ReadLine ) );
+       MaxValue := StrToInt( Trim( Lines[LineIdx] ) ); Inc(LineIdx);
        if MaxValue < 1 then
          raise Exception.Create('Invalid Depth <'+IntToStr(MaxValue)+'>');
        GetMem( FBuffer, FWidth * FHeight * SizeOf( Word ) );
        Lst.Delimiter := ' ';
        CurrPGMBuffer := FBuffer;
        for I:=0 to FHeight - 1 do begin
-         Lst.DelimitedText := Trim( Reader.ReadLine );
-         if Lst.Count <> FWidth then 
+         Lst.DelimitedText := Trim( Lines[LineIdx] ); Inc(LineIdx);
+         if Lst.Count <> FWidth then
            raise Exception.Create('Invalid Line <'+IntToStr(I)+'>: Found <'+IntToStr(Lst.Count)+' items, expected <'+IntToStr(FWidth));
           for J := 0 to Width - 1 do begin
             CurrPGMBuffer^ := Word( StrToInt( Lst[J] ) );
-            CurrPGMBuffer := PWord( Longint( CurrPGMBuffer ) + SizeOf( Word ) );
+            Inc( CurrPGMBuffer );
           end;
        end;
      finally
        Lst.Free;
      end;
   finally
-    Reader.Free;
+    Lines.Free;
   end;
 end;
 

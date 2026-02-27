@@ -34,7 +34,7 @@ type
 implementation
 
 uses CustomFormulas, Math, Math3D, HeaderTrafos, DivUtils, Calc, Paint,
-  ImageProcess, CalcHardShadow, CalcSR, DOF, SysUtils;
+  ImageProcess, CalcHardShadow, CalcSR, DOF, SysUtils, Types;
 
 { ---------------------------- TPreviewRenderer ------------------------------ }
 constructor TPreviewRenderer.Create(const MB3DParamsFacade: TMB3DParamsFacade);
@@ -126,12 +126,12 @@ begin
     MakeLightValsFromHeaderLight(PHeader, @HeaderLightVals, 1, PHeader^.bStereoMode);
 
     SetLength(siLight5, w * h);
-    R := Rect(0, 0, w - 1, h - 1);
+    R := Types.Rect(0, 0, w - 1, h - 1);
     CalcThreadStats.pLBcalcStop := @bCalcStop;
     CalcThreadStats.iProcessingType := 1;
     CalcThreadStats.iAllProcessingOptions := AllAutoProcessings(PHeader);
     if not CalcMandT(PHeader, @HeaderLightVals, @CalcThreadStats,
-                 @siLight5[0], w * 18, aFSIstart, aFSIoffset, Rect(0, 0, w - 1, h - 1)) then Exit;
+                 @siLight5[0], w * 18, aFSIstart, aFSIoffset, Types.Rect(0, 0, w - 1, h - 1)) then Exit;
     iActiveThreads := CalcThreadStats.iTotalThreadCount;
     while (iActiveThreads > 0) and (not bCalcStop) do begin
       WaitForThreads(50);

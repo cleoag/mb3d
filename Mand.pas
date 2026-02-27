@@ -368,7 +368,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure N11Click(Sender: TObject);
     procedure SpinEdit2ChangingEx(Sender: TObject; var AllowChange: Boolean;
-      NewValue: Integer; Direction: TUpDownDirection);
+      NewValue: SmallInt; Direction: TUpDownDirection);
     procedure UpDown1Click(Sender: TObject; Button: TUDBtnType);
     procedure SpinButton2DownClick(Sender: TObject);
     procedure SpinButton2UpClick(Sender: TObject);
@@ -548,13 +548,13 @@ var
 implementation
 
 uses Math, DivUtils, ImageProcess, ClipBrd, ShellApi, formulas,
-     CalcThread2D, CustomFormulas, Animation, AniPreviewWindow, Maps,
+     CalcThread2D, CustomFormulas, Animation, AniPreviewWindow, MB3DMaps,
      HeaderTrafos, Calc, IniDirsForm, FormulaGUI, Navigator, PostProcessForm,
      DOF, CalcHardShadow, AmbHiQ, BatchForm, Undo, CommDlg, VoxelExport,
      calcBlocky, CalcSR, Tiling, MonteCarloForm, TextBox, ColorPick,
      uMapCalcWindow, FormulaCompiler, MutaGenGUI, VisualThemesGUI,
      MapSequencesGUI, MapSequences, BulbTracer2UI, ScriptUI, HeightMapGenUI,
-     ZBuf16BitGenUI;
+     ZBuf16BitGenUI, Types;
 
 {$R *.lfm}
 
@@ -567,7 +567,7 @@ begin
  //     Result := TileRect;
   //    Result := TilingForm.brCalcRect
     else
-      Result := Rect(0, 0, MHeader.Width - 1, MHeader.Height - 1);
+      Result := Types.Rect(0, 0, MHeader.Width - 1, MHeader.Height - 1);
 end;
 
 procedure TMand3DForm.UpdateAndScaleImageFull(NewScale: Integer);
@@ -771,7 +771,7 @@ begin
       er := Msg.WParam shr 16;
       UpdateScaledImage(sr div ImageScale, er div ImageScale);   //tiling?
       if (DrawRect.Top = sr) and (DrawRect.Bottom = er) then
-        DrawRect := Rect(MHeader.Width, MHeader.Height, 0, 0);
+        DrawRect := Types.Rect(MHeader.Width, MHeader.Height, 0, 0);
     end
     else if Msg.LParam = 3 then
     begin
@@ -1744,7 +1744,7 @@ begin
     MCalcThreadStats.iProcessingType := 0;
     MCalcThreadStats.iTotalThreadCount := 0;
     iActivePaintThreads := 0;
-    UserAspect := Point(0, 0);
+    UserAspect := Types.Point(0, 0);
     IniMHeader;
     for i := 0 to 5 do IniCustomF(@HybridCustoms[i]);
     for i := 0 to 5 do IniCustomF(@calcHybridCustoms[i]);
@@ -2518,7 +2518,7 @@ begin
     if not (Image1.Cursor = crHourGlass) then
     begin
       GetCursorPos(MStartPos);
-      MOrigStartPos := Point(X, Y);
+      MOrigStartPos := Types.Point(X, Y);
       MmaxShapeWid  := 0;
       MZtranslate   := 0;
       if Image1.Cursor = crHandPoint then
@@ -2530,8 +2530,8 @@ begin
       begin
         if PostProForm.CheckBox21.Checked or PostProForm.CheckBox25.Checked then  //reflections preview
         begin
-          MXYStartPos := Point(X, Y);
-          PostProForm.iRect := Rect(X * ImageScale, Y * ImageScale, X * ImageScale, Y * ImageScale);
+          MXYStartPos := Types.Point(X, Y);
+          PostProForm.iRect := Types.Rect(X * ImageScale, Y * ImageScale, X * ImageScale, Y * ImageScale);
           Shape1.SetBounds(X + Image1.Left, Y + Image1.Top, 0, 0);
           Shape1.Visible := True;
         end  
@@ -2686,7 +2686,7 @@ begin
         else ps2.SIgradient := wCol or wInOut;
       end;
     end;
-    TriggerRepaintDraw(Rect(X - ir, Y - ir, X + ir, Y + ir));
+    TriggerRepaintDraw(Types.Rect(X - ir, Y - ir, X + ir, Y + ir));
 end;
 
 procedure TMand3DForm.MutaGenBtnClick(Sender: TObject);
@@ -3439,7 +3439,7 @@ begin
 end;
 
 procedure TMand3DForm.SpinEdit2ChangingEx(Sender: TObject;
-  var AllowChange: Boolean; NewValue: Integer; Direction: TUpDownDirection);
+  var AllowChange: Boolean; NewValue: SmallInt; Direction: TUpDownDirection);
 begin
     AllPresetsUp;
 end;
@@ -3678,7 +3678,7 @@ var p: TPoint;
 begin
     if ssRight in Shift then
     begin
-      p := Point(X, Y);
+      p := Types.Point(X, Y);
       p := Shape2.ClientToScreen(p);
       PopupMenu4.Popup(p.X, p.Y);
     end
@@ -3756,8 +3756,8 @@ begin
         bmp.PixelFormat := pf24bit;
         bmp.SetSize((TileRect.Right - TileRect.Left + 1 - 2 * Crop) div ImageScale,
           (TileRect.Bottom - TileRect.Top + 1 - 2 * Crop) div ImageScale);
-        bmp.Canvas.CopyRect(Rect(0, 0, bmp.Width, bmp.Height), Mand3DForm.Image1.Picture.Bitmap.Canvas,
-            Rect(Crop div ImageScale, Crop div ImageScale,
+        bmp.Canvas.CopyRect(Types.Rect(0, 0, bmp.Width, bmp.Height), Mand3DForm.Image1.Picture.Bitmap.Canvas,
+            Types.Rect(Crop div ImageScale, Crop div ImageScale,
                  Crop div ImageScale + bmp.Width, Crop div ImageScale + bmp.Height));
         case OutputType of
           0:  SavePNG(FileNam, bmp, CheckBox13.Checked);
@@ -4137,7 +4137,7 @@ end;
 procedure TMand3DForm.SpeedButton35Click(Sender: TObject);
 var CP: TPoint;
 begin
-    CP := SpeedButton35.ClientToScreen(Point(0, SpeedButton35.Height));
+    CP := SpeedButton35.ClientToScreen(Types.Point(0, SpeedButton35.Height));
     PopupMenu1.Popup(CP.X, CP.Y);
 end;
 

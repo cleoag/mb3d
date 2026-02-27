@@ -45,7 +45,7 @@ var CalcMaps: array[0..2] of TLightMap; //max 3 lightmaps?   todo: Global Map Ha
 
 implementation
 
-uses Mand, LightAdjust, CalcThread, CalcThread2D, HeaderTrafos, Math, Maps,
+uses Mand, LightAdjust, CalcThread, CalcThread2D, HeaderTrafos, Math, MB3DMaps,
      Navigator, SysUtils, Types, DivUtils, Forms, ImageProcess, FileHandling,
      MapSequences;
 

@@ -533,7 +533,7 @@ object JITFormulaEditorForm: TJITFormulaEditorForm
           BevelOuter = bvNone
           BorderWidth = 8
           TabOrder = 0
-          object CodeEdit: TRichEdit
+          object CodeEdit: TMemo
             Left = 8
             Top = 8
             Width = 680
@@ -564,7 +564,7 @@ object JITFormulaEditorForm: TJITFormulaEditorForm
           BevelOuter = bvNone
           BorderWidth = 8
           TabOrder = 0
-          object DescriptionEdit: TRichEdit
+          object DescriptionEdit: TMemo
             Left = 8
             Top = 8
             Width = 680
@@ -596,7 +596,7 @@ object JITFormulaEditorForm: TJITFormulaEditorForm
           BevelOuter = bvNone
           BorderWidth = 8
           TabOrder = 0
-          object PreprocessedCodeEdit: TRichEdit
+          object PreprocessedCodeEdit: TMemo
             Left = 8
             Top = 8
             Width = 680
@@ -628,7 +628,7 @@ object JITFormulaEditorForm: TJITFormulaEditorForm
           BevelOuter = bvNone
           BorderWidth = 8
           TabOrder = 0
-          object SupportedFunctionsEdit: TRichEdit
+          object SupportedFunctionsEdit: TMemo
             Left = 8
             Top = 8
             Width = 680

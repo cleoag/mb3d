@@ -36,7 +36,7 @@ var
 
 implementation
 
-uses DivUtils, HeaderTrafos, Math, Calc, Maps, Mand;
+uses DivUtils, HeaderTrafos, Math, Calc, MB3DMaps, Mand;
 
 {$R *.lfm}
 

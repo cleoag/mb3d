@@ -10,3 +10,5 @@ Mandelbulb3D.ini
 *.identcache
 color_preset*
 x64/*
+lib/
+*.exe

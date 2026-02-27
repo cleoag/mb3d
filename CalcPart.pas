@@ -6,7 +6,7 @@ unit CalcPart;
 interface
 
 uses
-  Classes, Math3D, TypeDefinitions, Windows;
+  Classes, Types, Math3D, TypeDefinitions, Windows;
 
 type
   TCalcPartThread = class(TThread)  //todo: use normal calcthread+hscalcthread with calcrect+psilight+FSI modifications
@@ -54,7 +54,7 @@ begin
         MCTparas.PLVals   := @HeaderLightVals;
         MCTparas.PCalcThreadStats := @MCalcThreadStats;
         with MCTparas do
-          CalcRect := Rect(CalcR.Left + CalcRect.Left, CalcR.Top + CalcRect.Top,
+          CalcRect := Types.Rect(CalcR.Left + CalcRect.Left, CalcR.Top + CalcRect.Top,
                            CalcR.Right + CalcRect.Left, CalcR.Bottom + CalcRect.Top);
         CalcHSVecsFromLights(@HeaderLightVals, @MCTparas);
         SetLength(CalcPartThread, ThreadCount);

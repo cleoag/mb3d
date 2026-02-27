@@ -128,7 +128,7 @@ var
 
 implementation
 
-uses SysUtils, Math, formulas, Forms, HeaderTrafos, Mand, Graphics, Maps;
+uses SysUtils, Math, formulas, Forms, HeaderTrafos, Mand, Graphics, MB3DMaps;
 
 {$IFDEF FPC}
   {$CODEALIGN PROC=16}
@@ -291,10 +291,10 @@ var i: Integer;
 begin
     i := Header.TilingOptions;  //32bits: 1..7:TileCountH 8..14:TileCountW 15..21:TilePosH 22..28:TilePosV 29..30: Downscale(AA)
     Crop := Max(1, (i shr 28) and 3);  //downscale 1..3
-    Tcount := Point(i and $7F, (i shr 7) and $7F);
-    Tpos := Point((i shr 14) and $7F, (i shr 21) and $7F);
-    Tsize := Point(Header.Width div Tcount.X, Header.Height div Tcount.Y);
-    TileRect := Rect(Tpos.X * Tsize.X - Crop, Tpos.Y * Tsize.Y - Crop,
+    Tcount := Types.Point(i and $7F, (i shr 7) and $7F);
+    Tpos := Types.Point((i shr 14) and $7F, (i shr 21) and $7F);
+    Tsize := Types.Point(Header.Width div Tcount.X, Header.Height div Tcount.Y);
+    TileRect := Types.Rect(Tpos.X * Tsize.X - Crop, Tpos.Y * Tsize.Y - Crop,
           (Tpos.X + 1) * Tsize.X + Crop - 1, (Tpos.Y + 1) * Tsize.Y + Crop - 1);
 end;
 
@@ -311,9 +311,9 @@ begin
     end else begin
       i := Header.TilingOptions;
       Crop := Max(1, (i shr 28) and 3);
-      Tcount := Point(i and $7F, (i shr 7) and $7F);
-      Tpos := Point((i shr 14) and $7F, (i shr 21) and $7F);
-      Tsize := Point(Header.Width div Tcount.X, Header.Height div Tcount.Y);
+      Tcount := Types.Point(i and $7F, (i shr 7) and $7F);
+      Tpos := Types.Point((i shr 14) and $7F, (i shr 21) and $7F);
+      Tsize := Types.Point(Header.Width div Tcount.X, Header.Height div Tcount.Y);
       Xplus := Tpos.X * Tsize.X - Crop;
       Yplus := Tpos.Y * Tsize.Y - Crop;
       wid := Tsize.X + 2 * Crop;
@@ -326,12 +326,12 @@ var Tcount: TPoint;
     Crop: Integer;
 begin
     if Header.TilingOptions = 0 then
-      Result := Point(Header.Width, Header.Height)
+      Result := Types.Point(Header.Width, Header.Height)
     else
     begin
       Crop := Max(1, (Header.TilingOptions shr 28) and 3);
-      Tcount := Point(Header.TilingOptions and $7F, (Header.TilingOptions shr 7) and $7F);
-      Result := Point(Header.Width div Tcount.X + 2 * Crop, Header.Height div Tcount.Y + 2 * Crop);
+      Tcount := Types.Point(Header.TilingOptions and $7F, (Header.TilingOptions shr 7) and $7F);
+      Result := Types.Point(Header.Width div Tcount.X + 2 * Crop, Header.Height div Tcount.Y + 2 * Crop);
     end;
     Result.X := Max(1, Min(30000, Result.X));
     Result.Y := Max(1, Min(30000, Result.Y));

@@ -181,7 +181,7 @@ var
 implementation
 
 uses CalcVoxelSliceThread, FileHandling, Math, Math3D, Calc, DivUtils, Mand,
-  HeaderTrafos, CustomFormulas, ImageProcess;
+  HeaderTrafos, CustomFormulas, ImageProcess, Types;
 
 {$R *.lfm}
   {    d := 2.1345 * 0.5 / VHeader.dZoom;
@@ -434,7 +434,7 @@ begin
     begin
       MCTparas.pSiLight := @Mand3DForm.siLight5[0];
       MCTparas.PCalcThreadStats := @VCalcThreadStats;
-      MCTparas.CalcRect := Rect(0, 0, M3Vfile.VHeader.Width - 1, M3Vfile.VHeader.Height - 1);
+      MCTparas.CalcRect := Types.Rect(0, 0, M3Vfile.VHeader.Width - 1, M3Vfile.VHeader.Height - 1);
       //calc VGrads to get the desired slice:
       if M3Vfile.UseDefaultOrientation then BuildRotMatrix(0, 0, 0, @MCTparas.VGrads);
       d := 2.2 / (M3Vfile.VHeader.dZoom * M3Vfile.Zscale * (M3Vfile.Zslices - 1)); //new stepwidth
@@ -514,7 +514,7 @@ begin
       with M3Vfile do
       begin
         if UseDefaultOrientation then BuildRotMatrix(0, 0, 0, @MCTparas.VGrads);
-        MCTparas.CalcRect := Rect(0, 0, PVwid - 1, PVhei - 1);
+        MCTparas.CalcRect := Types.Rect(0, 0, PVwid - 1, PVhei - 1);
         d := 2.2 / (VHeader.dZoom * Zscale * Max(1, PVdep - 1));
         MCTparas.VGrads := NormaliseMatrixTo(d, @MCTparas.VGrads);
     //    d := (PVwid - 1) / 64;

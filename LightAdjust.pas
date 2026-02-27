@@ -405,7 +405,7 @@ implementation
 
 uses Mand, CalcThread, DivUtils, Math, PaintThread, FileHandling, ImageProcess,
      Animation, ColorPick, Interpolation, Undo, PostProcessForm, HeaderTrafos,
-     Maps, Navigator;
+     MB3DMaps, Navigator, Types;
 
 {$R *.lfm}
 
@@ -1272,9 +1272,9 @@ begin
       if i > 5 then P := CustomPresets[i]
                else P := ConvertColPreset164To20(Presets[i]);
       bmp.Canvas.Brush.Color := P.DepthCol and $FFFFFF;
-      bmp.Canvas.FillRect(Rect(1,1,15,15));
+      bmp.Canvas.FillRect(Types.Rect(1,1,15,15));
       bmp.Canvas.Brush.Color := P.DepthCol2 and $FFFFFF;
-      bmp.Canvas.FillRect(Rect(16,1,31,15));
+      bmp.Canvas.FillRect(Types.Rect(16,1,31,15));
       ImageList1.Add(bmp, nil);
       MI := TMenuItem.Create(PopupMenu2);
       MI.Caption := IntToStr(i);

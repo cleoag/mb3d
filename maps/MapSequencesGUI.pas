@@ -150,7 +150,7 @@ var
   end;
 
 begin
-  if OpenPictureDialog.Execute(Self.Handle) then begin
+  if OpenPictureDialog.Execute then begin
     Sequence := TMapSequence.Create;
     try
       Sequence.ImageFilename := OpenPictureDialog.FileName;

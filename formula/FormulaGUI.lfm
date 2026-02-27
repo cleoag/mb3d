@@ -878,7 +878,7 @@ object FormulaGUIForm: TFormulaGUIForm
       Visible = False
       OnChange = Edit1Change
     end
-    object RichEdit1: TRichEdit
+    object RichEdit1: TMemo
       Left = 7
       Top = 73
       Width = 293

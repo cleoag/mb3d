@@ -212,7 +212,7 @@ implementation
 
 uses Mand, Math3D, PaintThread, ImageProcess, HeaderTrafos, Tiling, CommDlg,
   PostProcessForm, DivUtils, CalcMonteCarlo, CustomFormulas, FileHandling,
-  LightAdjust, Maps, Math, ColorOptionForm, DateUtils;
+  LightAdjust, MB3DMaps, Math, ColorOptionForm, DateUtils;
 
 {$R *.lfm}
 

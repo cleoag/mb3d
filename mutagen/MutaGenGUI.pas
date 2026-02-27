@@ -82,7 +82,7 @@ type
     Panel7: TPanel;
     Panel5: TPanel;
     DisableAllBtn: TButton;
-    GridPanel2: TGridPanel;
+    GridPanel2: TPanel;
     MinIterLabel: TLabel;
     ModifyFormulaWeightTBar: TTrackBarEx;
     Label2: TLabel;
@@ -163,7 +163,7 @@ implementation
 
 {$R *.lfm}
 uses
-  Mand, TypeDefinitions, CustomFormulas, Contnrs, Math, FileHandling;
+  Mand, TypeDefinitions, CustomFormulas, Contnrs, Math, FileHandling, Types;
 
 const
   TBAR_SCALE = 1000.0;
@@ -616,7 +616,7 @@ begin
   Result.Width  := Width;
   Result.Height := Height;
   Result.Canvas.Brush.Color := ColorToRGB(clBackground);
-  Result.Canvas.FillRect(Rect(0,0, Width, Height));
+  Result.Canvas.FillRect(Types.Rect(0,0, Width, Height));
 end;
 
 procedure TMutaGenFrm.ClearPanels;

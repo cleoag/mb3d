@@ -96,8 +96,6 @@ interface
 
 // defines to configure freepascal
 {$IFDEF FPC}
-  {$MODE Delphi}
-
   {$IFNDEF WINDOWS}
     {$LINKLIB c}
   {$ENDIF}

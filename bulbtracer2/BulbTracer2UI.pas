@@ -300,7 +300,7 @@ implementation
 
 uses CalcVoxelSliceThread, FileHandling, Math, Math3D, Calc, DivUtils, Mand,
   HeaderTrafos, CustomFormulas, ImageProcess, VectorMath, DateUtils, BulbTracer2,
-  MeshPreviewUI, MeshWriter, MeshReader, ActiveX, Clipbrd;
+  MeshPreviewUI, MeshWriter, MeshReader, ActiveX, Clipbrd, Types;
 
 {$R *.lfm}
 
@@ -369,7 +369,7 @@ begin
       MCTparas.SLoffset := PVwid * SizeOf(Cardinal);
       MCTparas.PCalcThreadStats := @VCalcThreadStats;
       BuildRotMatrix(DegToRad(BTracer2Header.XAngle), DegToRad(BTracer2Header.YAngle), DegToRad(BTracer2Header.ZAngle), @MCTparas.VGrads);
-      MCTparas.CalcRect := Rect(0, 0, PVwid - 1, PVhei - 1);
+      MCTparas.CalcRect := Types.Rect(0, 0, PVwid - 1, PVhei - 1);
       d := 2.2 / (VHeader.dZoom * BTracer2Header.Scale * Max(1, PVdep - 1));
       MCTparas.VGrads := NormaliseMatrixTo(d, @MCTparas.VGrads);
       MCTparas.Ystart := TPVec3D(@VHeader.dXmid)^;
@@ -810,7 +810,7 @@ begin
     SaveDialog.Filter := GetMeshFileFilter(TMeshSaveType(SaveTypeCmb.ItemIndex));
     SaveDialog.InitialDir := ExtractFilePath(FilenameREd.Text);
     SaveDialog.FileName := FilenameREd.Text;
-    if SaveDialog.Execute(Self.Handle) then
+    if SaveDialog.Execute then
       FilenameREd.Text := SaveDialog.FileName;
   except
     // Hide error
@@ -1353,7 +1353,7 @@ begin
     if Result then begin
       MCTparas.pSiLight := @Mand3DForm.siLight5[0];
       MCTparas.PCalcThreadStats := @VCalcThreadStats;
-      MCTparas.CalcRect := Rect(0, 0, VHeader.Width - 1, VHeader.Height - 1);
+      MCTparas.CalcRect := Types.Rect(0, 0, VHeader.Width - 1, VHeader.Height - 1);
       BuildRotMatrix(DegToRad(BTracer2Header.XAngle), DegToRad(BTracer2Header.YAngle), DegToRad(BTracer2Header.ZAngle), @MCTparas.VGrads);
       d := 2.2 / (VHeader.dZoom * BTracer2Header.Scale * (ZSlices - 1)); //new stepwidth
       MCTparas.VGrads := NormaliseMatrixTo(d, @MCTparas.VGrads);
@@ -1813,7 +1813,7 @@ begin
     ParamError := False;
     if BTracer2Header.MandParamsAsString <> '' then begin
       try
-        Clipboard.SetTextBuf(PWideChar(String(BTracer2Header.MandParamsAsString)));
+        Clipboard.SetTextBuf(PChar(String(BTracer2Header.MandParamsAsString)));
         Mand3DForm.SpeedButton8Click(nil);
         ImportParamsFromMainBtnClick(nil);
       except

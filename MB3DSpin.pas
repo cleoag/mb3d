@@ -1,4 +1,4 @@
-unit Spin;
+unit MB3DSpin;
 
 {$mode delphi}
 

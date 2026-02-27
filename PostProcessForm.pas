@@ -187,7 +187,7 @@ var
 implementation
 
 uses Mand, DOF, DivUtils, ImageProcess, DoubleSize, CalcPart, HeaderTrafos,
- CalcMonteCarlo, CalcSR, Math3D, Tiling, LightAdjust, FileHandling;
+ CalcMonteCarlo, CalcSR, Math3D, Tiling, LightAdjust, FileHandling, Types;
 
 {$R *.lfm}
 
@@ -501,7 +501,7 @@ begin
       else
       begin
         if not ClipIRect then Exit;
-        tmpR := Rect(iRect.Left + tmpR.Left, iRect.Top + tmpR.Top,
+        tmpR := Types.Rect(iRect.Left + tmpR.Left, iRect.Top + tmpR.Top,
                      iRect.Right + tmpR.Left, iRect.Bottom + tmpR.Top);
         SLoff := iRect.Left + iRect.Top * TSize.X;
         Moff := SLoff * 4;

@@ -32,7 +32,7 @@ type
 implementation
 
 uses CustomFormulas, Math, Math3D, HeaderTrafos, DivUtils, Calc, Paint,
-  ImageProcess, CalcHardShadow, CalcSR, DOF;
+  ImageProcess, CalcHardShadow, CalcSR, DOF, Types;
 
 constructor TM3Pgraphic.Create;
 var i: Integer;
@@ -101,12 +101,12 @@ begin
     MakeLightValsFromHeaderLight(@Header, @HeaderLightVals, 1, Header.bStereoMode);
 
     SetLength(siLight5, w * h);
-    R := Rect(0, 0, w - 1, h - 1);
+    R := Types.Rect(0, 0, w - 1, h - 1);
     CalcThreadStats.pLBcalcStop := @bCalcStop;
     CalcThreadStats.iProcessingType := 1;
     CalcThreadStats.iAllProcessingOptions := AllAutoProcessings(@Header);
     if not CalcMandT(@Header, @HeaderLightVals, @CalcThreadStats,
-                 @siLight5[0], w * 18, aFSIstart, aFSIoffset, Rect(0, 0, w - 1, h - 1)) then Exit;
+                 @siLight5[0], w * 18, aFSIstart, aFSIoffset, Types.Rect(0, 0, w - 1, h - 1)) then Exit;
     iActiveThreads := CalcThreadStats.iTotalThreadCount;
     while (not bCalcStop) and (iActiveThreads > 0)do
     begin

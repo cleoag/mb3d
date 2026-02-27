@@ -111,7 +111,7 @@ var
 
 implementation
 
-uses Mand, LightAdjust, Math, Math3D, DivUtils, Interpolation, HeaderTrafos;
+uses Mand, LightAdjust, Math, Math3D, DivUtils, Interpolation, HeaderTrafos, Types;
 
 {$R *.lfm}
 
@@ -583,7 +583,7 @@ begin
     if Key in [66, 67, 86] then
     begin
       GetCursorPos(MPos);
-      C := ControlAtPos(ScreenToClient(Point(MPos.X, MPos.Y)), False, False);
+      C := ControlAtPos(ScreenToClient(Types.Point(MPos.X, MPos.Y)), False, False);
       if (C <> nil) and (C is TShape) then
       begin
         t := (C as TShape).Tag;
@@ -666,7 +666,7 @@ begin
    begin
      RandMidCol[(Sender as TSpeedButton).Tag] := ColorToRGB(ColorDialog1.Color);
      Brush.Color := RandMidCol[(Sender as TSpeedButton).Tag];
-     FillRect(Rect(2, 1, 14, 13));
+     FillRect(Types.Rect(2, 1, 14, 13));
    end;
 end;
 

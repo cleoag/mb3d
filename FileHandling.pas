@@ -4,7 +4,7 @@ unit FileHandling;
 
 interface
 
-uses Windows, LightAdjust, SysUtils, Graphics, jpeg, TypeDefinitions,
+uses Windows, LightAdjust, SysUtils, Graphics, TypeDefinitions,
      SyncObjs, Classes, Controls, Dialogs, ExtDlgs;
 
 procedure LoadFullM3I(var Header: TMandHeader10; Filename: String);
@@ -93,7 +93,7 @@ implementation
 
 uses Mand, ImageProcess, Clipbrd, DivUtils, Math, CustomFormulas, HeaderTrafos,
      Animation, FormulaGUI, Navigator, AniPreviewWindow, Interpolation, Tiling,
-     Math3D, Forms, Maps, Undo, ZBuf16BitGen;
+     Math3D, Forms, MB3DMaps, Undo, ZBuf16BitGen, Types;
 
 function FileIsBigger1(Fname: String): LongBool;
 var F: TSearchRec;
@@ -971,7 +971,7 @@ end;
 
 procedure CopyHeaderAsTextToClipBoard(para: TPMandHeader10; Titel: String);
 begin
-    Clipboard.SetTextBuf(PWideChar(String(MakeTextparas(para, Titel))));
+    Clipboard.SetTextBuf(PChar(String(MakeTextparas(para, Titel))));
 end;
 
 function AnsiCopy(Text: AnsiString; Offset, Count: Integer): AnsiString;
@@ -1334,8 +1334,8 @@ begin
         GetTilingInfosFromHeader(@Mand3DForm.MHeader, TileRect, Crop);
         tbmp.SetSize((TileRect.Right - TileRect.Left + 1 - Crop * 2) div ImageScale,
           (TileRect.Bottom - TileRect.Top + 1 - Crop * 2) div ImageScale);
-        tbmp.Canvas.CopyRect(Rect(0, 0, tbmp.Width, tbmp.Height), Mand3DForm.Image1.Picture.Bitmap.Canvas,
-             Rect(Crop div ImageScale, Crop div ImageScale,
+        tbmp.Canvas.CopyRect(Types.Rect(0, 0, tbmp.Width, tbmp.Height), Mand3DForm.Image1.Picture.Bitmap.Canvas,
+             Types.Rect(Crop div ImageScale, Crop div ImageScale,
                   Crop div ImageScale + tbmp.Width, Crop div ImageScale + tbmp.Height));
       end
       else tbmp.SetSize(Mand3DForm.Image1.Picture.Width, Mand3DForm.Image1.Picture.Height);
