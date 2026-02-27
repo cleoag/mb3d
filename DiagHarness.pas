@@ -31,9 +31,6 @@ procedure DiagLogMCTparasRecord(const MCT: TMCTparameter; const SceneName: Strin
 { Log a post-processing step }
 procedure DiagLogPostProc(const StepName: String; StepCode: Integer);
 
-{ Save render bitmap }
-procedure DiagSaveBitmapToFile(const SceneName: String);
-
 { Sample siLight5 buffer at key points }
 procedure DiagLogSiLight5Sample(pSiLight: Pointer; Width, Height: Integer; const SceneName: String);
 
@@ -68,13 +65,17 @@ procedure DiagOpenLog;
 var LogPath: String;
 begin
   if gDiagLogOpen then Exit;
-  LogPath := DiagOutputDir + 'diag_log.txt';
-  AssignFile(gDiagLogFile, LogPath);
-  if FileExists(LogPath) then
-    Append(gDiagLogFile)
-  else
-    Rewrite(gDiagLogFile);
-  gDiagLogOpen := True;
+  try
+    LogPath := DiagOutputDir + 'diag_log.txt';
+    AssignFile(gDiagLogFile, LogPath);
+    if FileExists(LogPath) then
+      Append(gDiagLogFile)
+    else
+      Rewrite(gDiagLogFile);
+    gDiagLogOpen := True;
+  except
+    gDiagLogOpen := False;
+  end;
 end;
 
 procedure DiagLog(const S: String);
@@ -163,7 +164,6 @@ var
   FPath: String;
   i: Integer;
   SafeName: String;
-  pp: PtrUInt;
 begin
   if not gDiagActive then Exit;
 
@@ -248,12 +248,9 @@ begin
     WriteLn(F, '');
     WriteLn(F, '--- fHybrid procedure addresses ---');
     for i := 0 to 5 do
-    begin
-      // ThybridIteration2 is a plain procedure pointer
-      pp := PtrUInt(@MCT.fHybrid[i]);
-      pp := PPtrUInt(pp)^;  // dereference to get the stored pointer value
-      WriteLn(F, '  fHybrid[', i, '] = $', IntToHex(pp, 8));
-    end;
+      // In {$mode delphi}, @procVar returns the stored procedure address directly
+      // (NOT the address of the variable — that would be @@procVar)
+      WriteLn(F, '  fHybrid[', i, '] = $', IntToHex(PtrUInt(@MCT.fHybrid[i]), 8));
 
     WriteLn(F, '');
     WriteLn(F, '--- fHPVar constant pointers ---');
@@ -307,23 +304,6 @@ procedure DiagLogPostProc(const StepName: String; StepCode: Integer);
 begin
   if not gDiagActive then Exit;
   DiagLog('PostProc step: ' + StepName + ' (code=' + IntToStr(StepCode) + ')');
-end;
-
-procedure DiagSaveBitmapToFile(const SceneName: String);
-var
-  SafeName, FPath: String;
-  Bmp: Graphics.TBitmap;
-begin
-  if not gDiagActive then Exit;
-
-  SafeName := StringReplace(SceneName, ' ', '_', [rfReplaceAll]);
-  SafeName := StringReplace(SafeName, '.m3p', '', [rfReplaceAll, rfIgnoreCase]);
-  if SafeName = '' then SafeName := 'default';
-  FPath := DiagOutputDir + 'fpc_' + SafeName + '.bmp';
-
-  // We'll get the bitmap from Image1 in the calling code
-  // Here we just record the path; actual save is done by caller passing the bitmap
-  DiagLog('DiagSaveBitmapToFile: path=' + FPath);
 end;
 
 procedure DiagLogSiLight5Sample(pSiLight: Pointer; Width, Height: Integer; const SceneName: String);
