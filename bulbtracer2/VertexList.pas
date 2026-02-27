@@ -20,9 +20,26 @@ unit VertexList;
 interface
 
 uses
-  SysUtils, Classes, Contnrs, VectorMath, SyncObjs, Generics.Collections;
+  SysUtils, Classes, Contnrs, VectorMath, SyncObjs
+  {$IFDEF FPC}
+  , fgl
+  {$ELSE}
+  , Generics.Collections
+  {$ENDIF}
+  ;
 
 type
+{$IFDEF FPC}
+  { FPC: TDictionary from Generics.Collections conflicts with SyncObjs.
+    Use TFPGMap-based wrapper with TDictionary-compatible API. }
+  TStringIntDictionary = class(TFPGMap<string, integer>)
+  public
+    function ContainsKey(const Key: string): Boolean;
+    procedure Add(const Key: string; const Value: integer); reintroduce;
+    function GetItem(const Key: string): integer;
+    property Items[const Key: string]: integer read GetItem; default;
+  end;
+{$ENDIF}
   TFace = packed record
     Vertex1, Vertex2, Vertex3: Integer;
   end;
@@ -117,7 +134,11 @@ type
     FVertices: TPS3VectorList;
     // TODO rename
     FVertexColors2: TPVertexColorList;
+{$IFDEF FPC}
+    FVertexKeys: TStringIntDictionary;
+{$ELSE}
     FVertexKeys: TDictionary<string, integer>;
+{$ENDIF}
     function GetCount: Integer;
     function MakeVertexKey(const X, Y, Z: Double): String; overload;
     function ValidateFace(const V1, V2, V3: Integer): Boolean;
@@ -142,12 +163,12 @@ type
     function AddVertex(const V: TPS3Vector): Integer; overload;
     function AddVertex(const V: TPS3Vector; const ColorIdx, ColorR, ColorG, ColorB: TColorValue): Integer; overload;
     function AddVertex(const V: TPD3Vector; const ColorIdx, ColorR, ColorG, ColorB: TColorValue): Integer; overload;
-    function AddVertex(const V: TPS3Vector; const Sync: TCriticalSection ): Integer; overload;
+    function AddVertex(const V: TPS3Vector; const Sync: SyncObjs.TCriticalSection ): Integer; overload;
     function AddVertex(const V: TPD3Vector): Integer; overload;
     function GetFace(const Idx: Integer): TPFace;
     function GetVertex(const Idx: Integer): TPS3Vector;
     procedure MoveFaces(const Src: TFacesList); overload;
-    procedure MoveFaces(const Src: TFacesList; const Sync: TCriticalSection ); overload;
+    procedure MoveFaces(const Src: TFacesList; const Sync: SyncObjs.TCriticalSection ); overload;
     procedure RemoveDuplicates;
     procedure TaubinSmooth(const Lambda, Mu: Double; const Passes: Integer);
     procedure CompressFaces(const Passes: Integer);
@@ -195,6 +216,25 @@ implementation
 
 uses
   Windows, Math, DateUtils;
+
+{$IFDEF FPC}
+{ TStringIntDictionary - FPC TFPGMap wrapper with TDictionary-compatible API }
+function TStringIntDictionary.ContainsKey(const Key: string): Boolean;
+begin
+  Result := IndexOf(Key) >= 0;
+end;
+
+procedure TStringIntDictionary.Add(const Key: string; const Value: integer);
+begin
+  inherited Add(Key, Value);
+end;
+
+function TStringIntDictionary.GetItem(const Key: string): integer;
+begin
+  Result := KeyData[Key];
+end;
+{$ENDIF}
+
 { ----------------------------------- Misc ----------------------------------- }
 procedure ShowDebugInfo(const Msg: String; const RefTime: Int64);
 var
@@ -594,7 +634,11 @@ begin
   FFaces := TList.Create;
   FVertices := TPS3VectorList.Create;
   FVertexColors2 := TPVertexColorList.Create;
+{$IFDEF FPC}
+  FVertexKeys := TStringIntDictionary.Create;
+{$ELSE}
   FVertexKeys := TDictionary<string,integer>.Create;
+{$ENDIF}
 end;
 
 destructor TFacesList.Destroy;
@@ -803,7 +847,7 @@ begin
   end;
 end;
 
-function TFacesList.AddVertex(const V: TPS3Vector; const Sync: TCriticalSection ): Integer;
+function TFacesList.AddVertex(const V: TPS3Vector; const Sync: SyncObjs.TCriticalSection ): Integer;
 var
   Key: String;
 begin
@@ -882,7 +926,7 @@ begin
   end;
 end;
 
-procedure TFacesList.MoveFaces(const Src: TFacesList; const Sync: TCriticalSection );
+procedure TFacesList.MoveFaces(const Src: TFacesList; const Sync: SyncObjs.TCriticalSection );
 var
   I: Integer;
   Face: TPFace;
@@ -1496,15 +1540,15 @@ type
   private
     FDest, FSrc: TFacesList;
     FDone: boolean;
-    FSync: TCriticalSection;
+    FSync: SyncObjs.TCriticalSection;
   public
-    constructor Create( const Dest, Src: TFacesList; const Sync: TCriticalSection );
+    constructor Create( const Dest, Src: TFacesList; const Sync: SyncObjs.TCriticalSection );
   protected
     procedure Execute; override;
     function IsDone: boolean;
   end;
 
-constructor TMergeFacesThread.Create( const Dest, Src: TFacesList; const Sync: TCriticalSection );
+constructor TMergeFacesThread.Create( const Dest, Src: TFacesList; const Sync: SyncObjs.TCriticalSection );
 begin
   inherited Create(true);
   FDest := Dest;
@@ -1534,7 +1578,7 @@ var
   I: Integer;
   IsDone: boolean;
   FacesList: TFacesList;
-  Sync: TCriticalSection;
+  Sync: SyncObjs.TCriticalSection;
   CurrThread: TMergeFacesThread;
   Threads: TObjectList;
 begin
@@ -1542,7 +1586,7 @@ begin
   Result := TFacesList.Create;
   try
     if MultiThreaded then begin
-      Sync:=TCriticalSection.Create;
+      Sync:=SyncObjs.TCriticalSection.Create;
       try
         Threads := TObjectList.Create;
         try

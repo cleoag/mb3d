@@ -69,7 +69,7 @@ var
 
 implementation
 
-uses FileHandling, DivUtils, Mand, Math, UITypes, Forms, HeaderTrafos, Calc,
+uses FileHandling, DivUtils, Mand, Math, Forms, HeaderTrafos, Calc,
   MapSequences, PNMReader;
 
 function VolLightMapPosPas(vd: TPVec3D): LongBool;

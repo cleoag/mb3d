@@ -41,10 +41,10 @@ type
     CheckBox5: TCheckBox;
     Button6: TButton;
     ImageList1: TImageList;
-    CategoryPanelGroup2: TCategoryPanelGroup;
-    CategoryPanel6: TCategoryPanel;
-    CategoryPanel5: TCategoryPanel;
-    CategoryPanel1: TCategoryPanel;
+    CategoryPanelGroup2: TScrollBox;
+    CategoryPanel6: TGroupBox;
+    CategoryPanel5: TGroupBox;
+    CategoryPanel1: TGroupBox;
     Label9: TLabel;
     Edit21: TEdit;
     UpDown3: TUpDown;
@@ -66,7 +66,7 @@ type
     Edit3: TEdit;
     Label24: TLabel;
     ComboBox1: TComboBox;
-    CategoryPanel2: TCategoryPanel;
+    CategoryPanel2: TGroupBox;
     Label4: TLabel;
     Label5: TLabel;
     Label2avrgnoise: TLabel;
@@ -126,8 +126,6 @@ type
     procedure FormShow(Sender: TObject);
     procedure CheckBox4Click(Sender: TObject);
     procedure UpDown2Click(Sender: TObject; Button: TUDBtnType);
-    procedure CategoryPanel2Collapse(Sender: TObject);
-    procedure CategoryPanel2Expand(Sender: TObject);
     procedure Timer3Timer(Sender: TObject);
     procedure ToggleBatchPnlBtnClick(Sender: TObject);
     procedure BatchOpenM3PSequenceBtnClick(Sender: TObject);
@@ -161,8 +159,6 @@ type
     procedure ShowTotalCalcTime;
     procedure ConvertFromNewMCrecord;
     procedure CalcBokeDiscOnBMP(var BokehBMP: TBitmap; nr: Integer);
-    procedure SetCPanelImages(C: TCategoryPanel; Checked: LongBool);
-    procedure UpdatePanel(C: TCategoryPanel);
     procedure IniHeaderPointers;
     procedure EnableBatchControls;
     procedure RefreshBatchGrid;
@@ -416,21 +412,6 @@ begin
     end;
 end;
 
-procedure TMCForm.CategoryPanel2Collapse(Sender: TObject);
-begin   //set categoryGroupheight
-    CategoryPanelGroup2.Height := CategoryPanel1.Height + CategoryPanel2.Height
-                                + CategoryPanel5.Height + CategoryPanel6.Height;
-    Label33.Top := CategoryPanelGroup2.Height + 8;
-end;
-
-procedure TMCForm.CategoryPanel2Expand(Sender: TObject);
-begin //Collapse every other panel
-    if Sender <> CategoryPanel1 then CategoryPanel1.Collapsed := True;
-    if Sender <> CategoryPanel2 then CategoryPanel2.Collapsed := True;
-    if Sender <> CategoryPanel5 then CategoryPanel5.Collapsed := True;
-    if Sender <> CategoryPanel6 then CategoryPanel6.Collapsed := True;
-    CategoryPanel2Collapse(Sender);
-end;
 
 procedure TMCForm.IniHeaderPointers;
 var i: Integer;
@@ -587,7 +568,7 @@ end;
 
 procedure TMCForm.Timer3Timer(Sender: TObject);
 begin
-    Label33.Top := CategoryPanelGroup2.Height + 8;
+    Label33.Top := CategoryPanel1.Top + CategoryPanel1.Height + 8;
     if Timer3.Tag > 0 then
     begin
       Timer3.Tag := Timer3.Tag - 1;
@@ -1149,25 +1130,6 @@ begin
     FBatchCurrRayCount := maxRCount;
 end;
 
-procedure TMCForm.SetCPanelImages(C: TCategoryPanel; Checked: LongBool);
-var i: Integer;
-begin
-    if Checked then i := 2 else i := 0;
-    C.CollapsedImageIndex := i;
-    C.ExpandedImageIndex := i + 1;
-    C.CollapsedHotImageIndex := i + 4;
-    C.CollapsedPressedImageIndex := i + 4;
-    C.ExpandedHotImageIndex := i + 5;
-    C.ExpandedPressedImageIndex := i + 5;
-    UpdatePanel(C);
-end;
-
-procedure TMCForm.UpdatePanel(C: TCategoryPanel); //because it will not be repainted properly
-begin
-    if Copy(C.Caption, 1, 1) = ' ' then C.Caption := Trim(C.Caption)
-                                   else C.Caption := ' ' + Trim(C.Caption) + ' ';
-end;
-
 procedure TMCForm.CheckBox2Click(Sender: TObject);
 begin
     Edit1.Enabled := CheckBox2.Checked;
@@ -1175,14 +1137,12 @@ begin
     UpDown1.Enabled := CheckBox2.Checked;
     Button5.Enabled := CheckBox2.Checked;
     CheckBox3.Enabled := CheckBox2.Checked;
-    SetCPanelImages(CategoryPanel5, CheckBox2.Checked);
 end;
 
 procedure TMCForm.CheckBox4Click(Sender: TObject);
 begin
     UpDown2.Enabled := CheckBox4.Checked;
     Image2.Visible := CheckBox4.Checked; //is not updated if not visible! -> doublebuffered := True
-    SetCPanelImages(CategoryPanel6, CheckBox4.Checked);
 end;
 
 procedure TMCForm.StartCalc;

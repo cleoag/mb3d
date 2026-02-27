@@ -126,7 +126,11 @@ asm
  // if datasize=0 then exit
  jecxz @done
  // edx = self.crc
+{$IFDEF FPC}
+ mov  edx, dword ptr [edi + TCrc32Stream.curcrc]
+{$ELSE}
  mov  edx, [TCrc32Stream(edi).curcrc]
+{$ENDIF}
  // set direction forward
  cld
  // data loop
@@ -152,7 +156,11 @@ asm
   xor  edx, eax
  loop @lp1
  // self.crc = edx
+{$IFDEF FPC}
+ mov dword ptr [edi + TCrc32Stream.curcrc], edx
+{$ELSE}
  mov [TCrc32Stream(edi).curcrc], edx
+{$ENDIF}
  @done:
  popad
 end;

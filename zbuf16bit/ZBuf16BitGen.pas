@@ -26,7 +26,7 @@ implementation
 
 uses
   Types, Mand, DivUtils, PNMWriter, FileHandling, ImageProcess, HeaderTrafos,
-  TypeDefinitions, Forms, ShellApi;
+  TypeDefinitions, Forms;
 
 function CreateZBuf8Bit(const ZOffset, ZScale: double): TBitmap;
 var

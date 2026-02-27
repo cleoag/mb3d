@@ -72,7 +72,20 @@ http://www.efg2.com/Lab/Graphics/SphereInCubeMovie.htm
 interface
 
 uses
-  Windows, SysUtils, Graphics, GIFImage;
+  Windows, SysUtils, Graphics
+  {$IFNDEF FPC}
+  , GIFImage
+  {$ENDIF}
+  ;
+
+{$IFDEF FPC}
+{ FPC/LCL stub: Anders Melander's GIFImage is not available.
+  GIF animation export is disabled. Basic overloads are provided
+  so that calling code compiles, but they produce no output. }
+type
+  TGIFImage = class(TGraphic)
+  end;
+{$ENDIF}
 
 procedure GifAnimateBegin; overload;
 
@@ -89,6 +102,7 @@ function GifAnimateAddImage(Source: TGraphic; TransparentColor: TColor; DelayMS:
 // TransparentColor<>-1 uses that color as the transparent.
 // Note: There is no guaranteee that the color will actually be in the GIF's color palette.
 
+{$IFNDEF FPC}
 function GifAnimateAddImage(Source: TGraphic; pLeft, pTop: Word; NSLoop, GCExt: Boolean; Loops: Word; TransparentColor: TColor; DelayMS: Word; Disposal: TDisposalMethod): Integer; overload;
 // TransparentColor<>-1 uses that color as the transparent.
 // Note: There is no guaranteee that the color will actually be in the GIF's color palette.
@@ -96,8 +110,47 @@ function GifAnimateAddImage(Source: TGraphic; pLeft, pTop: Word; NSLoop, GCExt: 
 function GifAnimateAddImage(pSource: TGraphic; pLeft, pTop: Word; TransparentColor: TColor; pLoopExt: TGIFAppExtNSLoop; pGCExt: TGIFGraphicControlExtension): Integer; overload;
 
 function GetColorIndex(GIF: TGIFSubImage; Color: TColor): Integer;
+{$ENDIF}
 
 implementation
+
+{$IFDEF FPC}
+
+{ FPC stub implementations - GIF animation not available }
+
+procedure GifAnimateBegin;
+begin
+  // GIF animation not available in FPC build
+end;
+
+procedure GifAnimateBegin(Width, Height: Integer);
+begin
+  // GIF animation not available in FPC build
+end;
+
+function GifAnimateEndPicture: TPicture;
+begin
+  Result := TPicture.Create;
+end;
+
+function GifAnimateEndGif: TGIFImage;
+begin
+  Result := TGIFImage.Create;
+end;
+
+function GifAnimateAddImage(Source: TGraphic; Transparent: Boolean; DelayMS: Word): Integer;
+begin
+  Result := -1;
+end;
+
+function GifAnimateAddImage(Source: TGraphic; TransparentColor: TColor; DelayMS: Word): Integer;
+begin
+  Result := -1;
+end;
+
+{$ELSE}
+
+{ Delphi implementation using Anders Melander's GIFImage }
 
 var
   GIF: TGIFImage;
@@ -304,4 +357,5 @@ initialization
   GIF := nil;
 finalization
   GIF.Free;
+{$ENDIF}
 end.

@@ -20,7 +20,7 @@ unit BulbTracer2Config;
 interface
 
 uses
-  SysUtils, Classes, Generics.Collections, VertexList;
+  SysUtils, Classes, VertexList;
 
 const
   ZSlices = 100;
@@ -163,7 +163,7 @@ type
 
 implementation
 
-uses Contnrs, System.Math, Windows;
+uses Contnrs, Math, Windows;
 
 { --------------------------------- TRange ----------------------------------- }
 constructor TRange.Create;

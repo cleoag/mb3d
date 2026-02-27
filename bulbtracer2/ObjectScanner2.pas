@@ -21,7 +21,7 @@ interface
 
 uses
   SysUtils, Classes, Contnrs, VectorMath, TypeDefinitions, BulbTracer2Config,
-  VertexList, Generics.Collections, MeshIOUtil;
+  VertexList, MeshIOUtil;
 
 type
   TObjectScanner2Config = class

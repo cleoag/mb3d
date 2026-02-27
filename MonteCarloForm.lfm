@@ -352,50 +352,23 @@ object MCForm: TMCForm
       Height = 325
       Align = alClient
       TabOrder = 0
-      object Label33: TLabel
-        Left = 8
-        Top = 233
-        Width = 3
-        Height = 13
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'MS Sans Serif'
-        Font.Style = []
-        ParentFont = False
-      end
-      object CategoryPanelGroup2: TCategoryPanelGroup
+      object CategoryPanelGroup2: TScrollBox
         Left = 1
         Top = 1
         Width = 260
-        Height = 224
+        Height = 323
         VertScrollBar.Tracking = True
-        VertScrollBar.Visible = False
-        Align = alNone
-        HeaderAlignment = taCenter
-        HeaderFont.Charset = DEFAULT_CHARSET
-        HeaderFont.Color = clWindowText
-        HeaderFont.Height = -12
-        HeaderFont.Name = 'Tahoma'
-        HeaderFont.Style = []
-        HeaderHeight = 22
-        Images = ImageList1
+        AutoScroll = True
+        BorderStyle = bsNone
+        Align = alClient
         TabOrder = 0
-        object CategoryPanel2: TCategoryPanel
-          Top = 200
-          Height = 28
+        object CategoryPanel2: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 260
+          Height = 141
           Caption = 'Statistics'
-          Collapsed = True
-          CollapsedHotImageIndex = 4
-          CollapsedImageIndex = 0
-          CollapsedPressedImageIndex = 4
-          ExpandedHotImageIndex = 5
-          ExpandedImageIndex = 1
-          ExpandedPressedImageIndex = 5
           TabOrder = 0
-          OnCollapse = CategoryPanel2Collapse
-          OnExpand = CategoryPanel2Expand
-          ExpandedHeight = 141
           object Label4: TLabel
             Left = 51
             Top = 12
@@ -472,22 +445,14 @@ object MCForm: TMCForm
             Caption = ' '
           end
         end
-        object CategoryPanel6: TCategoryPanel
+        object CategoryPanel6: TGroupBox
           Tag = 1
-          Top = 172
-          Height = 28
+          Left = 0
+          Top = 141
+          Width = 260
+          Height = 142
           Caption = 'Depth of Field'
-          Collapsed = True
-          CollapsedHotImageIndex = 4
-          CollapsedImageIndex = 0
-          CollapsedPressedImageIndex = 4
-          ExpandedHotImageIndex = 5
-          ExpandedImageIndex = 1
-          ExpandedPressedImageIndex = 5
           TabOrder = 1
-          OnCollapse = CategoryPanel2Collapse
-          OnExpand = CategoryPanel2Expand
-          ExpandedHeight = 142
           object Image2: TImage
             Left = 185
             Top = 35
@@ -567,22 +532,14 @@ object MCForm: TMCForm
             OnClick = UpDown2Click
           end
         end
-        object CategoryPanel5: TCategoryPanel
+        object CategoryPanel5: TGroupBox
           Tag = 15
-          Top = 144
-          Height = 28
+          Left = 0
+          Top = 283
+          Width = 260
+          Height = 184
           Caption = 'Reflections + Transparency'
-          Collapsed = True
-          CollapsedHotImageIndex = 4
-          CollapsedImageIndex = 0
-          CollapsedPressedImageIndex = 4
-          ExpandedHotImageIndex = 5
-          ExpandedImageIndex = 1
-          ExpandedPressedImageIndex = 5
           TabOrder = 2
-          OnCollapse = CategoryPanel2Collapse
-          OnExpand = CategoryPanel2Expand
-          ExpandedHeight = 184
           object Label20: TLabel
             Left = 24
             Top = 35
@@ -735,19 +692,13 @@ object MCForm: TMCForm
             TabOrder = 6
           end
         end
-        object CategoryPanel1: TCategoryPanel
-          Top = 0
+        object CategoryPanel1: TGroupBox
+          Left = 0
+          Top = 467
+          Width = 260
           Height = 144
           Caption = 'Calculation options'
-          CollapsedHotImageIndex = 4
-          CollapsedImageIndex = 0
-          CollapsedPressedImageIndex = 4
-          ExpandedHotImageIndex = 5
-          ExpandedImageIndex = 1
-          ExpandedPressedImageIndex = 5
           TabOrder = 3
-          OnCollapse = CategoryPanel2Collapse
-          OnExpand = CategoryPanel2Expand
           object Label9: TLabel
             Left = 35
             Top = 10
@@ -871,6 +822,18 @@ object MCForm: TMCForm
               'Box'
               'Gauss')
           end
+        end
+        object Label33: TLabel
+          Left = 8
+          Top = 619
+          Width = 3
+          Height = 13
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
         end
       end
     end

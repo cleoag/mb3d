@@ -20,7 +20,7 @@ unit MeshReader;
 interface
 
 uses
-  SysUtils, Classes, Contnrs, VectorMath, SyncObjs, Generics.Collections,
+  SysUtils, Classes, Contnrs, VectorMath, SyncObjs,
   VertexList;
 
 type
@@ -57,7 +57,13 @@ var
   end;
 
 begin
+{$IFDEF FPC}
+  FS := DefaultFormatSettings;
+  FS.DecimalSeparator := '.';
+  FS.ThousandSeparator := ',';
+{$ELSE}
   FS := TFormatSettings.Create('en-US');
+{$ENDIF}
   Lines := TStringList.Create;
   try
     Lines.LoadFromFile( Filename );

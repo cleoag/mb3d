@@ -8,7 +8,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, CalcThread, Buttons, LightAdjust,
-  AmbShadowCalcThreadN, PaintThread, FileHandling, Math3D, SHFolder,
+  AmbShadowCalcThreadN, PaintThread, FileHandling, Math3D, ShlObj,
   TypeDefinitions, Menus, ExtDlgs, M3Iregister;
 
 type
@@ -547,7 +547,7 @@ var
 
 implementation
 
-uses Math, DivUtils, ImageProcess, ClipBrd, ShellAPI, FileCtrl, formulas,
+uses Math, DivUtils, ImageProcess, ClipBrd, ShellApi, formulas,
      CalcThread2D, CustomFormulas, Animation, AniPreviewWindow, Maps,
      HeaderTrafos, Calc, IniDirsForm, FormulaGUI, Navigator, PostProcessForm,
      DOF, CalcHardShadow, AmbHiQ, BatchForm, Undo, CommDlg, VoxelExport,

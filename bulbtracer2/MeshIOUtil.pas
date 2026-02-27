@@ -161,28 +161,40 @@ end;
 { ----------------------- Writing  of primitive types ------------------------ }
 procedure WriteAnsiString(const MemStream: TMemoryStream; const Value: AnsiString);
 begin
-  MemStream.WriteData(PAnsiChar(Value), Length(Value));
+  if Length(Value) > 0 then
+    MemStream.Write(PAnsiChar(Value)^, Length(Value));
 end;
 
 procedure WriteString(const MemStream: TMemoryStream; const Value: String);
 begin
-  MemStream.WriteData(PChar(Value), Length(Value) * SizeOf(Char));
+  if Length(Value) > 0 then
+    MemStream.Write(PChar(Value)^, Length(Value) * SizeOf(Char));
 end;
 
 procedure WriteNullTerminatedString(const MemStream: TMemoryStream; const Value: AnsiString);
+var
+  NullByte: Byte;
 begin
-  MemStream.WriteData(PAnsiChar(Value), Length(Value));
-  MemStream.WriteData(0, 1);
+  if Length(Value) > 0 then
+    MemStream.Write(PAnsiChar(Value)^, Length(Value));
+  NullByte := 0;
+  MemStream.Write(NullByte, 1);
 end;
 
 procedure WriteInt32(const MemStream: TMemoryStream; const Value: Int32);
+var
+  Tmp: Int32;
 begin
-  MemStream.WriteData(SwapEndianInt32(Value), 4);
+  Tmp := SwapEndianInt32(Value);
+  MemStream.Write(Tmp, 4);
 end;
 
 procedure WriteInt16(const MemStream: TMemoryStream; const Value: Int16);
+var
+  Tmp: Int16;
 begin
-  MemStream.WriteData(SwapEndianInt16(Value), 2);
+  Tmp := SwapEndianInt16(Value);
+  MemStream.Write(Tmp, 2);
 end;
 
 procedure WriteSingle(const MemStream: TMemoryStream; const Value: Single);
@@ -191,7 +203,7 @@ var
 begin
   BSRec.EndianVal := Value;
   SwapBytesSingle( @ASRec, @BSRec );
-  MemStream.WriteData(ASRec.EndianVal, 4);
+  MemStream.Write(ASRec.EndianVal, 4);
 end;
 
 procedure WriteDouble(const MemStream: TMemoryStream; const Value: Single);
@@ -200,7 +212,7 @@ var
 begin
   BDRec.EndianVal := Value;
   SwapBytesDouble( @ADRec, @BDRec );
-  MemStream.WriteData(ADRec.EndianVal, 8);
+  MemStream.Write(ADRec.EndianVal, 8);
 end;
 
 { ----------------------- Reading  of primitive types ------------------------ }

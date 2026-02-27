@@ -22,8 +22,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, Buttons, TypeDefinitions, ComCtrls,
-  Contnrs, VertexList, BulbTracer2Config, Tabs, BulbTracerUITools,
-  TrackBarEx, ObjectScanner2, Generics.Collections,
+  Contnrs, VertexList, BulbTracer2Config, BulbTracerUITools,
+  TrackBarEx, ObjectScanner2,
   SyncObjs, MeshIOUtil;
 
 type
@@ -214,7 +214,7 @@ type
     FCalculating, FForceAbort, FCalculatingPreview: Boolean;
     FCancelType: TCancelType;
     FRefreshing: Boolean;
-    FSavePartCriticalSection: TCriticalSection;
+    FSavePartCriticalSection: SyncObjs.TCriticalSection;
     FOpenGLPreviewIndicator: integer;
     procedure ClearClassicPreview;
     procedure UpdateBTracer2HeaderFromUI;
@@ -300,7 +300,7 @@ implementation
 
 uses CalcVoxelSliceThread, FileHandling, Math, Math3D, Calc, DivUtils, Mand,
   HeaderTrafos, CustomFormulas, ImageProcess, VectorMath, DateUtils, BulbTracer2,
-  MeshPreviewUI, MeshWriter, MeshReader, Ole2, Clipbrd;
+  MeshPreviewUI, MeshWriter, MeshReader, ActiveX, Clipbrd;
 
 {$R *.lfm}
 
@@ -739,7 +739,7 @@ begin
   FLogger := TDebugStringLogger.Create;
   FRefreshing := True;
   try
-    FSavePartCriticalSection := TCriticalSection.Create;
+    FSavePartCriticalSection := SyncObjs.TCriticalSection.Create;
     FParamSource := psMain;
     FThreadVertexLists := TObjectList.Create;
     FThreadNormalsLists := TObjectList.Create;

@@ -20,7 +20,7 @@ unit MeshWriter;
 interface
 
 uses
-  SysUtils, Classes, Contnrs, VectorMath, SyncObjs, Generics.Collections,
+  SysUtils, Classes, Contnrs, VectorMath, SyncObjs,
   VertexList;
 
 type
@@ -41,7 +41,7 @@ type
 implementation
 
 uses
-  Windows, Math, DateUtils, MeshIOUtil, ShellApi, BulbTracer2;
+  Windows, Math, DateUtils, MeshIOUtil, BulbTracer2;
 
 { --------------------------- TAbstractFileWriter ---------------------------- }
 class procedure TAbstractFileWriter.CreateDrawer(const Filename: String);

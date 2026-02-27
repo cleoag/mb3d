@@ -46,7 +46,7 @@ begin
     try
       Lst.Delimiter := ' ';
       StrBuffer := 'P2'#10+'# MB3D'#10 +IntTostr(Width)+' '+IntToStr(Height)+#10+'65535' +#10;
-      FileStream.WriteData( PAnsiChar( StrBuffer ), Length( StrBuffer ) );
+      FileStream.Write( PAnsiChar( StrBuffer )^, Length( StrBuffer ) );
       CurrPGMBuffer := Buffer;
 
       Histogram := TStringList.Create;
@@ -60,10 +60,10 @@ begin
             ValStr := IntToStr( CurrPGMBuffer^ );
             Lst.Add( ValStr );
             Histogram.Add( ValStr );
-            CurrPGMBuffer := PWord( Longint( CurrPGMBuffer ) + SizeOf( Word ) );
+            Inc(CurrPGMBuffer);
           end;
           StrBuffer := Lst.DelimitedText+#10;
-          FileStream.WriteData( PAnsiChar( StrBuffer ), Length( StrBuffer ) );
+          FileStream.Write( PAnsiChar( StrBuffer )^, Length( StrBuffer ) );
         end;
         OutputDebugString(PChar('PGM: ' + IntToStr( Histogram.Count ) + ' distinct colors'));
       finally
