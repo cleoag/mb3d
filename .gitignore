@@ -13,3 +13,4 @@ x64/*
 lib/
 *.exe
 .worktrees/
+diag_output/

@@ -62,6 +62,17 @@ Mandelbulb 3D (MB3D) is a Windows desktop application for generating 3D fractal 
 - **JIT formulas (.m3f)**: External formula files not tested — may have calling convention issues.
 - **Other formula types**: Only Integer Power 8 (HybridIntP8) tested. Other built-in formulas (quaternion, tricorn, Amazing Box, etc.) untested.
 
+### Diagnostic Harness (feature/fpc-diag-harness branch)
+Automated diagnostic tooling for pixel-level FPC vs Delphi comparison:
+- **DiagHarness.pas** — Core harness unit, activated by `-dFPC_DIAG` compiler define + `--diag` CLI flag
+- **DiagASMCheck.pas** — Pascal reference implementations for ASM routine spot-checks
+- **tools/compare_bitmaps.ps1** — PowerShell pixel comparison (per-pixel RGB diff, stats, visual diff image)
+- **tools/run_diag.bat** — Batch runner for 6 test matrix scenes
+
+Usage: Build with `-dFPC_DIAG`, then run `Mandelbulb3D.exe --diag [scene.m3p]` to auto-render and save bitmap + parameter logs to `diag_output/`. Compare with Delphi reference renders using `compare_bitmaps.ps1`.
+
+Test matrix scenes (in M3Parameter/): default (IntPow8), ABoxScale2Start (AmazingBox), Aexion 10bulbs (AexionC), BulboxCut (Bulbox), ApolloBalloons dIFS (dIFS), QuatP4hybridJulia (Quaternion).
+
 ### Key FPC vs Delphi Differences Found
 - **`Double(integer)` cast** (CRITICAL): In FPC `{$mode delphi}`, `Double(8)` is a RAW BIT reinterpretation (zero-extends int 8 to 0x0000000000000008 ≈ 3.95e-323). In Delphi, it's a type conversion to 8.0. Always use `8.0` literal instead. Search for `Double(` followed by integer literals to find other instances.
 - **`@procVar` operator**: In `{$mode delphi}`, `@procVar` returns the procedure address (the stored value), NOT the address of the variable. Use `@@procVar` for the variable's address.
