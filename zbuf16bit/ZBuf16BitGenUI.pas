@@ -22,8 +22,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, VertexList, ExtCtrls,
-  Buttons, StdCtrls, VectorMath, ComCtrls, JvExExtCtrls,
-  JvExtComponent, JvOfficeColorButton, JvExControls, JvColorBox, JvColorButton,
+  Buttons, StdCtrls, VectorMath, ComCtrls,
   SpeedButtonEx, ZBuf16BitGen;
 
 type
@@ -69,7 +68,7 @@ implementation
 uses
   DivUtils, BulbTracerUITools, Mand;
 
-{$R *.dfm}
+{$R *.lfm}
 
 procedure TZBuf16BitGenFrm.FormCreate(Sender: TObject);
 begin

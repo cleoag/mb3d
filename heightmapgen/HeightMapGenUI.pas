@@ -22,8 +22,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, VertexList, ExtCtrls,
-  Buttons, StdCtrls, VectorMath, ComCtrls, JvExExtCtrls,
-  JvExtComponent, JvOfficeColorButton, JvExControls, JvColorBox, JvColorButton,
+  Buttons, StdCtrls, VectorMath, ComCtrls,
   SpeedButtonEx, BulbTracerUITools, HeightMapGenPreview;
 
 type
@@ -89,7 +88,7 @@ implementation
 
 uses MeshReader, Maps;
 
-{$R *.dfm}
+{$R *.lfm}
 const
   MOVE_SCALE: Double = 0.001;
   SIZE_SCALE: Double = 0.01;

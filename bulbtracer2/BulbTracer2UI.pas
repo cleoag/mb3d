@@ -23,7 +23,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, Buttons, TypeDefinitions, ComCtrls,
   Contnrs, VertexList, BulbTracer2Config, Tabs, BulbTracerUITools,
-  JvExStdCtrls, JvGroupBox, TrackBarEx, ObjectScanner2, Generics.Collections,
+  TrackBarEx, ObjectScanner2, Generics.Collections,
   SyncObjs, MeshIOUtil;
 
 type
@@ -302,7 +302,7 @@ uses CalcVoxelSliceThread, FileHandling, Math, Math3D, Calc, DivUtils, Mand,
   HeaderTrafos, CustomFormulas, ImageProcess, VectorMath, DateUtils, BulbTracer2,
   MeshPreviewUI, MeshWriter, MeshReader, Ole2, Clipbrd;
 
-{$R *.dfm}
+{$R *.lfm}
 
 const
   OpenGLWindowTitleMesh = 'Generated Mesh';

@@ -22,8 +22,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, MeshPreview, VertexList, ExtCtrls,
-  Buttons, StdCtrls, VectorMath, ComCtrls, JvExExtCtrls,
-  JvExtComponent, JvOfficeColorButton, JvExControls, JvColorBox, JvColorButton,
+  Buttons, StdCtrls, VectorMath, ComCtrls, ColorBox,
   SpeedButtonEx, BulbTracerUITools;
 
 type
@@ -35,26 +34,26 @@ type
     MaterialSheet: TTabSheet;
     LightSheet: TTabSheet;
     Label17: TLabel;
-    SurfaceColorBtn: TJvOfficeColorButton;
+    SurfaceColorBtn: TColorButton;
     Label1: TLabel;
-    EdgesColorBtn: TJvOfficeColorButton;
+    EdgesColorBtn: TColorButton;
     Label2: TLabel;
-    WireframeColorBtn: TJvOfficeColorButton;
+    WireframeColorBtn: TColorButton;
     Label3: TLabel;
-    PointsColorBtn: TJvOfficeColorButton;
+    PointsColorBtn: TColorButton;
     Label4: TLabel;
-    MatAmbientColorBtn: TJvOfficeColorButton;
+    MatAmbientColorBtn: TColorButton;
     MatDiffuseColorLbl: TLabel;
-    MatDiffuseColorBtn: TJvOfficeColorButton;
+    MatDiffuseColorBtn: TColorButton;
     Label6: TLabel;
-    MatSpecularColorBtn: TJvOfficeColorButton;
+    MatSpecularColorBtn: TColorButton;
     Label7: TLabel;
     MatShininessEdit: TEdit;
     MatShininessBtn: TUpDown;
     Label8: TLabel;
-    LightAmbientBtn: TJvOfficeColorButton;
+    LightAmbientBtn: TColorButton;
     Label9: TLabel;
-    LightDiffuseBtn: TJvOfficeColorButton;
+    LightDiffuseBtn: TColorButton;
     Label5: TLabel;
     LightPositionXEdit: TEdit;
     LightPositionXBtn: TUpDown;
@@ -132,7 +131,7 @@ implementation
 uses
   OpenGLPreviewUtil;
 
-{$R *.dfm}
+{$R *.lfm}
 const
   MOVE_SCALE: Double = 0.001;
   SIZE_SCALE: Double = 0.01;
@@ -361,17 +360,17 @@ begin
   FRefreshing := True;
   try
     with FOpenGLHelper.MeshAppearance do begin
-      SurfaceColorBtn.SelectedColor := VecToColor(@SurfaceColor);
-      EdgesColorBtn.SelectedColor := VecToColor(@EdgesColor);
-      WireframeColorBtn.SelectedColor := VecToColor(@WireframeColor);
-      PointsColorBtn.SelectedColor := VecToColor(@PointsColor);
+      SurfaceColorBtn.ButtonColor := VecToColor(@SurfaceColor);
+      EdgesColorBtn.ButtonColor := VecToColor(@EdgesColor);
+      WireframeColorBtn.ButtonColor := VecToColor(@WireframeColor);
+      PointsColorBtn.ButtonColor := VecToColor(@PointsColor);
 
-      MatAmbientColorBtn.SelectedColor := VecToColor(@MatAmbient);
-      MatDiffuseColorBtn.SelectedColor := VecToColor(@MatDiffuse);
-      MatSpecularColorBtn.SelectedColor := VecToColor(@MatSpecular);
+      MatAmbientColorBtn.ButtonColor := VecToColor(@MatAmbient);
+      MatDiffuseColorBtn.ButtonColor := VecToColor(@MatDiffuse);
+      MatSpecularColorBtn.ButtonColor := VecToColor(@MatSpecular);
       MatShininessEdit.Text := FloatToStr(MatShininess);
-      LightAmbientBtn.SelectedColor := VecToColor(@LightAmbient);
-      LightDiffuseBtn.SelectedColor := VecToColor(@LightDiffuse);
+      LightAmbientBtn.ButtonColor := VecToColor(@LightAmbient);
+      LightDiffuseBtn.ButtonColor := VecToColor(@LightDiffuse);
 
       LightPositionXEdit.Text := FloatToStr(LightPosition.X);
       LightPositionYEdit.Text := FloatToStr(LightPosition.Y);
@@ -390,10 +389,10 @@ end;
 
 procedure TMeshPreviewFrm.SurfaceColorBtnClick(Sender: TObject);
 begin
-  if (Sender<>nil) and (Sender is TJvOfficeColorButton)  then begin
-    ColorDialog.Color := TJvOfficeColorButton(Sender).SelectedColor;
+  if (Sender<>nil) and (Sender is TColorButton)  then begin
+    ColorDialog.Color := TColorButton(Sender).ButtonColor;
     if ColorDialog.Execute(Self.Handle) then begin
-      TJvOfficeColorButton(Sender).SelectedColor := ColorDialog.Color;
+      TColorButton(Sender).ButtonColor := ColorDialog.Color;
       UIToAppearance;
     end;
   end;
@@ -417,22 +416,22 @@ begin
   if FRefreshing then
     Exit;
   with FOpenGLHelper.MeshAppearance do begin
-    ColorToVec(SurfaceColorBtn.SelectedColor, @SurfaceColor);
-    ColorToVec(EdgesColorBtn.SelectedColor, @EdgesColor);
-    ColorToVec(WireframeColorBtn.SelectedColor, @WireframeColor);
-    ColorToVec(PointsColorBtn.SelectedColor, @PointsColor);
+    ColorToVec(SurfaceColorBtn.ButtonColor, @SurfaceColor);
+    ColorToVec(EdgesColorBtn.ButtonColor, @EdgesColor);
+    ColorToVec(WireframeColorBtn.ButtonColor, @WireframeColor);
+    ColorToVec(PointsColorBtn.ButtonColor, @PointsColor);
 
-    ColorToVec(MatAmbientColorBtn.SelectedColor, @MatAmbient);
-    ColorToVec(MatDiffuseColorBtn.SelectedColor, @MatDiffuse);
-    ColorToVec(MatSpecularColorBtn.SelectedColor, @MatSpecular);
+    ColorToVec(MatAmbientColorBtn.ButtonColor, @MatAmbient);
+    ColorToVec(MatDiffuseColorBtn.ButtonColor, @MatDiffuse);
+    ColorToVec(MatSpecularColorBtn.ButtonColor, @MatSpecular);
     MatShininess := StrToFloatSafe(MatShininessEdit.Text, MatShininess);
     if MatShininess < 0.0 then
       MatShininess := 0.0
     else if MatShininess > 100.0 then
       MatShininess := 100.0;
 
-    ColorToVec(LightAmbientBtn.SelectedColor, @LightAmbient);
-    ColorToVec(LightDiffuseBtn.SelectedColor, @LightDiffuse);
+    ColorToVec(LightAmbientBtn.ButtonColor, @LightAmbient);
+    ColorToVec(LightDiffuseBtn.ButtonColor, @LightDiffuse);
     LightPosition.X := StrToFloatSafe(LightPositionXEdit.Text, LightPosition.X);
     LightPosition.Y := StrToFloatSafe(LightPositionYEdit.Text, LightPosition.Y);
     LightPosition.Z := StrToFloatSafe(LightPositionZEdit.Text, LightPosition.Z);

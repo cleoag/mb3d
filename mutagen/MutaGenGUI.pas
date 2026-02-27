@@ -21,12 +21,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
-  Controls, Forms, Dialogs, StdCtrls, ExtCtrls, JvExForms,
-  JvCustomItemViewer, JvImagesViewer, JvComponentBase, JvFormAnimatedIcon, MutaGen,
-  ComCtrls, JvExComCtrls, JvProgressBar, MB3DFacade, Menus, JvComCtrls,
-  JvxSlider, JvExControls, JvSlider, TrackBarEx, Buttons, PreviewRenderer,
-  JvExStdCtrls, JvGroupBox, JvOutlookBar, JvExExtCtrls, JvExtComponent,
-  JvCaptionPanel, JvPageList, JvNavigationPane, JvClipboardMonitor;
+  Controls, Forms, Dialogs, StdCtrls, ExtCtrls, MutaGen,
+  ComCtrls, MB3DFacade, Menus,
+  TrackBarEx, Buttons, PreviewRenderer;
 
 type
   TCategoryPanel = class(ExtCtrls.TCategoryPanel)
@@ -71,15 +68,15 @@ type
     SendtoMainItm: TMenuItem;
     ToClipboardItm: TMenuItem;
     PreviewRenderTimer: TTimer;
-    GenerationsGrp: TJvGroupBox;
+    GenerationsGrp: TGroupBox;
     Panel9: TPanel;
     GenerationBtn: TUpDown;
     ClearPrevGenerations: TButton;
-    MutateGrp: TJvGroupBox;
+    MutateGrp: TGroupBox;
     Panel8: TPanel;
     ProgressBar: TProgressBar;
     MutateBtn: TButton;
-    OptionsGrp: TJvGroupBox;
+    OptionsGrp: TGroupBox;
     Panel7: TPanel;
     Panel5: TPanel;
     DisableAllBtn: TButton;
@@ -162,7 +159,7 @@ var
 
 implementation
 
-{$R *.dfm}
+{$R *.lfm}
 uses
   Mand, TypeDefinitions, CustomFormulas, Contnrs, Math, FileHandling;
 
