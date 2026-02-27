@@ -1,5 +1,7 @@
 unit CustomFormulas;
 
+{$mode delphi}
+
 interface
 
 uses DivUtils, SysUtils, FileHandling, TypeDefinitions, JITFormulas;

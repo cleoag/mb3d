@@ -1,5 +1,8 @@
 unit ColorSSAO;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

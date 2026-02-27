@@ -3,12 +3,15 @@
 // Monitor.pas - Memory monitor
 // ----------------------------
 // Version:   2003-02-05
-// Maintain:  Michael Vinther    |    mv@logicnet·dk
+// Maintain:  Michael Vinther    |    mv@logicnetï¿½dk
 //
 // Last changes:
 //   Monitor is auto-enabled when assertions and debugging is enabled.
 //
 unit Monitor;
+
+{$mode delphi}
+{$asmmode intel}
 
 {DEFINE MonitorObjects}  // Define MonitorObjects to use object monitor
 {DEFINE UseMonitorTags}  // Define UseMonitorTags to give each object a tag #

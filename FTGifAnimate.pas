@@ -1,4 +1,6 @@
 unit FTGifAnimate;
+
+{$mode delphi}
 (******************************************************************************
 Unit to make an animated GIF.
 Author: Finn Tolderlund

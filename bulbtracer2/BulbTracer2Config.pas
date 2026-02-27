@@ -15,6 +15,8 @@
 *)
 unit BulbTracer2Config;
 
+{$mode delphi}
+
 interface
 
 uses

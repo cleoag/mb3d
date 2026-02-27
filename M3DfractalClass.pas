@@ -1,5 +1,7 @@
 unit M3DfractalClass;
 
+{$mode delphi}
+
 interface
 
 uses Windows, Classes, Forms, Messages, TypeDefinitions;

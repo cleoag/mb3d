@@ -1,5 +1,7 @@
 unit ColorPick;
 
+{$mode delphi}
+
 interface
 
 uses

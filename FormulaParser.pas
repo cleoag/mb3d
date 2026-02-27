@@ -1,5 +1,7 @@
 unit FormulaParser;
 
+{$mode delphi}
+
 interface
 
 uses

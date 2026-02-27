@@ -1,5 +1,7 @@
 unit HeaderTrafos;
 
+{$mode delphi}
+
 // All kind of transformations between Header and Light values
 // + calc Thread parameters
 

@@ -1,5 +1,8 @@
 unit AmbHiQ;     //24bit SSAO
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

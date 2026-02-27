@@ -15,6 +15,8 @@
 *)
 unit HeightMapGenPreview;
 
+{$mode delphi}
+
 interface
 
 uses

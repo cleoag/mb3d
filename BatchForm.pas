@@ -1,5 +1,7 @@
 unit BatchForm;
 
+{$mode delphi}
+
 interface
 
 uses

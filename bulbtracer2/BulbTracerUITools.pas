@@ -15,6 +15,8 @@
 *)
 unit BulbTracerUITools;
 
+{$mode delphi}
+
 interface
 
 uses

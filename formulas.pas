@@ -1,5 +1,8 @@
 unit formulas;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses CustomFormulas, TypeDefinitions;
@@ -2155,7 +2158,7 @@ db   $66,$0F,$7C,$C0            //haddpd  xmm0, xmm0
      jmp  @3
 @1:  cmp  edx, 6
      jl   @2
-@3:  mulsd   xmm5, xmm3         //*r²
+@3:  mulsd   xmm5, xmm3         //*rï¿½
 @2:  shr  edx, 1
      jnc  @up
      mulsd   xmm5, xmm1
@@ -2329,7 +2332,7 @@ db   $66,$0F,$7C,$DB      //haddpd  xmm3, xmm3
      movapd  xmm3, xmm1          //z
      cmp  edx, 4
      jl   @@2
-     movapd  xmm4, xmm0          //z²
+     movapd  xmm4, xmm0          //zï¿½
      movapd  xmm1, xmm0
      call @CMUL                  //z^4
      cmp  edx, 8
@@ -2736,17 +2739,17 @@ asm
   movapd  xmm3, [eax + 16]    //x[2,3]
   movapd  xmm5, xmm0          //x,y
   movapd  xmm6, xmm2          //x[0,1]
-  mulpd   xmm0, xmm0          //x²,y²
-  mulpd   xmm2, xmm2          //x[0]²,x[1]²
-  mulsd   xmm1, xmm1          //z²,w
-  mulsd   xmm3, xmm3          //x[2]²
-  addsd   xmm1, xmm0          //z²+x²
-  addsd   xmm3, xmm2          //x[2]²+x[0]²
-  unpckhpd xmm0, xmm0         //y²
-  unpckhpd xmm2, xmm2         //x[1]²
-  addsd   xmm1, xmm0          //x²+y²+z²
-  addsd   xmm3, xmm2          //x[0]²+x[1]²+x[2]²
-  unpcklpd xmm3, xmm1         //x[0]²+x[1]²+x[2]²,x²+y²+z²
+  mulpd   xmm0, xmm0          //xï¿½,yï¿½
+  mulpd   xmm2, xmm2          //x[0]ï¿½,x[1]ï¿½
+  mulsd   xmm1, xmm1          //zï¿½,w
+  mulsd   xmm3, xmm3          //x[2]ï¿½
+  addsd   xmm1, xmm0          //zï¿½+xï¿½
+  addsd   xmm3, xmm2          //x[2]ï¿½+x[0]ï¿½
+  unpckhpd xmm0, xmm0         //yï¿½
+  unpckhpd xmm2, xmm2         //x[1]ï¿½
+  addsd   xmm1, xmm0          //xï¿½+yï¿½+zï¿½
+  addsd   xmm3, xmm2          //x[0]ï¿½+x[1]ï¿½+x[2]ï¿½
+  unpcklpd xmm3, xmm1         //x[0]ï¿½+x[1]ï¿½+x[2]ï¿½,xï¿½+yï¿½+zï¿½
   sqrtpd  xmm0, xmm3          //xx,yy
   mulpd   xmm0, xmm7          //xx*s1,yy*s2
   pshufd  xmm2, xmm0, $4E
@@ -2765,11 +2768,11 @@ asm
 
   movapd  xmm4, xmm5          //x,y
   movsd   xmm2, xmm3          //z
-  mulpd   xmm4, xmm4          //x²,y²
-  mulsd   xmm2, xmm2          //z²      4D:  mulpd
-  addsd   xmm2, xmm4          //z²+x²   4D: addpd ...
-  unpckhpd xmm4, xmm4         //y²
-  addsd   xmm4, xmm2          //x²+y²+z²
+  mulpd   xmm4, xmm4          //xï¿½,yï¿½
+  mulsd   xmm2, xmm2          //zï¿½      4D:  mulpd
+  addsd   xmm2, xmm4          //zï¿½+xï¿½   4D: addpd ...
+  unpckhpd xmm4, xmm4         //yï¿½
+  addsd   xmm4, xmm2          //xï¿½+yï¿½+zï¿½
   addsd   xmm4, d1em40
   sqrtsd  xmm4, xmm4
 
@@ -2963,17 +2966,17 @@ asm
   movapd  xmm3, [eax + 16]    //x[2,3]
   movapd  xmm5, xmm0          //x,y
   movapd  xmm6, xmm2          //x[0,1]
-  mulpd   xmm0, xmm0          //x²,y²
-  mulpd   xmm2, xmm2          //x[0]²,x[1]²
-  mulsd   xmm1, xmm1          //z²,w
-  mulsd   xmm3, xmm3          //x[2]²
-  addsd   xmm1, xmm0          //z²+x²
-  addsd   xmm3, xmm2          //x[2]²+x[0]²
-  unpckhpd xmm0, xmm0         //y²
-  unpckhpd xmm2, xmm2         //x[1]²
-  addsd   xmm1, xmm0          //x²+y²+z²
-  addsd   xmm3, xmm2          //x[0]²+x[1]²+x[2]²
-  unpcklpd xmm3, xmm1         //x[0]²+x[1]²+x[2]²,x²+y²+z²
+  mulpd   xmm0, xmm0          //xï¿½,yï¿½
+  mulpd   xmm2, xmm2          //x[0]ï¿½,x[1]ï¿½
+  mulsd   xmm1, xmm1          //zï¿½,w
+  mulsd   xmm3, xmm3          //x[2]ï¿½
+  addsd   xmm1, xmm0          //zï¿½+xï¿½
+  addsd   xmm3, xmm2          //x[2]ï¿½+x[0]ï¿½
+  unpckhpd xmm0, xmm0         //yï¿½
+  unpckhpd xmm2, xmm2         //x[1]ï¿½
+  addsd   xmm1, xmm0          //xï¿½+yï¿½+zï¿½
+  addsd   xmm3, xmm2          //x[0]ï¿½+x[1]ï¿½+x[2]ï¿½
+  unpcklpd xmm3, xmm1         //x[0]ï¿½+x[1]ï¿½+x[2]ï¿½,xï¿½+yï¿½+zï¿½
   sqrtpd  xmm0, xmm3          //xx,yy
   mulpd   xmm0, xmm7          //xx*s1,yy*s2
   pshufd  xmm2, xmm0, $4E
@@ -2992,11 +2995,11 @@ asm
 
   movapd  xmm4, xmm5          //x,y
   movsd   xmm2, xmm3          //z
-  mulpd   xmm4, xmm4          //x²,y²
-  mulsd   xmm2, xmm2          //z²      4D:  mulpd
-  addsd   xmm2, xmm4          //z²+x²   4D: addpd ...
-  unpckhpd xmm4, xmm4         //y²
-  addsd   xmm4, xmm2          //x²+y²+z²
+  mulpd   xmm4, xmm4          //xï¿½,yï¿½
+  mulsd   xmm2, xmm2          //zï¿½      4D:  mulpd
+  addsd   xmm2, xmm4          //zï¿½+xï¿½   4D: addpd ...
+  unpckhpd xmm4, xmm4         //yï¿½
+  addsd   xmm4, xmm2          //xï¿½+yï¿½+zï¿½
   addsd   xmm4, d1em40
   sqrtsd  xmm4, xmm4
 

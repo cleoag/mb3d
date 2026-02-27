@@ -1,5 +1,7 @@
 unit Spin;
 
+{$mode delphi}
+
 interface
 
 uses Windows, Classes, StdCtrls, ExtCtrls, Controls, Messages, SysUtils,

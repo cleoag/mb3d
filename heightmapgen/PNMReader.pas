@@ -15,6 +15,8 @@
 *)
 unit PNMReader;
 
+{$mode delphi}
+
 interface
 
 uses

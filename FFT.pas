@@ -1,5 +1,8 @@
 unit FFT;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses TypeDefinitions;

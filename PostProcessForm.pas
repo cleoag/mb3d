@@ -1,5 +1,7 @@
 unit PostProcessForm;
 
+{$mode delphi}
+
 interface
 
 uses

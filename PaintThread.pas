@@ -1,5 +1,8 @@
 unit PaintThread;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

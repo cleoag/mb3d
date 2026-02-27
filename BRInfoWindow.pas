@@ -1,5 +1,7 @@
 unit BRInfoWindow;
 
+{$mode delphi}
+
 interface
 
 uses

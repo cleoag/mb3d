@@ -15,6 +15,8 @@
 *)
 unit HeightMapGenUI;
 
+{$mode delphi}
+
 interface
 
 uses

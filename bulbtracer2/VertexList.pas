@@ -15,6 +15,8 @@
 *)
 unit VertexList;
 
+{$mode delphi}
+
 interface
 
 uses

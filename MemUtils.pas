@@ -3,13 +3,15 @@
 // MemUtils.pas
 // --------------------------
 // Changed:   2005-01-27
-// Maintain:  Michael Vinther    |    mv@logicnet·dk
+// Maintain:  Michael Vinther    |    mv@logicnetï¿½dk
 //
 // Assembler optimized routines requires minimum 486 processor
 //
 // Last change: ReplaceChar moved to StringUtils
 //
 unit MemUtils;
+
+{$mode delphi}
 
 interface
 

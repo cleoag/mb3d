@@ -1,5 +1,7 @@
 unit Undo;
 
+{$mode delphi}
+
 interface
 
 uses TypeDefinitions;

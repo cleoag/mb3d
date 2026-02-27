@@ -1,5 +1,7 @@
 unit Navigator;
 
+{$mode delphi}
+
 interface
 
 uses

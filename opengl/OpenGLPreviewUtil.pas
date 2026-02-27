@@ -15,6 +15,8 @@
 *)
 unit OpenGLPreviewUtil;
 
+{$mode delphi}
+
 interface
 
 uses

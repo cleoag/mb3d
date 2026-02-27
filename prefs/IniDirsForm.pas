@@ -1,5 +1,7 @@
 unit IniDirsForm;
 
+{$mode delphi}
+
 interface
 
 uses

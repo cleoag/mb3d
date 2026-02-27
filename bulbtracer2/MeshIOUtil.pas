@@ -15,6 +15,8 @@
 *)
 unit MeshIOUtil;
 
+{$mode delphi}
+
 interface
 
 uses Classes, VertexList;

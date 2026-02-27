@@ -3,12 +3,14 @@
 // LinarBitmap.pas - Bitmap handling
 // ---------------------------------
 // Version:   2004-03-10
-// Maintain:  Michael Vinther    |     mv@logicnet·dk
+// Maintain:  Michael Vinther    |     mv@logicnetï¿½dk
 //
 // Last changes:
 //   16 bit grayscale bitmap support
 //
 unit LinarBitmap;
+
+{$mode delphi}
 
 interface
 
@@ -811,11 +813,11 @@ begin
               Inc(PalEntry);
             end;
             for C:=ColorCount to 255 do Palette^[C]:=BlackPix24;
-            LinInc:=(Width+3) and $fffffffc; // Rund op til nærmeste 4 bytes
+            LinInc:=(Width+3) and $fffffffc; // Rund op til nï¿½rmeste 4 bytes
             OPix:=Pointer(PalEntry);
           end;
      24 : begin
-            LinInc:=(Width*3+3) and $fffffffc; // Rund op til nærmeste 4 bytes
+            LinInc:=(Width*3+3) and $fffffffc; // Rund op til nï¿½rmeste 4 bytes
             OPix:=Pointer(DWord(@DIB)+biSize);
           end;
     else

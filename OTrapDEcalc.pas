@@ -1,5 +1,7 @@
 unit OTrapDEcalc;
 
+{$mode delphi}
+
 // de directly derived from min of vec(its) calculations
 
 interface

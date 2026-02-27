@@ -1,5 +1,7 @@
 unit FileHandling;
 
+{$mode delphi}
+
 interface
 
 uses Windows, LightAdjust, SysUtils, Graphics, jpeg, TypeDefinitions, pngimage,

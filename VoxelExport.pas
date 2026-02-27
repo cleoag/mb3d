@@ -1,5 +1,7 @@
 unit VoxelExport;
 
+{$mode delphi}
+
 interface
 
 uses

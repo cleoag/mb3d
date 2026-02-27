@@ -1,5 +1,7 @@
 unit Tiling;
 
+{$mode delphi}
+
 interface
 
 uses

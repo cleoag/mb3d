@@ -1,5 +1,7 @@
 unit ThreadUtils;
 
+{$mode delphi}
+
 // allocating, freeing mem for threadstats records giving an interface between
 // threads and user interface.
 

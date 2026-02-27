@@ -1,5 +1,7 @@
 unit ScriptUI;
 
+{$mode delphi}
+
 interface
 
 uses

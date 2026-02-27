@@ -3,9 +3,9 @@
 // Streams.pas - Streams interface
 // -------------------------------
 // Version:   2003-02-07
-// Maintain:  Michael Vinther   mv@logicnet·dk
+// Maintain:  Michael Vinther   mv@logicnetï¿½dk
 //
-// Original by Rune Møller and Michael Vinther
+// Original by Rune Mï¿½ller and Michael Vinther
 //
 // Contains:
 //   GetWin32ErrorText - returns a string with error text in native language
@@ -21,6 +21,8 @@
 // Suggested improvements:
 //
 unit Streams;
+
+{$mode delphi}
 
 interface
 
@@ -41,7 +43,7 @@ resourcestring
   rs_DeleteFileError   = 'Error deleting "%s" - %s';               // filename, error text
   rs_TruncateFileError = 'Error truncating file "%s" - %s';        // filename, error text
   rs_SeekFileError     = 'Error moving file pointer - %s';         // error text
-  rs_GetFileAttrError  = 'Could not read attríbutes - %s';         // error text
+  rs_GetFileAttrError  = 'Could not read attrï¿½butes - %s';         // error text
   rs_SetFileAttrError  = 'Could not change attributes - %s';       // error text
   rs_NoFileAccessSpec  = 'Either read, write or full access must be specified in call to CreateFile';
 

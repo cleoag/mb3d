@@ -1,5 +1,8 @@
 unit LightAdjust;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses
@@ -701,9 +704,9 @@ asm
     fld  st
     fmul st, st      //t*t,t
     fld  st
-    fmul st, st(2)   //t³,t²,t
+    fmul st, st(2)   //tï¿½,tï¿½,t
     fld  s3
-    fmul st(2), st   //3, t³=sv[3], 3*t²=sv[2], t
+    fmul st(2), st   //3, tï¿½=sv[3], 3*tï¿½=sv[2], t
     fld  st(2)       //sv[2], 3, sv[3], sv[2], t
     fsub st, st(2)   //sv[2]-sv[3], 3, sv[3], sv[2], t
     fsub st, st(4)   //sv[2]-sv[3]-t, 3, sv[3], sv[2], t
@@ -719,9 +722,9 @@ asm
     fadd s6
     fstp dword [eax + 4]
     fmul st, st(1)
-    fsubp st(2), st  //t³,3*t²-3*t³,t
+    fsubp st(2), st  //tï¿½,3*tï¿½-3*tï¿½,t
     fsub st, st(2)
-    fstp dword [eax + 12]  //3*t²-3*t³,t
+    fstp dword [eax + 12]  //3*tï¿½-3*tï¿½,t
     fxch
     fmul s6
     faddp
@@ -1681,7 +1684,7 @@ begin
       i2 := 5;
     end;
     for i := i1 to i2 do if (LAtmpLight.Lights[i].Loption and 1) = 0 then
-      TabControl1.Tabs[i] := 'Li.' + IntToStr(i + 1) + ' •'
+      TabControl1.Tabs[i] := 'Li.' + IntToStr(i + 1) + ' ï¿½'
     else
       TabControl1.Tabs[i] := 'Li.' + IntToStr(i + 1);
 end;

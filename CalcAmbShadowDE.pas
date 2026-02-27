@@ -1,5 +1,8 @@
 unit CalcAmbShadowDE;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses
@@ -557,7 +560,7 @@ begin
                   begin
                     dTmp := DotOfSVectors(SVec, RotM[itmp2]);
                     if dTmp > dMinADif then
-                    begin                      //(90°) 0 -> Pi*0.5 (0°)
+                    begin                      //(90ï¿½) 0 -> Pi*0.5 (0ï¿½)
                     //  Overlap := minRA[itmp2] - ArcCosSafe(dTmp) * ABR; //   ABR=recip. angle between rows
                       Overlap := minRA[itmp2] - ArcCosSafe(dTmp) * ABR + 1;
                       if Overlap > 0 then sAdd[itmp] := sAdd[itmp] + MinCS(MaxAdd, Overlap) * CorrectionWeight;  //CW: recip. of raycount of neighbours
@@ -746,7 +749,7 @@ begin
             begin
               dTmp := DotOfSVectors(SVec, RotM[ix]);
               if dTmp > dMinADif then
-              begin                      //(90°) 0 -> Pi*0.5 (0°)
+              begin                      //(90ï¿½) 0 -> Pi*0.5 (0ï¿½)
                 Overlap := minRA[ix] - ArcCosSafe(dTmp) * ABR + 1;
                 if Overlap > 0 then sAdd[iy] := sAdd[iy] + MinCS(MaxAdd, Overlap) * CorrectionWeight;  //CW: recip. of raycount of neighbours
               end;

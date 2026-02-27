@@ -1,5 +1,7 @@
 unit RegisterM3Pgraphic;   // Just enough to make the OpenPictureDialog work with m3p files
 
+{$mode delphi}
+
 interface
 
 uses Windows, Graphics, Classes, TypeDefinitions;

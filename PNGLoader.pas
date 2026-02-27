@@ -3,7 +3,7 @@
 // PNGLoader.pas - PNG/MNG bitmap coding/decoding
 // ----------------------------------------------
 // Version:   2003-12-07
-// Maintain:  Michael Vinther    |     mv@logicnet·dk
+// Maintain:  Michael Vinther    |     mv@logicnetï¿½dk
 //
 // Last changes:
 //   Transparency, alpha channel and gamma bug fixes
@@ -11,6 +11,8 @@
 //   MNG support
 //
 unit PNGLoader;
+
+{$mode delphi}
 
 interface
 
@@ -141,7 +143,7 @@ var
 
 var
   I : Integer;
-begin  // sorter efter hvilke 2 farver der ofte er nærmest
+begin  // sorter efter hvilke 2 farver der ofte er nï¿½rmest
   for I:=0 to 255 do
   begin
     List[I].Index:=I;

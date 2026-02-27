@@ -15,6 +15,8 @@
 *)
 unit MeshWriter;
 
+{$mode delphi}
+
 interface
 
 uses

@@ -15,6 +15,8 @@
 *)
 unit ShaderUtil;
 
+{$mode delphi}
+
 interface
 
 uses

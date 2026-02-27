@@ -1,5 +1,8 @@
 unit CalcThread;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

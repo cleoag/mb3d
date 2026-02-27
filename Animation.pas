@@ -1,5 +1,7 @@
 unit Animation;
 
+{$mode delphi}
+
 interface
 
 uses

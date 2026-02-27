@@ -1,5 +1,8 @@
 unit calcBlocky;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

@@ -1,5 +1,7 @@
 unit uMapCalcWindow;
 
+{$mode delphi}
+
 interface
 
 uses

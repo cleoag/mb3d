@@ -5,6 +5,8 @@
 
 unit ScriptCompiler;
 
+{$mode delphi}
+
 interface
 
 uses

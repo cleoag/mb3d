@@ -1,5 +1,7 @@
 unit MapSequences;
 
+{$mode delphi}
+
 interface
 
 uses

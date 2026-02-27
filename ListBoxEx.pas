@@ -1,5 +1,7 @@
 unit ListBoxEx;
 
+{$mode delphi}
+
 interface
 
 uses

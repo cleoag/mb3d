@@ -1,5 +1,8 @@
 unit Calc;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses Windows, TypeDefinitions, Math3D, FormulaClass;

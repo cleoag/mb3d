@@ -1,5 +1,7 @@
 unit SpeedButtonEx;
 
+{$mode delphi}
+
 interface
 
 uses

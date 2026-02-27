@@ -15,6 +15,8 @@
 *)
 unit MeshPreview;
 
+{$mode delphi}
+
 interface
 
 uses

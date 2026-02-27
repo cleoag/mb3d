@@ -1,5 +1,8 @@
 unit CalcMonteCarlo;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

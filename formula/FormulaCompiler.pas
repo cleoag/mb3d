@@ -16,6 +16,8 @@
 
 unit FormulaCompiler;
 
+{$mode delphi}
+
 interface
 
 uses

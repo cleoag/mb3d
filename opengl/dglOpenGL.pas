@@ -90,6 +90,8 @@
 
 unit dglOpenGL;
 
+{$mode delphi}
+
 interface
 
 // defines to configure freepascal

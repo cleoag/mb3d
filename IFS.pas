@@ -1,5 +1,7 @@
 unit IFS;
 
+{$mode delphi}
+
 interface
 
 uses Types;

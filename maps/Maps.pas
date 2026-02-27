@@ -1,5 +1,7 @@
 unit Maps;
 
+{$mode delphi}
+
 //map loading, access, managing, freeing
 
 interface

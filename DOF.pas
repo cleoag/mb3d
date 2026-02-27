@@ -1,5 +1,8 @@
 unit DOF;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses TypeDefinitions;

@@ -25,6 +25,8 @@
 {$G+}
 unit CRC32Stream;
 
+{$mode delphi}
+
 interface
 
 uses

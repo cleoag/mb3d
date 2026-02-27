@@ -15,6 +15,8 @@
 *)
 unit VectorMath;
 
+{$mode delphi}
+
 interface
 
 uses

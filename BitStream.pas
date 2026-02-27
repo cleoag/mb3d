@@ -3,7 +3,7 @@
 // BitStream.pas - Bit stream unit
 // -------------------------------
 // Changed:   2001-02-10
-// Maintain:  Michael Vinther    |    mv@logicnet·dk
+// Maintain:  Michael Vinther    |    mv@logicnetï¿½dk
 //
 // Contains:
 //   (TBaseStream)
@@ -12,6 +12,8 @@
 //
 
 unit BitStream;
+
+{$mode delphi}
 
 interface
 

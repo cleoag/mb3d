@@ -1,5 +1,7 @@
 unit AniProcess;
 
+{$mode delphi}
+
 interface
 
 uses

@@ -3,9 +3,11 @@
 // MathUtils.pas - Math functions
 // ------------------------------
 // Version:   2004-03-20
-// Maintain:  Michael Vinther   |    mv@logicnet·dk
+// Maintain:  Michael Vinther   |    mv@logicnetï¿½dk
 //
 unit MathUtils;
+
+{$mode delphi}
 
 interface
 
@@ -104,9 +106,9 @@ function Gauss(const x,Spread: Double): Double;
 function VectorAdd(const V1,V2: TFloatPoint): TFloatPoint;
 // Result = V1-V2
 function VectorSubtract(const V1,V2: TFloatPoint): TFloatPoint;
-// Result = V1·V2
+// Result = V1ï¿½V2
 function VectorDot(const V1,V2: TFloatPoint): Double;
-// Result = |V|²
+// Result = |V|ï¿½
 function VectorLengthSqr(const V: TFloatPoint): Double;
 // Result = V*s
 function VectorMult(const V: TFloatPoint; const s: Double): TFloatPoint;
@@ -622,13 +624,13 @@ begin
   Result.Y:=V1.Y-V2.Y;
 end;
 
-// Result = V1·V2
+// Result = V1ï¿½V2
 function VectorDot(const V1,V2: TFloatPoint): Double;
 begin
   Result:=V1.X*V2.X+V1.Y*V2.Y;
 end;
 
-// Result = |V|²
+// Result = |V|ï¿½
 function VectorLengthSqr(const V: TFloatPoint): Double;
 begin
   Result:=Sqr(V.X)+Sqr(V.Y);

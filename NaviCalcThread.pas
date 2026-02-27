@@ -1,5 +1,8 @@
 unit NaviCalcThread;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

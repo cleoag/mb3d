@@ -2,6 +2,8 @@
 
 unit M3Iregister;
 
+{$mode delphi}
+
 interface
 
 uses Windows, SysUtils, Graphics, Classes, TypeDefinitions, ExtCtrls,

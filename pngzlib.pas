@@ -6,6 +6,8 @@
 
 unit pngzlib;
 
+{$mode delphi}
+
 interface
 
 type

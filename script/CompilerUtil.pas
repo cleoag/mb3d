@@ -1,5 +1,7 @@
 unit CompilerUtil;
 
+{$mode delphi}
+
 interface
 
 uses

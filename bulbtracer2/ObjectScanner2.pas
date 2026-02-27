@@ -15,6 +15,8 @@
 *)
 unit ObjectScanner2;
 
+{$mode delphi}
+
 interface
 
 uses

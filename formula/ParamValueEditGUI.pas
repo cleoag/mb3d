@@ -15,6 +15,8 @@
 *)
 unit ParamValueEditGUI;
 
+{$mode delphi}
+
 interface
 
 uses

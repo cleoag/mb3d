@@ -1,5 +1,8 @@
 unit DivUtils;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses FileHandling, TypeDefinitions, Math3D, StdCtrls, Types, Classes, Windows;

@@ -15,6 +15,8 @@
 *)
 unit FormulaNames;
 
+{$mode delphi}
+
 interface
 
 uses

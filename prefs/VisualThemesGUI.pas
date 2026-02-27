@@ -1,5 +1,7 @@
 unit VisualThemesGUI;
 
+{$mode delphi}
+
 interface
 
 uses

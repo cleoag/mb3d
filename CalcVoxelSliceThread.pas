@@ -1,5 +1,8 @@
 unit CalcVoxelSliceThread;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

@@ -1,5 +1,7 @@
 unit TypeDefinitions;
 
+{$mode delphi}
+
 interface
 
 uses Windows, Classes, Math3D, Messages;

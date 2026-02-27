@@ -1,5 +1,8 @@
 unit CalcHardShadow;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

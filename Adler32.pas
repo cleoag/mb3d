@@ -3,11 +3,13 @@
 // Adler32.pas - Adler32 data integrity check
 // ------------------------------------------
 // Version:   2003-05-15
-// Maintain:  Michael Vinther    |    mv@logicnet·dk
+// Maintain:  Michael Vinther    |    mv@logicnetï¿½dk
 //
 // Last changes:
 //
 unit Adler32;
+
+{$mode delphi}
 
 interface
 

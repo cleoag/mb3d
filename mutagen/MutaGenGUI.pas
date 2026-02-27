@@ -15,6 +15,8 @@
 *)
 unit MutaGenGUI;
 
+{$mode delphi}
+
 interface
 
 uses

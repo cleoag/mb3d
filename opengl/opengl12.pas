@@ -1,4 +1,6 @@
 unit opengl12;
+
+{$mode delphi}
 {define USE_SDL}
 
 {

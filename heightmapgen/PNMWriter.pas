@@ -15,6 +15,8 @@
 *)
 unit PNMWriter;
 
+{$mode delphi}
+
 interface
 
 uses

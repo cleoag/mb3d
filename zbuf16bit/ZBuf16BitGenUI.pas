@@ -15,6 +15,8 @@
 *)
 unit ZBuf16BitGenUI;
 
+{$mode delphi}
+
 interface
 
 uses

@@ -1,5 +1,7 @@
 unit Interpolation;
 
+{$mode delphi}
+
 interface
 
 uses TypeDefinitions, Math3D;
@@ -509,7 +511,7 @@ begin
     begin
       Ini1CFfromHAddon(H1.PCFAddon, H1.PHCustomF[i], i, False);
       for IHS := 0 to Min(16, PTHeaderCustomAddon(H1.PCFAddon).Formulas[i].iOptionCount) - 1 do
-      if PTHeaderCustomAddon(H1.PCFAddon).Formulas[i].byOptionType[IHS] in [3..6] then   //CF.iOptionTYpes(3..6) = Angles ->  ipol 360°
+      if PTHeaderCustomAddon(H1.PCFAddon).Formulas[i].byOptionType[IHS] in [3..6] then   //CF.iOptionTYpes(3..6) = Angles ->  ipol 360ï¿½
       begin
         D1 := PTHeaderCustomAddon(H1.PCFAddon).Formulas[i].dOptionValue[IHS];
         D2 := PTHeaderCustomAddon(H2.PCFAddon).Formulas[i].dOptionValue[IHS];
@@ -939,7 +941,7 @@ begin
     begin
       Ini1CFfromHAddon(H1.PCFAddon, H1.PHCustomF[i], i);
       for IHS := 0 to Min(16, PTHeaderCustomAddon(H1.PCFAddon).Formulas[i].iOptionCount) - 1 do
-      if isAngleType(PTHeaderCustomAddon(H1.PCFAddon).Formulas[i].byOptionType[IHS]) then   //CF.iOptionTYpes(3..6) = Angles ->  ipol 360°
+      if isAngleType(PTHeaderCustomAddon(H1.PCFAddon).Formulas[i].byOptionType[IHS]) then   //CF.iOptionTYpes(3..6) = Angles ->  ipol 360ï¿½
       begin
         D1 := PTHeaderCustomAddon(H1.PCFAddon).Formulas[i].dOptionValue[IHS];
         D2 := PTHeaderCustomAddon(H2.PCFAddon).Formulas[i].dOptionValue[IHS];

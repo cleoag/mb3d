@@ -1,5 +1,7 @@
 unit FormulaClass;
 
+{$mode delphi}
+
 interface
 
 uses Windows, Classes, TypeDefinitions;

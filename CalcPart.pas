@@ -1,5 +1,8 @@
 unit CalcPart;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

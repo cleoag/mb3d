@@ -15,6 +15,8 @@
 *)
 unit MB3DFacade;
 
+{$mode delphi}
+
 interface
 
 uses

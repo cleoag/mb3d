@@ -1,5 +1,8 @@
 unit Mand;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses
@@ -3405,7 +3408,7 @@ begin
     Edit30.Text := FloatToStr(v4[2]);
     Edit7.Text := FloatToStr(v4[3]);
       //Wadd
-{The following code causes “stay on top” forms to allow a MessageBox to appear on top. After the message box is closed, the topmost forms are restored so that they continue to float to the top.
+{The following code causes ï¿½stay on topï¿½ forms to allow a MessageBox to appear on top. After the message box is closed, the topmost forms are restored so that they continue to float to the top.
 Begin
   with Application do
   begin

@@ -1,5 +1,8 @@
 unit AmbShadowCalcThread;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses

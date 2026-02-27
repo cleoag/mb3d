@@ -1,5 +1,7 @@
 unit CalcMissed;
 
+{$mode delphi}
+
 interface
 
 uses

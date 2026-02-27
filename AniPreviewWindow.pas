@@ -1,5 +1,7 @@
 unit AniPreviewWindow;
 
+{$mode delphi}
+
 interface
 
 uses

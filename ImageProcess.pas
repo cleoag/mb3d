@@ -1,5 +1,8 @@
 unit ImageProcess;
 
+{$mode delphi}
+{$asmmode intel}
+
 interface
 
 uses Windows, Graphics, TypeDefinitions, AmbShadowCalcThreadN, Math3D, ExtCtrls;

@@ -3,7 +3,7 @@
 // Deflate.pas - Deflate compression unit
 // --------------------------------------
 // Changed:   2003-04-25
-// Maintain:  Michael Vinther    |    mv@logicnet·dk
+// Maintain:  Michael Vinther    |    mv@logicnetï¿½dk
 //
 // Contains:
 //   (TBaseStream)
@@ -13,6 +13,8 @@
 //
 
 unit Deflate;
+
+{$mode delphi}
 
 interface
 

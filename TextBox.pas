@@ -1,5 +1,7 @@
 unit TextBox;
 
+{$mode delphi}
+
 interface
 
 uses

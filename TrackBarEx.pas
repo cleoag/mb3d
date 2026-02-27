@@ -1,5 +1,7 @@
 unit TrackBarEx;
 
+{$mode delphi}
+
 interface
 
 uses

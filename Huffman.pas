@@ -3,7 +3,7 @@
 // Huffman.pas - Huffman compression unit
 // --------------------------------------
 // Changed:   2003-05-09
-// Maintain:  Michael Vinther    |    mv@logicnet·dk
+// Maintain:  Michael Vinther    |    mv@logicnetï¿½dk
 //
 // Contains:
 //   THuffmanCodes
@@ -16,6 +16,8 @@
 // Suggested improvements:
 //
 unit Huffman;
+
+{$mode delphi}
 
 interface
 

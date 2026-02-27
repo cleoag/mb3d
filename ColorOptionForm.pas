@@ -1,5 +1,7 @@
 unit ColorOptionForm;
 
+{$mode delphi}
+
 interface
 
 uses

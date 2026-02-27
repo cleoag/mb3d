@@ -1,4 +1,7 @@
 unit Paint;
+
+{$mode delphi}
+{$asmmode intel}
 //
 //  for painting the image out of the paras, only for animation previews, just mainthread
 //

@@ -15,6 +15,8 @@
 *)
 unit JITFormulaEditGUI;
 
+{$mode delphi}
+
 interface
 
 uses

@@ -1,5 +1,8 @@
 unit CalcSR;
 
+{$mode delphi}
+{$asmmode intel}
+
 //  Calculate Reflections
 
 interface

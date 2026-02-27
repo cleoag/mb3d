@@ -1,5 +1,7 @@
 unit MonteCarloForm;
 
+{$mode delphi}
+
 interface
 
 uses

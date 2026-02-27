@@ -1,5 +1,7 @@
 unit DoubleSize;
 
+{$mode delphi}
+
 interface
 
 function DoubleImageSize: Boolean;

@@ -15,6 +15,8 @@
 *)
 unit MeshReader;
 
+{$mode delphi}
+
 interface
 
 uses

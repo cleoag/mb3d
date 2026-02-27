@@ -1,5 +1,7 @@
 unit PreviewRenderer;
 
+{$mode delphi}
+
 interface
 
 uses Windows, Graphics, Classes, TypeDefinitions, MB3DFacade;

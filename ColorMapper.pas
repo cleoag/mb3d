@@ -3,13 +3,15 @@
 // ColorMapper.pas - Color mapping and histogram calculations for TLinearBitmap
 // ----------------------------------------------------------------------------
 // Version:   2003-01-25
-// Maintain:  Michael Vinther         mv@logicnet·dk
+// Maintain:  Michael Vinther         mv@logicnetï¿½dk
 //
 // Last changes:
 //   AutoBlackWhitePoint added
 //   Apply palette fixed
 //
 unit ColorMapper;
+
+{$mode delphi}
 
 interface
 
