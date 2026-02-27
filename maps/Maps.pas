@@ -6,7 +6,7 @@ unit Maps;
 
 interface
 
-uses Windows, LightAdjust, SysUtils, Graphics, jpeg, TypeDefinitions, pngimage,
+uses Windows, LightAdjust, SysUtils, Graphics, jpeg, TypeDefinitions,
      SyncObjs, Classes, Math3D;
 
 type

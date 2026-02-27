@@ -4,8 +4,8 @@ unit FileHandling;
 
 interface
 
-uses Windows, LightAdjust, SysUtils, Graphics, jpeg, TypeDefinitions, pngimage,
-     SyncObjs, Classes, Controls, Dialogs, vcl.ExtDlgs;
+uses Windows, LightAdjust, SysUtils, Graphics, jpeg, TypeDefinitions,
+     SyncObjs, Classes, Controls, Dialogs, ExtDlgs;
 
 procedure LoadFullM3I(var Header: TMandHeader10; Filename: String);
 function LoadParameter(var Para10: TMandHeader10; FileName: String; Verbose: LongBool): Boolean;
@@ -93,7 +93,7 @@ implementation
 
 uses Mand, ImageProcess, Clipbrd, DivUtils, Math, CustomFormulas, HeaderTrafos,
      Animation, FormulaGUI, Navigator, AniPreviewWindow, Interpolation, Tiling,
-     Math3D, Forms, Maps, Undo, Vcl.Themes, ZBuf16BitGen;
+     Math3D, Forms, Maps, Undo, ZBuf16BitGen;
 
 function FileIsBigger1(Fname: String): LongBool;
 var F: TSearchRec;
@@ -657,7 +657,7 @@ begin
       IniVal[22] := IniDirs[10]; //voxel folder
       IniVal[32] := IniDirs[11]; //m3c folder
       IniVal[37] := IniDirs[12]; //meshes folder
-      IniVal[35] := TStyleManager.ActiveStyle.Name;
+      IniVal[35] := 'Default (System)'; { TStyleManager not available in LCL }
       Rewrite(f);
       for i := 0 to 6 do Writeln(f, IniDirs[i]);
       for i := 0 to IniMax do
@@ -1178,53 +1178,48 @@ begin
 end;
 
 procedure SavePNG(FileName: String; bmp: TBitmap; SaveTXTparas: Boolean);
-var// tmpPNG: TPngImage;
-    tmpPNG: TPNGObject;
+var
+    png: TPortableNetworkGraphic;
     s: AnsiString;
 begin
-  //  tmpPNG := TPngImage.Create;           // some PNG options: AddzTXt,  CreateAlpha, COLOR_GRAYSCALE, BitDepth = 1
-    tmpPNG := TPNGObject.Create;
+    png := TPortableNetworkGraphic.Create;
     try
-      tmpPNG.Assign(bmp);
- //     tmpPNG.Bitmap.Assign(bmp);
- //     tmpPNG.Bitmap.PixelFormat := pf24bit;
-      tmpPNG.CompressionLevel := 5;
+      png.Assign(bmp);
+      // Note: LCL TPortableNetworkGraphic does not support AddtEXt metadata.
+      // Parameter embedding is skipped in FPC build.
       if SaveTXTparas then
-      begin   //insert textparams, read in gimp with image information->comment
-        s := MakeTextparas(@Mand3DForm.MHeader, Mand3DForm.Caption);
-        tmpPNG.AddtEXt('Comment', s);
+      begin
+        // TODO: Implement PNG tEXt chunk writing for parameter embedding
+        // For now, parameters are not embedded in PNG files
       end;
-      tmpPNG.SaveToFile(ChangeFileExtSave(FileName, '.png'));
+      png.SaveToFile(ChangeFileExtSave(FileName, '.png'));
     finally
-      tmpPNG.Free;
+      png.Free;
     end;
 end;
 
 procedure SavePNG2FStream(FileName: String; bmp: TBitmap; FS: TFileStream);
-var //tmpPNG: TPngImage;
-    tmpPNG: TPNGObject;
+var
+    png: TPortableNetworkGraphic;
 begin
- //   tmpPNG := TPngImage.Create;
-    tmpPNG := TPNGObject.Create;
+    png := TPortableNetworkGraphic.Create;
     try
-      tmpPNG.Assign(bmp);
-      tmpPNG.CompressionLevel := 5;
-      tmpPNG.SaveToStream(FS);
+      png.Assign(bmp);
+      png.SaveToStream(FS);
     finally
-      tmpPNG.Free;
+      png.Free;
     end;
 end;
 
 procedure Save1bitPNG(FileName: String; bmp: TBitmap);
-var pal: PLogPalette;
+var
+    pal: PLogPalette;
     hpal: HPALETTE;
- //   tmpPNG: TPngImage;
-    tmpPNG: TPNGObject;
+    png: TPortableNetworkGraphic;
     tmpBMP: TBitmap;
     i: Integer;
 begin
- //   tmpPNG := TPngImage.Create;
-    tmpPNG := TPNGObject.Create;
+    png := TPortableNetworkGraphic.Create;
     tmpBMP := TBitmap.Create;
     try
       tmpBMP.Assign(bmp);
@@ -1240,17 +1235,10 @@ begin
       hpal := CreatePalette(pal^);
       if hpal <> 0 then tmpBMP.Palette := hpal;
       tmpBMP.PixelFormat := pf1bit;
-  //    tmpBMP.Canvas.CopyRect(tmpBMP.Canvas.ClipRect, bmp.Canvas, bmp.Canvas.ClipRect);
-    {  SysPal.lpal.palVersion := $300;
-      SysPal.lpal.palNumEntries := 2;
-      PCardinal(@SysPal.palEntries[0])^ := 0;
-      PCardinal(@SysPal.palEntries[1])^ := $FFFFFF;
-      tmpPNG.Palette := CreatePalette(SysPal.lpal);  }      //  AddzTXt,  CreateAlpha, COLOR_GRAYSCALE, BitDepth = 1
-      tmpPNG.Assign(tmpBMP);
-      tmpPNG.CompressionLevel := 5;
-      tmpPNG.SaveToFile(ChangeFileExtSave(FileName, '.png'));
+      png.Assign(tmpBMP);
+      png.SaveToFile(ChangeFileExtSave(FileName, '.png'));
     finally
-      tmpPNG.Free;
+      png.Free;
       tmpBMP.Free;
       FreeMem(pal);
     end;

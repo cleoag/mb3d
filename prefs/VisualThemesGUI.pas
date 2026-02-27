@@ -34,7 +34,11 @@ implementation
 {$R *.dfm}
 
 uses
-  Vcl.Themes, FileHandling;
+  FileHandling;
+
+{ Note: Vcl.Themes / TStyleManager is not available in LCL (Lazarus).
+  LCL applications use native OS widget themes automatically.
+  This form is kept functional but theme selection is disabled. }
 
 procedure TVisualThemesFrm.SaveAndExitBtnClick(Sender: TObject);
 begin
@@ -45,39 +49,29 @@ end;
 
 procedure TVisualThemesFrm.StylesCmbChange(Sender: TObject);
 begin
-  try
-    TStyleManager.TrySetStyle(StylesCmb.Items[StylesCmb.ItemIndex]);
-  except
-    on E: Exception do begin
-      if Pos('Focus', E.Message) < 1 then
-        raise;
-    end;
-  end;
+  { TStyleManager.TrySetStyle is not available in LCL.
+    LCL uses native OS themes automatically. }
 end;
 
 procedure TVisualThemesFrm.ThemesOffBtnClick(Sender: TObject);
 begin
-  StylesCmb.ItemIndex := StylesCmb.Items.IndexOf('Windows');
-  StylesCmbChange(Sender);
+  StylesCmb.ItemIndex := 0;
 end;
 
 procedure TVisualThemesFrm.DefaultThemeBtnClick(Sender: TObject);
 begin
-  StylesCmb.ItemIndex := StylesCmb.Items.IndexOf('Glossy');
-  StylesCmbChange(Sender);
+  StylesCmb.ItemIndex := 0;
 end;
 
 procedure TVisualThemesFrm.FormShow(Sender: TObject);
-var
-  s: String;
 begin
   StylesCmb.Items.BeginUpdate;
   try
     StylesCmb.Items.Clear;
-    for s in TStyleManager.StyleNames do
-       StylesCmb.Items.Add(s);
-    StylesCmb.Sorted := True;
-    StylesCmb.ItemIndex := StylesCmb.Items.IndexOf(TStyleManager.ActiveStyle.Name);
+    { LCL does not support TStyleManager.StyleNames.
+      Show a single entry indicating native OS theming is in use. }
+    StylesCmb.Items.Add('Default (System)');
+    StylesCmb.ItemIndex := 0;
   finally
     StylesCmb.Items.EndUpdate;
   end;

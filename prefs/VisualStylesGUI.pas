@@ -31,33 +31,31 @@ implementation
 
 {$R *.dfm}
 
-uses
- Vcl.Themes;
+{ Note: Vcl.Themes / TStyleManager is not available in LCL (Lazarus).
+  LCL applications use native OS widget themes automatically.
+  This form is kept functional but theme selection is disabled. }
 
 procedure TVisualStylesForm.SaveAndExitBtnClick(Sender: TObject);
 begin
-//    SaveIni(True);
-//    LoadIni;
     Visible := False;
 end;
 
 procedure TVisualStylesForm.ApplyBtnClick(Sender: TObject);
 begin
-  TStyleManager.TrySetStyle(StylesCmb.Items[StylesCmb.ItemIndex]);
+  { TStyleManager.TrySetStyle is not available in LCL.
+    LCL uses native OS themes automatically. }
 end;
 
 procedure TVisualStylesForm.FormShow(Sender: TObject);
-var
-  s: String;
 begin
-  FInitialStyle := TStyleManager.ActiveStyle.Name;
+  FInitialStyle := 'Default (System)';
   StylesCmb.Items.BeginUpdate;
   try
     StylesCmb.Items.Clear;
-    for s in TStyleManager.StyleNames do
-       StylesCmb.Items.Add(s);
-    StylesCmb.Sorted := True;
-    StylesCmb.ItemIndex := StylesCmb.Items.IndexOf(TStyleManager.ActiveStyle.Name);
+    { LCL does not support TStyleManager.StyleNames.
+      Show a single entry indicating native OS theming is in use. }
+    StylesCmb.Items.Add('Default (System)');
+    StylesCmb.ItemIndex := 0;
   finally
     StylesCmb.Items.EndUpdate;
   end;

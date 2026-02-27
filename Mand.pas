@@ -9,7 +9,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, CalcThread, Buttons, LightAdjust,
   AmbShadowCalcThreadN, PaintThread, FileHandling, Math3D, SHFolder,
-  TypeDefinitions, Menus, Vcl.ExtDlgs, M3Iregister;
+  TypeDefinitions, Menus, ExtDlgs, M3Iregister;
 
 type
   TqualPreset = packed record
@@ -551,8 +551,8 @@ uses Math, DivUtils, ImageProcess, ClipBrd, ShellAPI, FileCtrl, formulas,
      CalcThread2D, CustomFormulas, Animation, AniPreviewWindow, Maps,
      HeaderTrafos, Calc, IniDirsForm, FormulaGUI, Navigator, PostProcessForm,
      DOF, CalcHardShadow, AmbHiQ, BatchForm, Undo, CommDlg, VoxelExport,
-     calcBlocky, CalcSR, Tiling, MonteCarloForm, TextBox, pngimage, ColorPick,
-     uMapCalcWindow, FormulaCompiler, MutaGenGUI, VisualThemesGUI, Vcl.Themes,
+     calcBlocky, CalcSR, Tiling, MonteCarloForm, TextBox, ColorPick,
+     uMapCalcWindow, FormulaCompiler, MutaGenGUI, VisualThemesGUI,
      MapSequencesGUI, MapSequences, BulbTracer2UI, ScriptUI, HeightMapGenUI,
      ZBuf16BitGenUI;
 
@@ -1711,7 +1711,8 @@ begin
     OutMessage('');
 
     LoadIni;
-    if IniVal[35] <> '' then TStyleManager.TrySetStyle(IniVal[35]);
+    { TStyleManager.TrySetStyle not available in LCL - native OS themes are used }
+    // if IniVal[35] <> '' then TStyleManager.TrySetStyle(IniVal[35]);
 
     OPD := TOpenPictureDialogM3D.Create(Self);
     OPD.Filter := 'M3D Image + Parameter (*.m3i)|*.m3i';
