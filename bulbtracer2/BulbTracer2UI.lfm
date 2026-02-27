@@ -26,7 +26,6 @@ object BulbTracer2Frm: TBulbTracer2Frm
     Height = 710
     Align = alClient
     BevelOuter = bvNone
-    DoubleBuffered = True
     TabOrder = 0
     object ImportParamsFromMainBtn: TButton
       Left = 10

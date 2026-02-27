@@ -7,7 +7,6 @@ object MCForm: TMCForm
   Color = clBtnFace
   Constraints.MinHeight = 600
   Constraints.MinWidth = 600
-  DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -974,7 +973,6 @@ object MCForm: TMCForm
     BevelInner = bvNone
     BevelOuter = bvNone
     BorderStyle = bsNone
-    DoubleBuffered = True
     TabOrder = 3
     object Image1: TImage
       Left = 0

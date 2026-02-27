@@ -199,7 +199,6 @@ object JITFormulaEditorForm: TJITFormulaEditorForm
               Width = 151
               Height = 120
               Align = alClient
-              DoubleBuffered = False
               ItemHeight = 13
               TabOrder = 0
               OnClick = OptionsListClick
@@ -307,7 +306,6 @@ object JITFormulaEditorForm: TJITFormulaEditorForm
               Width = 151
               Height = 120
               Align = alClient
-              DoubleBuffered = False
               ItemHeight = 13
               TabOrder = 0
               OnClick = ConstantsListClick
@@ -415,7 +413,6 @@ object JITFormulaEditorForm: TJITFormulaEditorForm
               Width = 151
               Height = 133
               Align = alClient
-              DoubleBuffered = False
               ItemHeight = 13
               TabOrder = 0
               OnClick = ParamsListClick

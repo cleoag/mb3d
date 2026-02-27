@@ -404,7 +404,6 @@ object MutaGenFrm: TMutaGenFrm
             Width = 65
             Height = 21
             Anchors = []
-            DoubleBuffered = False
             Max = 1000
             TabOrder = 9
             ThumbLength = 18

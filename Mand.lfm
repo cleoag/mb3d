@@ -432,7 +432,6 @@ object Mand3DForm: TMand3DForm
       ActivePage = TabSheet5
       Align = alTop
       BiDiMode = bdLeftToRight
-      DoubleBuffered = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
