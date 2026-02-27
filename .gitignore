@@ -12,3 +12,4 @@ color_preset*
 x64/*
 lib/
 *.exe
+.worktrees/
