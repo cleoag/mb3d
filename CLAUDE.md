@@ -10,11 +10,21 @@ Mandelbulb 3D (MB3D) is a Windows desktop application for generating 3D fractal 
 
 ## Build
 
+### Delphi (original)
 - **IDE**: Open `Mandelbulb3D.dproj` in RAD Studio / Delphi, then Build (Shift+F9) or Run (F9)
 - **Command line**: `msbuild Mandelbulb3D.dproj /p:Config=Release /p:Platform=Win32`
-- **Entry point**: `Mandelbulb3D.dpr` — creates all forms and runs the VCL application loop
+
+### FPC / Lazarus (migration in progress)
+- **Build command**: `/c/lazarus/lazbuild.exe --cpu=i386 --os=win32 --compiler=/c/FPC/3.2.2/bin/i386-Win32/ppc386.exe --lazarusdir=/c/lazarus C:/work/mb3d/Mandelbulb3D.lpi`
+- **FPC version**: 3.2.2, i386-Win32
+- **Lazarus version**: 4.4
+- **Project file**: `Mandelbulb3D.lpi` (Lazarus project, separate from Delphi `.dproj`)
+- **Custom options**: `-Mdelphi -dPARAMS_PER_THREAD -dJIT_FORMULA_PREPROCESSING`
+
+### Common
+- **Entry point**: `Mandelbulb3D.dpr` / `Mandelbulb3D.lpr`
 - **Output**: `Mandelbulb3D.exe`
-- **No test suite exists** — verification is manual
+- **No test suite exists** — verification is manual (screenshots, render output)
 
 ### Key compiler settings
 - Stack: 16KB min / 16MB max (`-$M16384,16777216`)
@@ -23,6 +33,42 @@ Mandelbulb 3D (MB3D) is a Windows desktop application for generating 3D fractal 
 - I/O checking OFF, range checking OFF, overflow checking OFF (performance-critical math)
 - Active defines (Release): `PARAMS_PER_THREAD`, `JIT_FORMULA_PREPROCESSING`, `DEBUG_MESHEXP`
 - Disabled defines: `USE_PAX_COMPILER` (commercial PAX Compiler dependency removed; all PAX code is guarded by `{$IFDEF USE_PAX_COMPILER}`)
+
+## FPC/Lazarus Migration Status
+
+### Completed
+1. **Compilation** — builds successfully under FPC 3.2.2 / Lazarus 4.4
+2. **Runtime startup** — app launches, UI loads correctly
+3. **Property skip fix** — FPC's streaming skips unknown/incompatible Delphi properties gracefully
+4. **fHybrid null pointer fix** — initialization of `TIteration3D.fHybrid` array to `EmptyFormula`
+5. **DOF QuickSort fix** — replaced Delphi-specific generics with FPC-compatible sort
+6. **SSE2 disable under FPC** — wrapped SSE2 function pointer overrides in `{$IFNDEF FPC}` in `DivUtils.pas`; Pascal fallbacks used instead (SSE2 asm uses Delphi-specific conventions: COMISD+JC infinite loop on NaN, stack param order differences, MXCSR not configured)
+7. **MXCSR initialization** — added `SetSSECSR(GetSSECSR or $1F80)` for FPC to mask SSE2 FP exceptions
+8. **PARAMS_PER_THREAD define** — added to `.lpi` (was missing; critical for per-thread MCTparas initialization including `nHybrid` formula counts)
+9. **nHybrid[0]=0 infinite loop fix** — added safety exit in `doHybridPas` when all nHybrid values are 0
+
+10. **`Double(integer)` cast fix** — FPC's `Double(8)` does raw bit reinterpretation (→ 3.95e-323), unlike Delphi which converts to 8.0. Fixed `Double(8)` → `8.0` and `Double(2)` → `2.0` in `CustomFormulas.pas:330`. This was the ROOT CAUSE of formulas not loading — `dSIpow` got garbage, `Round(garbage)=0`, `fHIntFunctions[0]` was out-of-bounds (array is [2..8]), so `pCodePointer` stayed nil/EmptyFormula.
+11. **Formula pipeline now works** — After the Double() fix, `ParseCFfromOld` correctly sets `dSIpow=8`, loads `HybridIntP8`, and the formula executes correctly (modifies x,y,z, produces correct escape/bounded behavior).
+
+12. **2D render fully working** — Formula iteration, RMdoColor (inline ASM), PaintThread coloring, and bitmap output all produce correct results. Verified 480×360 render of power-8 Mandelbulb 2D cross-section with smooth coloring.
+13. **3D render fully working** — Full 3D ray marching pipeline works: distance estimation (CalcDE), surface normal calculation, RMdoColor ASM, PaintThread lighting/shading, bitmap output. Verified 480×360 3D Mandelbulb render with proper depth, surface normals, and lighting.
+14. **Debug logging removed** — All temporary debug file I/O removed from CalcThread.pas, CalcThread2D.pas, Calc.pas, CustomFormulas.pas, formulas.pas, Mand.pas.
+
+15. **Post-processing pipeline verified** — Full post-processing chain tested: NormalsOnZBuf (x=2), Hard Shadows (x=4), Ambient Occlusion (x=8) all execute correctly and complete without errors. Verified via diagnostic logging showing step-by-step progression through Timer4Timer state machine. Final rendered bitmap has rich colors with proper lighting/shading.
+
+### In Progress / Untested
+- **Reflections (CalcSRT)**: Requires scene with reflective surfaces configured. Code reviewed — no FPC-specific issues found.
+- **DOF (doDOF/doDOFsort)**: Requires scene with DOF settings. Code reviewed — no FPC-specific issues found.
+- **JIT formulas (.m3f)**: External formula files not tested — may have calling convention issues.
+- **Other formula types**: Only Integer Power 8 (HybridIntP8) tested. Other built-in formulas (quaternion, tricorn, Amazing Box, etc.) untested.
+
+### Key FPC vs Delphi Differences Found
+- **`Double(integer)` cast** (CRITICAL): In FPC `{$mode delphi}`, `Double(8)` is a RAW BIT reinterpretation (zero-extends int 8 to 0x0000000000000008 ≈ 3.95e-323). In Delphi, it's a type conversion to 8.0. Always use `8.0` literal instead. Search for `Double(` followed by integer literals to find other instances.
+- **`@procVar` operator**: In `{$mode delphi}`, `@procVar` returns the procedure address (the stored value), NOT the address of the variable. Use `@@procVar` for the variable's address.
+- **SSE2 inline assembly**: Delphi's COMISD+JC handles NaN differently than FPC; MXCSR register not auto-configured
+- **Stack parameter order**: Delphi register convention pushes remaining params LEFT-TO-RIGHT; FPC may differ
+- **Defines**: Must manually add `-dPARAMS_PER_THREAD -dJIT_FORMULA_PREPROCESSING` in `.lpi` (Delphi `.dproj` has them)
+- **Inline asm offsets**: FPC warns about `+offset(%ebp)` usage — assembly code using `[ebp+offset]` for stack params needs verification
 
 ## Architecture
 

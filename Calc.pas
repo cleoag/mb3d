@@ -5,7 +5,7 @@ unit Calc;
 
 interface
 
-uses Windows, TypeDefinitions, Math3D, FormulaClass;
+uses Classes, Windows, TypeDefinitions, Math3D, FormulaClass;
 
 function CalcMandT(Header: TPMandHeader10; PLightVals: TPLightVals; PCTS: TPCalcThreadStats;
                    PsiLight5: TPsiLight5; hSLoffset, FSIstart, FSIoffset: Integer; hRect: TRect): Boolean;

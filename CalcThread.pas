@@ -6,7 +6,7 @@ unit CalcThread;
 interface
 
 uses
-  Classes, Math3D, TypeDefinitions, Windows, FormulaClass;
+  SysUtils, Classes, Math3D, TypeDefinitions, Windows, FormulaClass;
 
 type
   TMandCalcThread = class(TThread)
@@ -813,7 +813,9 @@ begin
             end;
           end
           else
-label1:     dTmp := CalcDE(@Iteration3Dext, @MCTparas);
+label1:   begin
+            dTmp := CalcDE(@Iteration3Dext, @MCTparas);
+          end;
 
           if (Iteration3Dext.ItResultI >= MaxItsResult) or (dTmp < msDEstop) then   // already in the set
           begin

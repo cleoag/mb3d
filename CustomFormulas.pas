@@ -324,7 +324,7 @@ begin
       SIMDlevel := 0;
       dDEscale  := ds[f];
       dADEscale := 1;
-      if f = 0 then dSIpow := Math.Min(Double(8), Math.Max(Double(2), dOptionValues[0])) else
+      if f = 0 then dSIpow := Math.Min(8.0, Math.Max(2.0, dOptionValues[0])) else
       if f in [1, 9] then dSIpow := NonZero(dOptionValues[0]) else dSIpow := 2;
       dRstop      := 16;
       iConstCount := 0;

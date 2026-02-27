@@ -494,7 +494,7 @@
     </Linking>
     <Other>
       <CompilerPath Value="C:/FPC/3.2.2/bin/i386-Win32/ppc386.exe"/>
-      <CustomOptions Value="-Mdelphi"/>
+      <CustomOptions Value="-Mdelphi -dPARAMS_PER_THREAD -dJIT_FORMULA_PREPROCESSING"/>
     </Other>
   </CompilerOptions>
   <Debugging>

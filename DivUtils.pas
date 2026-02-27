@@ -1658,8 +1658,17 @@ Initialization
 
   {$IFNDEF DEBUG}
     set8087cw($133F);  // mask floating point errors
+    {$IFDEF FPC}
+    SetSSECSR(GetSSECSR or $1F80);  // also mask SSE2 floating point exceptions
+    {$ENDIF}
   {$ENDIF}
 
+  {$IFNDEF FPC}
+  // SSE2 assembly routines use Delphi-specific inline assembly conventions:
+  // - Stack params pushed in Delphi register order (differs from FPC)
+  // - COMISD+JC creates infinite loop on NaN (Pascal > handles NaN correctly)
+  // - MXCSR not configured (set8087cw only affects x87 FPU, not SSE2)
+  // Under FPC, use the Pascal fallback implementations instead.
   if SupportSSE2 then
   begin
     fIsMemberAlternating := doHybridSSE2;
@@ -1673,6 +1682,7 @@ Initialization
     fHybridItIntPow2 := HybridItIntPow2SSE2;
     fHIntFunctions[2] := HybridItIntPow2SSE2;
   end;
+  {$ENDIF}
 
   QueryPerformanceFrequency(Fi64);
   if Fi64 = 0 then HiQCounterMul := 1e-3 else
