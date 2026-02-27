@@ -55,7 +55,8 @@ implementation
 
 uses Math, DivUtils, formulas, CustomFormulas, Mand, SysUtils, LightAdjust,
      Navigator, Animation, Interpolation, PaintThread, Types, DOF, Tiling,
-     FileHandling, Calc, MB3DMaps{, OTrapDEcalc};
+     FileHandling, Calc, MB3DMaps{, OTrapDEcalc}
+     {$IFDEF FPC_DIAG}, DiagHarness{$ENDIF};
 
 function GetDEstopFactor(Header: TPMandHeader10): Double;
 var x1, x2, ze: Double;
@@ -989,6 +990,10 @@ begin                                //calcHybridFormulas -> usage of own calcfo
         if not bMCTisValid then Mand3DForm.OutMessage('Error, formula option is not valid.');
       end;
     end;
+    {$IFDEF FPC_DIAG}
+    if DiagHarness.DiagIsActive then
+      DiagHarness.DiagLogMCTparasRecord(Result, DiagHarness.DiagCurrentScene);
+    {$ENDIF}
 end;
 
 procedure CalcHSVecsFromLights(Lvals: TPLightVals; MCTpars: PMCTparameter);

@@ -554,7 +554,8 @@ uses Math, DivUtils, ImageProcess, ClipBrd, ShellApi, formulas,
      calcBlocky, CalcSR, Tiling, MonteCarloForm, TextBox, ColorPick,
      uMapCalcWindow, FormulaCompiler, MutaGenGUI, VisualThemesGUI,
      MapSequencesGUI, MapSequences, BulbTracer2UI, ScriptUI, HeightMapGenUI,
-     ZBuf16BitGenUI, Types;
+     ZBuf16BitGenUI, Types
+     {$IFDEF FPC_DIAG}, DiagHarness{$ENDIF};
 
 {$R *.lfm}
 
@@ -2207,12 +2208,18 @@ begin
       begin          //Postprocessings of single procs
         case c of    //0: not calculating, 1: main calculation, 2: hard shadow postcalc, 3: NsOnZBuf, 4: AO, 5: free, 6: Reflections, 7: DOF
       1, 10:  begin
+                {$IFDEF FPC_DIAG}
+                if DiagIsActive then DiagLogPostProc('Main render complete', c);
+                {$ENDIF}
                 MHeader.iCalcTime := Round(y * 0.01);
                 if MHeader.bCalc3D > 0 then CalcStatistic;
                 MCalcThreadStats.iTotalThreadCount := 0;
                 if (AnimationForm.AniOption <= 0) and (c = 1) then LightAdjustForm.MakeHisto;
               end;
           3:  begin //HS
+                {$IFDEF FPC_DIAG}
+                if DiagIsActive then DiagLogPostProc('Hard Shadow complete', 3);
+                {$ENDIF}
                 MHeader.iCalcHStime := Round(y * 0.01);
                 Label8.Caption := IntToTimeStr(MHeader.iCalcHStime);
                 for z := 0 to 5 do
@@ -2220,12 +2227,18 @@ begin
                     (MHeader.bHScalculated shr (z + 2)) and 1;
               end;
           4:  begin //AO
+                {$IFDEF FPC_DIAG}
+                if DiagIsActive then DiagLogPostProc('Ambient Occlusion complete', 4);
+                {$ENDIF}
                 MHeader.iAmbCalcTime := Round(y * 0.01);
                 Label48.Caption := IntToTimeStr(MHeader.iAmbCalcTime);
                 if (MHeader.bCalcAmbShadowAutomatic and 12) = 8 then
                   if SSAORiteration < MHeader.SSAORcount then c := 3;
               end;
           6:  begin //Reflects
+                {$IFDEF FPC_DIAG}
+                if DiagIsActive then DiagLogPostProc('Reflections complete', 6);
+                {$ENDIF}
                 MHeader.iReflectsCalcTime := Round(y * 0.01);
                 Label50.Caption := IntToTimeStr(MHeader.iReflectsCalcTime);
               end;
@@ -2239,6 +2252,9 @@ begin
         begin              //next processing step
           case x of        // 2: NsOnZBuf, 4: hard shadow postcalc, 8: AO, 16: free, 32: Reflections, 64: DOF
             2:  begin
+                  {$IFDEF FPC_DIAG}
+                  if DiagIsActive then DiagLogPostProc('Starting NormalsOnZBuf', 2);
+                  {$ENDIF}
                   Screen.Cursor := crHourGlass;
                   Label6.Caption := 'Normals on ZBuf';  //before HS!
                   try
@@ -3136,7 +3152,13 @@ end;
 procedure TMand3DForm.LoadStartupParas;
 var s: String;
     bStartTimer: LongBool;
+    {$IFDEF FPC_DIAG}
+    DiagSceneFile: String;
+    {$ENDIF}
 begin
+    {$IFDEF FPC_DIAG}
+    DiagCheckStartup;
+    {$ENDIF}
     bStartTimer := True;
     if ParamCount > 0 then
     begin
@@ -3162,6 +3184,38 @@ begin
       if not LoadParameter(MHeader, IncludeTrailingPathDelimiter(IniDirs[1]) + 'Default.m3p', True) then
         FormulaGUIForm.TabControl1.OnChange(Self);
     Timer1.Enabled := bStartTimer;
+
+    {$IFDEF FPC_DIAG}
+    // In diagnostic mode: load specified scene (or default), then auto-start 3D render
+    if DiagIsActive then
+    begin
+      DiagSceneFile := DiagCurrentScene;
+      if DiagSceneFile <> '' then
+      begin
+        // Load the specified scene
+        if not FileExists(DiagSceneFile) then
+          DiagSceneFile := IncludeTrailingPathDelimiter(IniDirs[1]) + DiagSceneFile;
+        if FileExists(DiagSceneFile) then
+        begin
+          LoadParameter(MHeader, DiagSceneFile, True);
+          AllPresetsUp;
+          DiagLog('Loaded scene: ' + DiagSceneFile);
+        end
+        else
+          DiagLog('WARNING: Scene file not found: ' + DiagCurrentScene);
+      end
+      else
+        DiagLog('Using default scene');
+
+      // Force 3D render
+      DiagLog('Starting 3D render...');
+      DiagSetRenderStartTick;
+      Timer1.Enabled := False;
+      MHeader.bCalc3D := 1;
+      MHeader.bStereoMode := 0;
+      CalcMand(True);
+    end;
+    {$ENDIF}
 end;
 
 procedure TMand3DForm.FormShow(Sender: TObject);
@@ -3252,6 +3306,9 @@ end;
 
 procedure TMand3DForm.Timer8Timer(Sender: TObject);  //Repaint done? + Animation save BMP
 var y, ymin, c: Integer;
+    {$IFDEF FPC_DIAG}
+    DiagSafeName, DiagFPath: String;
+    {$ENDIF}
 begin
     ymin := 999999;
     c := 0;
@@ -3269,7 +3326,27 @@ begin
       isRepainting   := False;
       if (AnimationForm.AniOption > 0) and SaveAniImage then DoSaveAniImage else
       if SaveTileImage then DoSaveTileImage else
-      if Timer3.Enabled then Timer3Timer(Self) else StoreUndoLight;
+      if Timer3.Enabled then Timer3Timer(Self) else
+      begin
+        StoreUndoLight;
+        {$IFDEF FPC_DIAG}
+        if DiagIsActive and (MCalcThreadStats.iProcessingType = 0) then
+        begin
+          DiagOnRenderComplete;
+          // Save the final bitmap
+          DiagSafeName := StringReplace(DiagCurrentScene, ' ', '_', [rfReplaceAll]);
+          DiagSafeName := StringReplace(DiagSafeName, '.m3p', '', [rfReplaceAll, rfIgnoreCase]);
+          if DiagSafeName = '' then DiagSafeName := 'default';
+          DiagFPath := DiagOutputDir + 'fpc_' + DiagSafeName + '.bmp';
+          SaveBMP(DiagFPath, Image1.Picture.Bitmap, pf24bit);
+          DiagLog('Bitmap saved: ' + DiagFPath);
+          if Length(siLight5) > 0 then
+            DiagLogSiLight5Sample(@siLight5[0], MHeader.Width, MHeader.Height, DiagCurrentScene);
+          DiagLog('=== Diagnostic render complete. Closing. ===');
+          Application.Terminate;
+        end;
+        {$ENDIF}
+      end;
     end;
     Timer8.Interval := 100;
 end;
