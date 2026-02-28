@@ -58,13 +58,31 @@ Mandelbulb 3D (MB3D) is a Windows desktop application for generating 3D fractal 
 
 16. **UI display blit fix** — In FPC/LCL, `TBitmap.ScanLine` writes go to `RawImage.Data`, a separate buffer from the GDI HBITMAP used for screen painting (in Delphi VCL they share memory via DIB section). This caused the rendered fractal to be correct in memory but display as black. Fixed in `ImageProcess.pas` by: (a) setting alpha=0xFF in all 4 copy paths of `UpdateScaledImage` (LCL uses AlphaBlend for 32bpp — alpha=0 means transparent), and (b) calling `SetDIBitsToDevice` after each ScanLine copy loop (`UpdateScaledImage` and `doAA`) to push pixel data from `RawImage.Data` directly to the bitmap's `Canvas.Handle` DC.
 
-### In Progress / Untested
-- **Reflections (CalcSRT)**: Requires scene with reflective surfaces configured. Code reviewed — no FPC-specific issues found.
-- **DOF (doDOF/doDOFsort)**: Requires scene with DOF settings. Code reviewed — no FPC-specific issues found.
-- **JIT formulas (.m3f)**: External formula files not tested — may have calling convention issues.
-- **Other formula types**: Only Integer Power 8 (HybridIntP8) tested. Other built-in formulas (quaternion, tricorn, Amazing Box, etc.) untested.
+17. **Headless CLI rendering** — `HeadlessRender.pas`: command-line rendering without GUI (`--render input.m3p --output result.png [--format png|jpg|bmp] [--width N] [--height N] [--threads N]`). Uses `Application.ShowMainForm := False` to keep forms in memory (controls populated by `LoadParameter`) but invisible. Timer-driven pipeline runs via `Application.Run`. FPC-only (`{$IFDEF FPC}`).
 
-### Diagnostic Harness (feature/fpc-diag-harness branch)
+18. **Headless state machine fixes** — Three bugs in Timer4Timer post-processing state machine caused 25 scenes to hang after rendering completed: (a) after reflections/DOF (c>4), `UpdateScaledImageFull` was called instead of `RepaintMand3D(True)`, so Timer8 was never enabled and the headless exit never triggered; (b) `AllOpts` bitmask contains bits for already-completed phases, causing `(AllOpts & $FFFC) != 0` even when no processing remains — neither RepaintMand3D nor UpdateScaledImageFull was called; (c) Volume Light Map opens `MapCalcWindow` with busy-wait loop that hangs in headless mode. Fixed by adding headless exit fallback in Timer4Timer completion block, skipping volume light map in headless, and handling CalcSRT/CalcMandT failures with proper error exit.
+
+19. **Broad formula coverage verified** — Headless test suite across 80 .m3p scenes: **79/80 pass** (1 skip: Test8.m3p, incompatible file format). Verified formula types: IntPow 2–8, AmazingBox, ABoxSOff4d, AexionC, Bulbox, Quaternion, generalized Quaternion, Julia variants, Menger variants, dIFS (7 scenes), KochSurf, hybrid chains. Verified post-processing: NormalsOnZBuf, Hard Shadows, Ambient Occlusion, Reflections (CalcSRT), DOF (doDOF/doDOFsort).
+
+### In Progress / Untested
+- **JIT formulas (.m3f)**: External formula files (~200+ in M3Formulas/) not tested — may have calling convention issues (binary machine code targets Delphi register calling convention).
+- **Volume Light Map in headless**: Currently skipped in headless mode (MapCalcWindow requires GUI). Needs headless-compatible implementation.
+- **Monte Carlo renderer**: `CalcMonteCarlo.pas` — separate render pipeline, not exercised by headless test suite.
+- **Animation**: AnimationForm workflow not tested under FPC.
+- **Tiling**: TilingForm large-image tiled rendering not tested under FPC.
+- **Batch processing**: BatchForm1 batch rendering not tested under FPC.
+- **BulbTracer2**: Voxel mesh generation + OpenGL preview — separate pipeline, not tested.
+- **Pixel-level FPC vs Delphi comparison**: Renders pass visually but per-pixel comparison not done for most formulas. Minor numerical differences possible due to Pascal fallbacks vs SSE2.
+- **SSE2 ASM paths**: Disabled under FPC (`{$IFNDEF FPC}` in DivUtils.pas). Pascal fallbacks used. Performance optimization opportunity.
+
+### Headless CLI Rendering
+Production headless rendering mode for scripting and automation (FPC-only):
+- **HeadlessRender.pas** — CLI argument parsing, console allocation, output saving
+- Usage: `Mandelbulb3D.exe --render input.m3p --output result.png [--format png|jpg|bmp] [--width N] [--height N] [--threads N]`
+- **run_headless_tests.sh** — Batch test runner for all 80 .m3p scenes (generates test_report.txt + CSV)
+- Test results: **79/80 pass** at 200×150 resolution with 120s timeout
+
+### Diagnostic Harness
 Automated diagnostic tooling for pixel-level FPC vs Delphi comparison:
 - **DiagHarness.pas** — Core harness unit, activated by `-dFPC_DIAG` compiler define + `--diag` CLI flag
 - **DiagASMCheck.pas** — Pascal reference implementations for ASM routine spot-checks
@@ -83,6 +101,8 @@ Test matrix scenes (in M3Parameter/): default (IntPow8), ABoxScale2Start (Amazin
 - **Defines**: Must manually add `-dPARAMS_PER_THREAD -dJIT_FORMULA_PREPROCESSING` in `.lpi` (Delphi `.dproj` has them)
 - **Inline asm offsets**: FPC warns about `+offset(%ebp)` usage — assembly code using `[ebp+offset]` for stack params needs verification
 - **LCL ScanLine / HBITMAP split** (CRITICAL): `TBitmap.ScanLine` in LCL writes to `RawImage.Data`, which is a **separate memory buffer** from the GDI HBITMAP used for screen painting. In Delphi VCL, `ScanLine` points directly to DIB section bits (shared memory). After writing pixels via ScanLine in LCL, you must call `SetDIBitsToDevice` on `Canvas.Handle` to push the data to the HBITMAP. Also, LCL uses `AlphaBlend` for 32bpp bitmaps, so the alpha byte must be set to `$FF` (Delphi VCL uses `BitBlt` which ignores alpha).
+- **Timer4Timer state machine completion paths**: The post-processing state machine has multiple completion paths that rely on `RepaintMand3D(True)` → Timer8 → Timer8Timer. In headless/non-GUI mode, some paths call `UpdateScaledImageFull` instead (which doesn't enable Timer8), and some paths match no condition at all (because `AllOpts` retains bits for already-completed phases). Any new headless/automated exit must add a fallback in the `else` completion block of Timer4Timer, not only in Timer8Timer.
+- **GUI modal dialogs in render paths**: `ShowMessage` (OOM in CalcMand), `MapCalcWindow.Visible` busy-wait (Volume Light Map) — these block in headless mode. Guard with `if HeadlessMode` checks.
 
 ## Architecture
 
