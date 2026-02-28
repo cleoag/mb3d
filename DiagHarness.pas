@@ -37,6 +37,9 @@ procedure DiagLogSiLight5Sample(pSiLight: Pointer; Width, Height: Integer; const
 { Record render start time }
 procedure DiagSetRenderStartTick;
 
+{ Save fullSizeImage buffer directly as 24-bit BMP }
+procedure DiagSaveFullSizeImageBMP(const FilePath: String; pData: Pointer; Width, Height, Stride: Integer);
+
 { General log message }
 procedure DiagLog(const S: String);
 
@@ -368,6 +371,86 @@ begin
   end;
 
   DiagLog('siLight5 samples saved to: ' + FPath);
+end;
+
+procedure DiagSaveFullSizeImageBMP(const FilePath: String; pData: Pointer; Width, Height, Stride: Integer);
+{ Write fullSizeImage (array of Cardinal = BGRA, 4 bytes/pixel) as 24-bit BMP.
+  BMP format is bottom-up, so row 0 in file = last row of image.
+  Stride is bytes per row in the source (typically Width * 4). }
+var
+  F: file;
+  BmpFileHdr: packed record
+    bfType: Word;
+    bfSize: Cardinal;
+    bfReserved: Cardinal;
+    bfOffBits: Cardinal;
+  end;
+  BmpInfoHdr: packed record
+    biSize: Cardinal;
+    biWidth: Integer;
+    biHeight: Integer;
+    biPlanes: Word;
+    biBitCount: Word;
+    biCompression: Cardinal;
+    biSizeImage: Cardinal;
+    biXPelsPerMeter: Integer;
+    biYPelsPerMeter: Integer;
+    biClrUsed: Cardinal;
+    biClrImportant: Cardinal;
+  end;
+  RowBytes, PadBytes, y, x: Integer;
+  RowBuf: array of Byte;
+  pSrc: PByte;
+  pDst: PByte;
+begin
+  RowBytes := Width * 3;
+  PadBytes := (4 - (RowBytes mod 4)) mod 4;
+
+  BmpFileHdr.bfType := $4D42; // 'BM'
+  BmpFileHdr.bfOffBits := SizeOf(BmpFileHdr) + SizeOf(BmpInfoHdr);
+  BmpFileHdr.bfSize := BmpFileHdr.bfOffBits + Cardinal((RowBytes + PadBytes) * Height);
+  BmpFileHdr.bfReserved := 0;
+
+  BmpInfoHdr.biSize := SizeOf(BmpInfoHdr);
+  BmpInfoHdr.biWidth := Width;
+  BmpInfoHdr.biHeight := Height; // positive = bottom-up
+  BmpInfoHdr.biPlanes := 1;
+  BmpInfoHdr.biBitCount := 24;
+  BmpInfoHdr.biCompression := 0; // BI_RGB
+  BmpInfoHdr.biSizeImage := Cardinal((RowBytes + PadBytes) * Height);
+  BmpInfoHdr.biXPelsPerMeter := 0;
+  BmpInfoHdr.biYPelsPerMeter := 0;
+  BmpInfoHdr.biClrUsed := 0;
+  BmpInfoHdr.biClrImportant := 0;
+
+  SetLength(RowBuf, RowBytes + PadBytes);
+  FillChar(RowBuf[0], Length(RowBuf), 0);
+
+  AssignFile(F, FilePath);
+  Rewrite(F, 1);
+  try
+    BlockWrite(F, BmpFileHdr, SizeOf(BmpFileHdr));
+    BlockWrite(F, BmpInfoHdr, SizeOf(BmpInfoHdr));
+
+    // Write rows bottom-up: BMP row 0 = image row (Height-1)
+    for y := Height - 1 downto 0 do
+    begin
+      pSrc := PByte(pData) + y * Stride;
+      pDst := @RowBuf[0];
+      for x := 0 to Width - 1 do
+      begin
+        // Source is BGRA (Cardinal), destination is BGR (24-bit BMP)
+        pDst^ := pSrc^;           Inc(pDst); Inc(pSrc); // B
+        pDst^ := pSrc^;           Inc(pDst); Inc(pSrc); // G
+        pDst^ := pSrc^;           Inc(pDst); Inc(pSrc); // R
+        Inc(pSrc);                                        // skip A
+      end;
+      // Pad bytes are already 0 from FillChar
+      BlockWrite(F, RowBuf[0], RowBytes + PadBytes);
+    end;
+  finally
+    CloseFile(F);
+  end;
 end;
 
 procedure DiagOnRenderComplete;

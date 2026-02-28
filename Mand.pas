@@ -3333,12 +3333,16 @@ begin
         if DiagIsActive and (MCalcThreadStats.iProcessingType = 0) then
         begin
           DiagOnRenderComplete;
-          // Save the final bitmap
+          // Save the final bitmap from fullSizeImage buffer (not Image1 which may be blank in headless mode)
           DiagSafeName := StringReplace(DiagCurrentScene, ' ', '_', [rfReplaceAll]);
           DiagSafeName := StringReplace(DiagSafeName, '.m3p', '', [rfReplaceAll, rfIgnoreCase]);
           if DiagSafeName = '' then DiagSafeName := 'default';
           DiagFPath := DiagOutputDir + 'fpc_' + DiagSafeName + '.bmp';
-          SaveBMP(DiagFPath, Image1.Picture.Bitmap, pf24bit);
+          if Length(fullSizeImage) > 0 then
+            DiagSaveFullSizeImageBMP(DiagFPath, @fullSizeImage[0],
+              MHeader.Width, MHeader.Height, mFSIoffset)
+          else
+            DiagLog('ERROR: fullSizeImage is empty, cannot save bitmap');
           DiagLog('Bitmap saved: ' + DiagFPath);
           if Length(siLight5) > 0 then
             DiagLogSiLight5Sample(@siLight5[0], MHeader.Width, MHeader.Height, DiagCurrentScene);
