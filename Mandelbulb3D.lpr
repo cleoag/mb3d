@@ -6,6 +6,7 @@ uses
   SysUtils, Classes, LResources,
   Interfaces, // LCL widgetset
   Forms,
+  HeadlessRender,
   Mand in 'Mand.pas' {Mand3DForm},
   LightAdjust in 'LightAdjust.pas' {LightAdjustForm},
   CalcThread in 'CalcThread.pas',
@@ -183,6 +184,11 @@ begin
   try
     Application.Initialize;
     Application.Title := 'Mandelbulb 3D';
+    {$IFDEF FPC}
+    HeadlessParseArgs;
+    if HeadlessMode then
+      Application.ShowMainForm := False;
+    {$ENDIF}
     {$I+}
     Assign(LogFile, 'mb3d_startup.log');
     Rewrite(LogFile);

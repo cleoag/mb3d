@@ -555,6 +555,7 @@ uses Math, DivUtils, ImageProcess, ClipBrd, ShellApi, formulas,
      uMapCalcWindow, FormulaCompiler, MutaGenGUI, VisualThemesGUI,
      MapSequencesGUI, MapSequences, BulbTracer2UI, ScriptUI, HeightMapGenUI,
      ZBuf16BitGenUI, Types
+     {$IFDEF FPC}, HeadlessRender{$ENDIF}
      {$IFDEF FPC_DIAG}, DiagHarness{$ENDIF};
 
 {$R *.lfm}
@@ -1065,6 +1066,9 @@ end;
 procedure TMand3DForm.EnableButtons;
 var P: TPoint;
 begin
+    {$IFDEF FPC}
+    if HeadlessMode then Exit;
+    {$ENDIF}
     Label6.Caption := '';
     Button2.Caption := 'Calculate 3D';
     Button2.Hint := 'Sart the main rendering of the image.';
@@ -1158,6 +1162,9 @@ end;
 
 procedure TMand3DForm.DisableButtons;
 begin
+    {$IFDEF FPC}
+    if HeadlessMode then Exit;
+    {$ENDIF}
     SetThreadExecutionState(ES_CONTINUOUS or ES_SYSTEM_REQUIRED or ES_AWAYMODE_REQUIRED);
     SpeedButton32.Enabled := False;
     SpeedButton33.Enabled := False;
@@ -2174,6 +2181,9 @@ begin
     CalcYact := ymin;
     if MCalcThreadStats.iProcessingType in [1, 3, 4, 6, 10] then
     begin
+      {$IFDEF FPC}
+      if not HeadlessMode then
+      {$ENDIF}
       ProgressBar1.Position := (ProgressBar1.Max * Max(0, (ymin - MCalcThreadStats.ctCalcRect.Top))) div
         Max(1, MCalcThreadStats.ctCalcRect.Bottom - MCalcThreadStats.ctCalcRect.Top);
       if (MCalcThreadStats.iProcessingType in [1, 3, 6, 10]) or (MHeader.bCalcAmbShadowAutomatic and 12 = 12) then
@@ -2181,12 +2191,17 @@ begin
         y := Max(0, GetTickCount - MCalcThreadStats.cCalcTime);
         if y > 100000 then MButtonsUp;
         xx := y / MSecsPerDay;
-        Label1.Caption := dDateTimeToStr(xx);
-        if y > 2000 then
+        {$IFDEF FPC}
+        if not HeadlessMode then
+        {$ENDIF}
         begin
-          yy := MaxCD(0.0001, yy);
-          Label19.Caption := 'togo: ' +  dDateTimeToStr(xx * (ymax * MCalcThreadStats.iTotalThreadCount - yy) / yy *
-                                           (MCalcThreadStats.iTotalThreadCount / Max(c, 1)));
+          Label1.Caption := dDateTimeToStr(xx);
+          if y > 2000 then
+          begin
+            yy := MaxCD(0.0001, yy);
+            Label19.Caption := 'togo: ' +  dDateTimeToStr(xx * (ymax * MCalcThreadStats.iTotalThreadCount - yy) / yy *
+                                             (MCalcThreadStats.iTotalThreadCount / Max(c, 1)));
+          end;
         end;
       end
       else if MCalcThreadStats.iProcessingType = 4 then
@@ -2200,10 +2215,15 @@ begin
       c := MCalcThreadStats.iProcessingType;
       MCalcThreadStats.iProcessingType := 0;
       if MCalcStop or not (c in [1, 6]) then MCalcThreadStats.iTotalThreadCount := 0;
-      Label19.Caption := '';
-      Label6.Caption := '';
-      Label1.Caption := '';
-      ProgressBar1.Visible := False;
+      {$IFDEF FPC}
+      if not HeadlessMode then
+      {$ENDIF}
+      begin
+        Label19.Caption := '';
+        Label6.Caption := '';
+        Label1.Caption := '';
+        ProgressBar1.Visible := False;
+      end;
       if not MCalcStop then
       begin          //Postprocessings of single procs
         case c of    //0: not calculating, 1: main calculation, 2: hard shadow postcalc, 3: NsOnZBuf, 4: AO, 5: free, 6: Reflections, 7: DOF
@@ -3156,6 +3176,35 @@ var s: String;
     DiagSceneFile: String;
     {$ENDIF}
 begin
+    {$IFDEF FPC}
+    if HeadlessMode then
+    begin
+      HeadlessLog('Loading parameters: ' + HeadlessInputFile);
+      if not LoadParameter(MHeader, HeadlessInputFile, True) then
+      begin
+        HeadlessLog('Error: failed to load parameter file: ' + HeadlessInputFile);
+        Halt(1);
+      end;
+      { Override resolution. bUserChange must be False to prevent
+        Edit11Change from enforcing aspect ratio lock. }
+      if (HeadlessWidth > 0) or (HeadlessHeight > 0) then
+      begin
+        bUserChange := False;
+        if HeadlessWidth > 0 then
+          Edit11.Text := IntToStr(HeadlessWidth);
+        if HeadlessHeight > 0 then
+          Edit12.Text := IntToStr(HeadlessHeight);
+        bUserChange := True;
+      end;
+      if HeadlessThreads > 0 then
+        UpDown3.Position := HeadlessThreads;
+      HeadlessLog('Rendering ' + Edit11.Text + 'x' + Edit12.Text + '...');
+      MHeader.bCalc3D := 1;
+      MHeader.bStereoMode := 0;
+      CalcMand(True);
+      Exit;
+    end;
+    {$ENDIF}
     {$IFDEF FPC_DIAG}
     DiagCheckStartup;
     {$ENDIF}
@@ -3329,6 +3378,13 @@ begin
       if Timer3.Enabled then Timer3Timer(Self) else
       begin
         StoreUndoLight;
+        {$IFDEF FPC}
+        if HeadlessMode and (MCalcThreadStats.iProcessingType = 0) then
+        begin
+          SdoAA;
+          HeadlessOnRenderComplete(Image1.Picture.Bitmap);
+        end;
+        {$ENDIF}
         {$IFDEF FPC_DIAG}
         if DiagIsActive and (MCalcThreadStats.iProcessingType = 0) then
         begin

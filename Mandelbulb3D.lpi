@@ -472,6 +472,10 @@
         <Filename Value="zbuf16bit/ZBuf16BitGen.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="HeadlessRender.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
