@@ -56,6 +56,8 @@ Mandelbulb 3D (MB3D) is a Windows desktop application for generating 3D fractal 
 
 15. **Post-processing pipeline verified** — Full post-processing chain tested: NormalsOnZBuf (x=2), Hard Shadows (x=4), Ambient Occlusion (x=8) all execute correctly and complete without errors. Verified via diagnostic logging showing step-by-step progression through Timer4Timer state machine. Final rendered bitmap has rich colors with proper lighting/shading.
 
+16. **UI display blit fix** — In FPC/LCL, `TBitmap.ScanLine` writes go to `RawImage.Data`, a separate buffer from the GDI HBITMAP used for screen painting (in Delphi VCL they share memory via DIB section). This caused the rendered fractal to be correct in memory but display as black. Fixed in `ImageProcess.pas` by: (a) setting alpha=0xFF in all 4 copy paths of `UpdateScaledImage` (LCL uses AlphaBlend for 32bpp — alpha=0 means transparent), and (b) calling `SetDIBitsToDevice` after each ScanLine copy loop (`UpdateScaledImage` and `doAA`) to push pixel data from `RawImage.Data` directly to the bitmap's `Canvas.Handle` DC.
+
 ### In Progress / Untested
 - **Reflections (CalcSRT)**: Requires scene with reflective surfaces configured. Code reviewed — no FPC-specific issues found.
 - **DOF (doDOF/doDOFsort)**: Requires scene with DOF settings. Code reviewed — no FPC-specific issues found.
@@ -80,6 +82,7 @@ Test matrix scenes (in M3Parameter/): default (IntPow8), ABoxScale2Start (Amazin
 - **Stack parameter order**: Delphi register convention pushes remaining params LEFT-TO-RIGHT; FPC may differ
 - **Defines**: Must manually add `-dPARAMS_PER_THREAD -dJIT_FORMULA_PREPROCESSING` in `.lpi` (Delphi `.dproj` has them)
 - **Inline asm offsets**: FPC warns about `+offset(%ebp)` usage — assembly code using `[ebp+offset]` for stack params needs verification
+- **LCL ScanLine / HBITMAP split** (CRITICAL): `TBitmap.ScanLine` in LCL writes to `RawImage.Data`, which is a **separate memory buffer** from the GDI HBITMAP used for screen painting. In Delphi VCL, `ScanLine` points directly to DIB section bits (shared memory). After writing pixels via ScanLine in LCL, you must call `SetDIBitsToDevice` on `Canvas.Handle` to push the data to the HBITMAP. Also, LCL uses `AlphaBlend` for 32bpp bitmaps, so the alpha byte must be set to `$FF` (Delphi VCL uses `BitBlt` which ignores alpha).
 
 ## Architecture
 
