@@ -337,6 +337,9 @@ var itmp: Integer;
     RLastStepWidth, dTmp, dStep, ZZplus, ZZ2, RLastDE, MaxL, ZZtmp, SpecMulT: Double;
     NewVec, tmpLoc, tmpNorm: TVec3D;
     tmpAmb, tmpSpec, tmpAbsorb: TSVec;
+    {$IFDEF FPC}
+    RMStepCount: Integer;
+    {$ENDIF}
     tmpSDsvecs: TLightSD;
     tmpPSV: TPSVec;
 label lab1, lab2, lab3;
@@ -390,7 +393,13 @@ lab2:
       end
       else
       begin
+        {$IFDEF FPC}
+        dTmp := SqrLengthOfVec(Normal);
+        if dTmp < s1em10 then Exit;  // degenerate normal, skip reflection
+        NewVec := SubtractVectors(@SRVec, ScaleVector(Normal, 2 * DotOfVectors(@Normal, @SRVec) / dTmp));
+        {$ELSE}
         NewVec := SubtractVectors(@SRVec, ScaleVector(Normal, 2 * DotOfVectors(@Normal, @SRVec) / SqrLengthOfVec(Normal)));   //fp invalid op     div0
+        {$ENDIF}
       end;
 
       ZZplus := DotOfVectors(@mVgradsFOV, @NewVec) / Sqrt(SqrLengthOfVec(mVgradsFOV) * SqrLengthOfVec(NewVec) + d1em100);
@@ -419,8 +428,15 @@ lab2:
         RSFmul := 1;
         dTmp := CalcDE(@Iteration3Dext, @MCTparas);
         RLastStepWidth := dTmp * sZstepDiv;
+        {$IFDEF FPC}
+        RMStepCount := 0;
+        {$ENDIF}
         if dTmp > s1em10 then
         repeat
+          {$IFDEF FPC}
+          Inc(RMStepCount);
+          if RMStepCount > 100000 then begin OpenAir := True; Break; end;
+          {$ENDIF}
           RLastDE := dTmp;
           if DFogOnIt = 65535 then
           begin
@@ -458,6 +474,9 @@ lab2:
           ZZ := ZZ + dStep * ZZplus;
           msDEstop := DEstop * (1 + Abs(ZZ) * mctDEstopFactor);
           dTmp := CalcDE(@Iteration3Dext, @MCTparas);
+          {$IFDEF FPC}
+          if IsNaN(dTmp) or IsInfinite(dTmp) then begin OpenAir := True; Break; end;
+          {$ENDIF}
           if Iteration3Dext.ItResultI >= MaxItsResult then
           begin
             DElimited := False;
@@ -682,7 +701,7 @@ lab3:
     end;
 end;
 
-procedure TSRCalcThread.Execute;       //todo: make mctparas VGradsFOV to actual VGradsFOVit to use the RM functions 
+procedure TSRCalcThread.Execute;       //todo: make mctparas VGradsFOV to actual VGradsFOVit to use the RM functions
 var x, y, itmp: Integer;
     DElimited, bInsideTmp: LongBool;
     dT1, dTmp: Double;
