@@ -1614,6 +1614,9 @@ begin
     if Length(siLight5) = 0 then
     begin
       Button2.Caption := 'Calculate 3D';
+      {$IFDEF FPC}
+      if HeadlessMode then begin HeadlessLog('CalcMand: OUT OF MEMORY'); Halt(1); end;
+      {$ENDIF}
       ShowMessage('Out of memory, decrease the imagesize.');
       Exit;
     end;
@@ -1621,6 +1624,12 @@ begin
     if (MHeader.bCalc3D <> 0) and ((MHeader.bVolLightNr and 7) > 0) and
       ((MHeader.Light.Lights[Min(5, (MHeader.bVolLightNr and 7) - 1)].Loption and 3) = 0) then
     begin
+      {$IFDEF FPC}
+      if HeadlessMode then
+        HeadlessLog('Skipping volume light map (headless)');
+      {$ENDIF}
+      if not HeadlessMode then
+      begin
       MapCalcWindow.pMap := @VolumeLightMap;
       MapCalcWindow.pHeader := @MHeader;
       MapCalcWindow.PLightVals := @HeaderLightVals;
@@ -1632,6 +1641,7 @@ begin
         Exit;
       end;
       bSRVolLightMapCalculated := True;
+      end;
     end;
     MHeader.iCalcHStime := 0;
     MHeader.iAmbCalcTime := 0;
@@ -1658,6 +1668,13 @@ begin
     end
     else
     begin
+      {$IFDEF FPC}
+      if HeadlessMode then
+      begin
+        HeadlessLog('Error: CalcMandT failed - no threads created');
+        Halt(1);
+      end;
+      {$ENDIF}
       EnableButtons;
       MCalcThreadStats.iProcessingType := 0;
     end;
@@ -2304,7 +2321,17 @@ begin
                     ProgressBar1.Visible := True;
                     Timer4.Interval := 1000;
                     Timer4.Enabled := True;
-                  end;
+                  end
+                  {$IFDEF FPC}
+                  else if HeadlessMode then
+                  begin
+                    HeadlessLog('CalcSRT failed, skipping reflections');
+                    MCalcThreadStats.iProcessingType := 0;
+                    SdoAA;
+                    HeadlessOnRenderComplete(Image1.Picture.Bitmap);
+                  end
+                  {$ENDIF}
+                  ;
                 end;  
            64:  begin
                   ProgressBar1.Max := MHeader.Height;
@@ -2407,6 +2434,13 @@ begin
                RepaintMand3D(True)
             else if c > 4 then
               UpdateScaledImageFull;
+            {$IFDEF FPC}
+            if HeadlessMode then
+            begin
+              SdoAA;
+              HeadlessOnRenderComplete(Image1.Picture.Bitmap);
+            end;
+            {$ENDIF}
           end;
         end;
         if (AnimationForm.AniOption <= 0) and (c = 4) then
