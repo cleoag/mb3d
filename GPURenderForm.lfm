@@ -1,0 +1,131 @@
+object GPURenderFrm: TGPURenderFrm
+  Left = 400
+  Top = 200
+  Caption = 'GPU Render (OpenCL)'
+  ClientHeight = 520
+  ClientWidth = 720
+  Color = clBtnFace
+  Constraints.MinHeight = 400
+  Constraints.MinWidth = 500
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ToolbarPnl: TPanel
+    Left = 0
+    Top = 0
+    Width = 720
+    Height = 65
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    object LabelDevice: TLabel
+      Left = 8
+      Top = 6
+      Width = 38
+      Height = 13
+      Caption = 'Device:'
+    end
+    object LabelStatus: TLabel
+      Left = 8
+      Top = 45
+      Width = 3
+      Height = 13
+    end
+    object LabelTime: TLabel
+      Left = 380
+      Top = 45
+      Width = 3
+      Height = 13
+    end
+    object ComboBoxDevice: TComboBox
+      Left = 52
+      Top = 3
+      Width = 300
+      Height = 21
+      Style = csDropDownList
+      TabOrder = 0
+      OnChange = ComboBoxDeviceChange
+    end
+    object ButtonImport: TButton
+      Left = 360
+      Top = 2
+      Width = 85
+      Height = 25
+      Caption = 'Import params'
+      TabOrder = 1
+      OnClick = ButtonImportClick
+    end
+    object ButtonStartStop: TButton
+      Left = 452
+      Top = 2
+      Width = 85
+      Height = 25
+      Caption = 'Start render'
+      TabOrder = 2
+      OnClick = ButtonStartStopClick
+    end
+    object ButtonSave: TButton
+      Left = 544
+      Top = 2
+      Width = 75
+      Height = 25
+      Caption = 'Save image'
+      Enabled = False
+      TabOrder = 3
+      OnClick = ButtonSaveClick
+    end
+    object ProgressBar1: TProgressBar
+      Left = 8
+      Top = 28
+      Width = 610
+      Height = 14
+      TabOrder = 4
+    end
+    object ButtonSendToMain: TButton
+      Left = 626
+      Top = 2
+      Width = 85
+      Height = 25
+      Caption = 'Send to main'
+      Enabled = False
+      TabOrder = 5
+      OnClick = ButtonSendToMainClick
+    end
+  end
+  object ScrollBox1: TScrollBox
+    Left = 0
+    Top = 65
+    Width = 720
+    Height = 455
+    Align = alClient
+    TabOrder = 1
+    object Image1: TImage
+      Left = 0
+      Top = 0
+      Width = 400
+      Height = 300
+    end
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 200
+    OnTimer = Timer1Timer
+    Left = 664
+    Top = 72
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = 'png'
+    Filter = 'PNG files (*.png)|*.png|JPEG files (*.jpg)|*.jpg|BMP files (*.bmp)|*.bmp'
+    Options = [ofOverwritePrompt, ofPathMustExist]
+    Left = 664
+    Top = 104
+  end
+end

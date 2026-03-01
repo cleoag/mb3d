@@ -175,6 +175,7 @@ type
     SpeedButton27: TSpeedButton;
     CheckBox12: TCheckBox;
     SpeedButton28: TSpeedButton;
+    SpeedButton36: TSpeedButton;
     SaveDialog1: TSaveDialog;
     SpeedButton29: TSpeedButton;
     Button19: TButton;
@@ -347,6 +348,7 @@ type
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure SpeedButton27Click(Sender: TObject);
     procedure SpeedButton28Click(Sender: TObject);
+    procedure SpeedButton36Click(Sender: TObject);
     procedure SaveDialog1TypeChange(Sender: TObject);
     procedure SpeedButton29Click(Sender: TObject);
     procedure Button18Click(Sender: TObject);
@@ -551,7 +553,7 @@ uses Math, DivUtils, ImageProcess, ClipBrd, ShellApi, formulas,
      CalcThread2D, CustomFormulas, Animation, AniPreviewWindow, MB3DMaps,
      HeaderTrafos, Calc, IniDirsForm, FormulaGUI, Navigator, PostProcessForm,
      DOF, CalcHardShadow, AmbHiQ, BatchForm, Undo, CommDlg, VoxelExport,
-     calcBlocky, CalcSR, Tiling, MonteCarloForm, TextBox, ColorPick,
+     calcBlocky, CalcSR, Tiling, MonteCarloForm, GPURenderForm, TextBox, ColorPick,
      uMapCalcWindow, FormulaCompiler, MutaGenGUI, VisualThemesGUI,
      MapSequencesGUI, MapSequences, BulbTracer2UI, ScriptUI, HeightMapGenUI,
      ZBuf16BitGenUI, Types
@@ -1146,6 +1148,7 @@ begin
 
 
     if MCFormCreated then MCForm.Button4.Enabled := MCForm.Button8.Enabled;
+    if GPURenderFormCreated then GPURenderFrm.ButtonSendToMain.Enabled := True;
     ColorForm.CheckBox3.Enabled := True;
     SetImageCursor;
     GetCursorPos(P);
@@ -1239,6 +1242,7 @@ begin
       BulbTracer2Frm.EnableControls(False);
     end;
     if MCFormCreated then MCForm.Button4.Enabled := False;
+    if GPURenderFormCreated then GPURenderFrm.ButtonSendToMain.Enabled := False;
     Image1.Cursor := crHourGlass;
     DragAcceptFiles(Self.Handle, False);
     AnimationForm.DisableButtons;
@@ -3045,6 +3049,7 @@ begin
     Inc(NglobalCounter);
     MCalcStop := True;
     MCForm.MCCalcStop := True;
+    if GPURenderFormCreated then GPURenderFrm.GPUCalcStop := True;
     CanClose  := not ((MCalcThreadStats.iProcessingType > 0) or isRepainting or
                      (FNavigator.Visible and FNavigator.isCalculating));
     Inc(CloseTries);
@@ -4107,6 +4112,12 @@ procedure TMand3DForm.SpeedButton28Click(Sender: TObject);
 begin
     MCForm.Visible := True;
     BringToFront2(MCForm.Handle);
+end;
+
+procedure TMand3DForm.SpeedButton36Click(Sender: TObject);
+begin
+    GPURenderFrm.Visible := True;
+    BringToFront2(GPURenderFrm.Handle);
 end;
 
 procedure TMand3DForm.SaveDialog1TypeChange(Sender: TObject);

@@ -3051,6 +3051,17 @@ object Mand3DForm: TMand3DForm
             ShowHint = True
             OnClick = SpeedButton28Click
           end
+          object SpeedButton36: TSpeedButton
+            Left = 253
+            Top = 4
+            Width = 42
+            Height = 30
+            Hint = 'GPU rendering (OpenCL)'
+            Caption = 'GPU'
+            ParentShowHint = False
+            ShowHint = True
+            OnClick = SpeedButton36Click
+          end
         end
         object TabSheet13: TTabSheet
           Caption = 'Prefs'

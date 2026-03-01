@@ -409,6 +409,21 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
+        <Filename Value="opengl/dglOpenCL.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="opengl/OpenCLUtil.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="GPURenderForm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="GPURenderFrm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
         <Filename Value="opengl/MeshPreviewUI.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="MeshPreviewFrm"/>
@@ -451,6 +466,10 @@
       </Unit>
       <Unit>
         <Filename Value="formula/FormulaCompiler.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="formula/FormulaTranspiler.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>

@@ -80,6 +80,9 @@ uses
   MeshIOUtil in 'bulbtracer2\MeshIOUtil.pas',
   ShaderUtil in 'opengl\ShaderUtil.pas',
   dglOpenGL in 'opengl\dglOpenGL.pas',
+  dglOpenCL in 'opengl\dglOpenCL.pas',
+  OpenCLUtil in 'opengl\OpenCLUtil.pas',
+  GPURenderForm in 'GPURenderForm.pas' {GPURenderFrm},
   MeshPreviewUI in 'opengl\MeshPreviewUI.pas' {MeshPreviewFrm},
   OpenGLPreviewUtil in 'opengl\OpenGLPreviewUtil.pas',
   HeightMapGenPreview in 'heightmapgen\HeightMapGenPreview.pas',
@@ -89,6 +92,7 @@ uses
   PNMReader in 'heightmapgen\PNMReader.pas',
   CompilerUtil in 'script\CompilerUtil.pas',
   FormulaCompiler in 'formula\FormulaCompiler.pas',
+  FormulaTranspiler in 'formula\FormulaTranspiler.pas',
   VertexList in 'bulbtracer2\VertexList.pas',
   MeshWriter in 'bulbtracer2\MeshWriter.pas',
   ZBuf16BitGenUI in 'zbuf16bit\ZBuf16BitGenUI.pas' {ZBuf16BitGenFrm},
@@ -222,6 +226,8 @@ begin
     Application.CreateForm(TTilingForm, TilingForm);
     WriteLn(LogFile, 'Creating MCForm...'); Flush(LogFile);
     Application.CreateForm(TMCForm, MCForm);
+    WriteLn(LogFile, 'Creating GPURenderFrm...'); Flush(LogFile);
+    Application.CreateForm(TGPURenderFrm, GPURenderFrm);
     WriteLn(LogFile, 'Creating FTextBox...'); Flush(LogFile);
     Application.CreateForm(TFTextBox, FTextBox);
     WriteLn(LogFile, 'Creating BRInfoForm...'); Flush(LogFile);
