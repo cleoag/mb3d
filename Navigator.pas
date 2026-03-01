@@ -979,9 +979,54 @@ begin
     end;
 end;
 
-procedure TFNavigator.Timer1Timer(Sender: TObject);  
+procedure TFNavigator.Timer1Timer(Sender: TObject);
+{$IFDEF FPC}
+var
+  bmi: BITMAPINFO;
+  w, h, x, y: Integer;
+  pSL: PCardinal;
+  slStart: PByte;
+  slOff: Integer;
+{$ENDIF}
 begin
     Timer1.Interval := 100;
+    {$IFDEF FPC}
+    // LCL: ScanLine writes go to RawImage.Data, not to the GDI HBITMAP.
+    // 1) Set alpha=0xFF (LCL uses AlphaBlend for 32bpp; alpha=0 = invisible)
+    // 2) Flush pixel data from RawImage.Data to the bitmap's Canvas DC.
+    if Assigned(Image1.Picture.Bitmap) and (Image1.Picture.Bitmap.Width > 0) then
+    begin
+      w := Image1.Picture.Bitmap.Width;
+      h := Image1.Picture.Bitmap.Height;
+      slStart := PByte(Image1.Picture.Bitmap.ScanLine[0]);
+      if h > 1 then
+        slOff := PByte(Image1.Picture.Bitmap.ScanLine[1]) - slStart
+      else
+        slOff := w * 4;
+      for y := 0 to h - 1 do
+      begin
+        pSL := PCardinal(slStart + slOff * y);
+        for x := 0 to w - 1 do
+        begin
+          pSL^ := pSL^ or $FF000000;
+          Inc(pSL);
+        end;
+      end;
+      FillChar(bmi, SizeOf(bmi), 0);
+      bmi.bmiHeader.biSize := SizeOf(bmi.bmiHeader);
+      bmi.bmiHeader.biWidth := w;
+      bmi.bmiHeader.biHeight := -h;  // negative = top-down
+      bmi.bmiHeader.biPlanes := 1;
+      bmi.bmiHeader.biBitCount := 32;
+      bmi.bmiHeader.biCompression := BI_RGB;
+      SetDIBitsToDevice(
+        Image1.Picture.Bitmap.Canvas.Handle,
+        0, 0, w, h,
+        0, 0, 0, h,
+        slStart,
+        bmi, DIB_RGB_COLORS);
+    end;
+    {$ENDIF}
     Image1.Repaint;
     if not isCalculating then
     begin

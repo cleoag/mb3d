@@ -12,6 +12,7 @@ object MutaGenFrm: TMutaGenFrm
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  DoubleBuffered = True
   OldCreateOrder = False
   Position = poMainFormCenter
   OnCloseQuery = FormCloseQuery
@@ -233,7 +234,6 @@ object MutaGenFrm: TMutaGenFrm
             Top = 36
             Width = 86
             Height = 52
-            Align = alTop
             BevelOuter = bvNone
             TabOrder = 1
             object Label1: TLabel
@@ -266,7 +266,6 @@ object MutaGenFrm: TMutaGenFrm
             Top = 108
             Width = 86
             Height = 42
-            Align = alTop
             BevelOuter = bvNone
             TabOrder = 2
             object Label6: TLabel
@@ -326,7 +325,6 @@ object MutaGenFrm: TMutaGenFrm
             Top = 180
             Width = 86
             Height = 41
-            Align = alTop
             BevelOuter = bvNone
             TabOrder = 5
             object Label7: TLabel
@@ -377,7 +375,6 @@ object MutaGenFrm: TMutaGenFrm
             Top = 252
             Width = 86
             Height = 41
-            Align = alTop
             BevelOuter = bvNone
             TabOrder = 8
             object Label11: TLabel
@@ -457,6 +454,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -489,6 +487,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -521,6 +520,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -553,6 +553,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -585,6 +586,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -617,6 +619,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -649,6 +652,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -681,6 +685,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -713,6 +718,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -745,6 +751,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -777,6 +784,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -809,6 +817,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -841,6 +850,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -873,6 +883,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -905,6 +916,7 @@ object MutaGenFrm: TMutaGenFrm
         Top = 6
         Width = 38
         Height = 33
+        AlignWithMargins = True
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
