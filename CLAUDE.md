@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Mandelbulb 3D (MB3D) is a Windows desktop application for generating 3D fractal renderings using distance estimation (DE) techniques. Written in Object Pascal, targeting Win32. Builds with Free Pascal/Lazarus (LCL).
 
-**Current version**: 1.9.9.37+
+**Current version**: 1.9.9.1.38
 
 ## Build
 
