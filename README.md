@@ -4,9 +4,95 @@
 
 ## ABOUT
 
-Mandelbulb 3D is a program designed for the Windows platform, for generating 3D views of different fractals. The rendering is based on distance estimates (DE), you might find this shortcut in some of the explanations. 
+Mandelbulb 3D is a program designed for the Windows platform, for generating 3D views of different fractals. The rendering is based on distance estimates (DE), you might find this shortcut in some of the explanations.
 
-Many thanks to the people on FractalForums.com, especially to David Makin for helping with implementing DE, also to Buddhi for the fast DE method for the amazing box, msltoe for the riemannian formula, Tglad for the Amazing Box, Fracmonk for the CommQuat formula, Trafassel for the IdesFormula, Kali, Bethchen, all I forgot, for even more formulas, and of course Luca (DarkBeam) for many, many own made formulas! Not at least thanks to Daniel White, whose fast int power formulas I am using and for developing some of the first 3d bulbs together with Paul Nylander. Also to Syntopia and all the others for inspiration, helping, testing, for suggestions, and the people of Nasa and Gimp for the awesome work and the maps I generated from their work (and hopefully there is no restriction in using them this way). Also a big thanks to all who supported m3d, me and others with kind words, lightmaps, cool renderings and their parameters! 
+Many thanks to the people on FractalForums.com, especially to David Makin for helping with implementing DE, also to Buddhi for the fast DE method for the amazing box, msltoe for the riemannian formula, Tglad for the Amazing Box, Fracmonk for the CommQuat formula, Trafassel for the IdesFormula, Kali, Bethchen, all I forgot, for even more formulas, and of course Luca (DarkBeam) for many, many own made formulas! Not at least thanks to Daniel White, whose fast int power formulas I am using and for developing some of the first 3d bulbs together with Paul Nylander. Also to Syntopia and all the others for inspiration, helping, testing, for suggestions, and the people of Nasa and Gimp for the awesome work and the maps I generated from their work (and hopefully there is no restriction in using them this way). Also a big thanks to all who supported m3d, me and others with kind words, lightmaps, cool renderings and their parameters!
+
+## BUILDING FROM SOURCE
+
+Mandelbulb 3D can be built with two toolchains: the original Delphi and the free FPC/Lazarus. The FPC port is functional and passes 79/80 test scenes.
+
+### Prerequisites
+
+**Option A: Free Pascal / Lazarus (free, recommended)**
+
+| Tool | Version | Download |
+|------|---------|----------|
+| Free Pascal Compiler (FPC) | 3.2.2+ | https://www.freepascal.org/download.html |
+| Lazarus IDE | 4.x+ | https://www.lazarus-ide.org/index.php?page=downloads |
+
+Install both for the **Win32 / i386** target. The project builds as a 32-bit Windows application.
+
+**Option B: Delphi (commercial)**
+
+| Tool | Version |
+|------|---------|
+| RAD Studio / Embarcadero Delphi | 10.x+ (Rio or later) |
+
+### Build with FPC / Lazarus
+
+**From command line (recommended):**
+
+```bash
+lazbuild --cpu=i386 --os=win32 \
+  --compiler=/path/to/ppc386.exe \
+  --lazarusdir=/path/to/lazarus \
+  Mandelbulb3D.lpi
+```
+
+Example with default installation paths on Windows:
+
+```bash
+"C:\lazarus\lazbuild.exe" --cpu=i386 --os=win32 ^
+  --compiler="C:\FPC\3.2.2\bin\i386-Win32\ppc386.exe" ^
+  --lazarusdir="C:\lazarus" ^
+  Mandelbulb3D.lpi
+```
+
+**From the IDE:**
+
+1. Open `Mandelbulb3D.lpi` in Lazarus
+2. Set target: Project → Project Options → Compiler Options → Config and Target → Target CPU: `i386`, Target OS: `Win32`
+3. Build: Run → Build (Shift+F9)
+
+Output: `Mandelbulb3D.exe` in the project root directory.
+
+### Build with Delphi
+
+**From the IDE:**
+
+1. Open `Mandelbulb3D.dproj` in RAD Studio
+2. Select platform: **Win32**
+3. Build: Shift+F9
+
+**From command line:**
+
+```bash
+msbuild Mandelbulb3D.dproj /p:Config=Release /p:Platform=Win32
+```
+
+### Headless CLI Rendering (FPC only)
+
+The FPC build includes a headless rendering mode for scripting and automation:
+
+```bash
+Mandelbulb3D.exe --render input.m3p --output result.png [--width 1920] [--height 1080] [--threads 8]
+```
+
+Supported output formats: PNG, JPG, BMP.
+
+### Project Files
+
+| File | Description |
+|------|-------------|
+| `Mandelbulb3D.lpi` | Lazarus / FPC project file |
+| `Mandelbulb3D.lpr` | Lazarus program source |
+| `Mandelbulb3D.dproj` | Delphi project file |
+| `Mandelbulb3D.dpr` | Delphi program source |
+
+### FPC Migration
+
+The project has been ported from Delphi to Free Pascal / Lazarus. See [docs/FPC-MIGRATION.md](docs/FPC-MIGRATION.md) for a detailed description of what was changed, known differences, and remaining work.
 
 
 
@@ -14,9 +100,11 @@ Many thanks to the people on FractalForums.com, especially to David Makin for he
 
 ## INDEX
 
-1. [About](#about) 
+1. [About](#about)
 
-2. [Installation](#Installation)
+2. [Building from Source](#building-from-source)
+
+3. [Installation](#Installation)
 
 3. [Zooming and Navigating](#ZoomingandNavigating)
 
