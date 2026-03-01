@@ -1,3 +1,17 @@
+V1.99.1.38 (2026-03-01) â€” FPC/Lazarus port:
+  - Fully ported from Delphi to Free Pascal (FPC 3.2.2) / Lazarus 4.4
+  - Removed all Delphi-specific files (.dproj, .dpr, .dfm, FastMM4)
+  - Removed all {$IFDEF FPC}/{$IFNDEF FPC} conditional compilation guards
+  - Added headless CLI rendering (--render input.m3p --output result.png)
+  - Added LGPL-2.1 license file
+  - 79/80 test scenes pass, 21/21 formula regression tests pass
+  - All built-in formulas, post-processing, and rendering features preserved
+
+  Previous versions below are from the original Delphi codebase
+  maintained by Jesse (thargor6): https://github.com/thargor6/mb3d
+
+---
+
 V1.99.34:
   - new option "Store PNG-preview" in the Batch-render ("m3p->m3i") to save an additional *.PNG preview, which is default set to on
   - changed some initial settings in BTracer2 to produce better results in most cases (but causing worse results for the "standard bulb")
@@ -378,7 +392,7 @@ HISTORY
 	Relevance: 60.7%
 	DarkBeam's three original posts describing formulas he released
 	Custom formulas & transforms (old post)
-	« on: February 07, 2011, 05:38:22 AM »
+	ï¿½ on: February 07, 2011, 05:38:22 AM ï¿½
 
 	IMPORTANT. HOW TO USE TRANSFORMS AS PRE-TRANSFORMS
 	Jesse revealed me this trick that I didn't know. It is really really useful if you like to use transformations as pre-transformations.
@@ -446,13 +460,13 @@ HISTORY
 	--------------------------------------------------------------------
 
 	Revision 4
-	Added poincare (Poincarè metric, base code is almost identical to sphere inversion but final look is quite different ).
+	Added poincare (Poincarï¿½ metric, base code is almost identical to sphere inversion but final look is quite different ).
 	Fixed typos in some inversions; you may need to adjust "scale" to get the same result again.I don't honestly think that it can harm, nobody is using inversions for now I think
 
 	--------------------------------------------------------------------
 
 	Revision 4.5
-	Fixed coding errors in Poincarè - now is no more fuzzy and seems to work OK
+	Fixed coding errors in Poincarï¿½ - now is no more fuzzy and seems to work OK
 
 	--------------------------------------------------------------------
 
@@ -745,7 +759,7 @@ HISTORY
 	22.0
 	_DonutTransform a yummy idea from Aexion
 	22.1
-	Added a shape to ABoxVsShapes (n° 17)
+	Added a shape to ABoxVsShapes (nï¿½ 17)
 	22.2
 	_RotateXYonItsP
 	22.3
@@ -772,7 +786,7 @@ HISTORY
 
 
 	Custom formulas & transforms - Release
-	« on: February 07, 2011, 06:03:02 AM »
+	ï¿½ on: February 07, 2011, 06:03:02 AM ï¿½
 
 	Older posts here; http://www.fractalforums.com/index.php?topic=5656.msg27691#msg27691
 
@@ -1002,7 +1016,7 @@ HISTORY
 	Improved a lot hextgrid3IFS & hexgridIFS following Knighty's concepts and scripts, now they have a lot of added functionality and possibilities for new shapes
 
 	Custom formulas & transforms - Release
-	« on: September 11, 2013, 12:00:14 PM »
+	ï¿½ on: September 11, 2013, 12:00:14 PM ï¿½
 
 	Older posts here; http://www.fractalforums.com/index.php?topic=5656.msg27691#msg27691
 	http://www.fractalforums.com/index.php?topic=9810.0

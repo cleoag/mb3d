@@ -1,12 +1,37 @@
-# Mandelbulb3D
+# Mandelbulb 3D
+
+**Version 1.9.9.1.38** — FPC/Lazarus port
 
 <a name='about'></a>
 
 ## ABOUT
 
-Mandelbulb 3D is a program designed for the Windows platform, for generating 3D views of different fractals. The rendering is based on distance estimates (DE), you might find this shortcut in some of the explanations.
+Mandelbulb 3D (MB3D) is a free, open-source 3D fractal rendering application for Windows. It generates stunning 3D views of Mandelbulb, Mandelbox, and hundreds of other fractal types using distance estimation (DE) ray marching.
 
-Many thanks to the people on FractalForums.com, especially to David Makin for helping with implementing DE, also to Buddhi for the fast DE method for the amazing box, msltoe for the riemannian formula, Tglad for the Amazing Box, Fracmonk for the CommQuat formula, Trafassel for the IdesFormula, Kali, Bethchen, all I forgot, for even more formulas, and of course Luca (DarkBeam) for many, many own made formulas! Not at least thanks to Daniel White, whose fast int power formulas I am using and for developing some of the first 3d bulbs together with Paul Nylander. Also to Syntopia and all the others for inspiration, helping, testing, for suggestions, and the people of Nasa and Gimp for the awesome work and the maps I generated from their work (and hopefully there is no restriction in using them this way). Also a big thanks to all who supported m3d, me and others with kind words, lightmaps, cool renderings and their parameters!
+This is a fork of the original Mandelbulb 3D, ported from Delphi to [Free Pascal](https://www.freepascal.org/) / [Lazarus](https://www.lazarus-ide.org/) and maintained independently.
+
+### Acknowledgments
+
+This project builds on the work of many talented people:
+
+- **Jens "Jesse" Dierks** — original creator and author of Mandelbulb 3D (v1.0–1.89, 2010–2014)
+- **Andreas Maschke (thargor6)** — took over MB3D development in 2015, adding BulbTracer2, ZBuffer generator, MutaGen, formula editor, visual themes, and many other features. Also the author of [JWildfire](https://github.com/thargor6/JWildfire). [Previous repository](https://github.com/thargor6/mb3d)
+- **Luca (DarkBeam)** — prolific formula author, contributed dozens of custom formulas (.m3f)
+- **Daniel White & Paul Nylander** — developed the first 3D Mandelbulb formulas (2007–2009) and integer power algorithms
+- **David Makin** — helped with distance estimation implementation, first deep Mandelbulb zooms
+- **Krzysztof Marczak (Buddhi)** — fast DE method for the Amazing Box, also author of [Mandelbulber](https://github.com/buddhi1980/mandelbulber2)
+- **Tom Lowe (Tglad)** — inventor of the Mandelbox / Amazing Box (2010)
+- **Mikael Hvidtfeldt Christensen (Syntopia)** — inspiration, DE research, [Fragmentarium](https://syntopia.github.io/Fragmentarium/)
+- **Knighty** — Kaleidoscopic IFS and polytope distance estimators
+- **Kali, Bethchen, Fracmonk, Trafassel, msltoe** — formula contributions (Kaliset, CommQuat, IdesFormula, Riemannian, and more)
+- The **[FractalForums](https://fractalforums.com/)** community — formulas, testing, ideas, and support
+- **NASA** and **GIMP** — map resources
+
+### What's different in this fork
+
+- Fully ported to **Free Pascal (FPC 3.2.2) / Lazarus 4.4** — Delphi support removed
+- **Headless CLI rendering** for scripting and automation
+- All original rendering features preserved: 200+ formulas, hybrid chains, post-processing, animation
 
 ## BUILDING FROM SOURCE
 
@@ -559,7 +584,9 @@ Because of newer functions there might always be changes in the displaying and c
 
 ## CHANGE LOG
 
-See https://github.com/thargor6/mb3d/blob/master/CHANGELOG.txt
+See [CHANGELOG.txt](CHANGELOG.txt) for the full history.
+
+Previous maintainer's changelog: https://github.com/thargor6/mb3d/blob/master/CHANGELOG.txt
 
 
 
