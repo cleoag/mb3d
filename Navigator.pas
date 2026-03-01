@@ -980,17 +980,14 @@ begin
 end;
 
 procedure TFNavigator.Timer1Timer(Sender: TObject);
-{$IFDEF FPC}
 var
   bmi: BITMAPINFO;
   w, h, x, y: Integer;
   pSL: PCardinal;
   slStart: PByte;
   slOff: Integer;
-{$ENDIF}
 begin
     Timer1.Interval := 100;
-    {$IFDEF FPC}
     // LCL: ScanLine writes go to RawImage.Data, not to the GDI HBITMAP.
     // 1) Set alpha=0xFF (LCL uses AlphaBlend for 32bpp; alpha=0 = invisible)
     // 2) Flush pixel data from RawImage.Data to the bitmap's Canvas DC.
@@ -1026,7 +1023,6 @@ begin
         slStart,
         bmi, DIB_RGB_COLORS);
     end;
-    {$ENDIF}
     Image1.Repaint;
     if not isCalculating then
     begin

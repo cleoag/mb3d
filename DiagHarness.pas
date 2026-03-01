@@ -137,12 +137,8 @@ begin
   gDiagStartTick := GetTickCount;
   DiagOpenLog;
   DiagLog('=== FPC Diagnostic Harness Started ===');
-  {$IFDEF FPC}
   DiagLog('FPC Version: ' + {$I %FPCVERSION%});
   DiagLog('Target: ' + {$I %FPCTARGET%} + '-' + {$I %FPCTARGETOS%});
-  {$ELSE}
-  DiagLog('Compiler: Delphi');
-  {$ENDIF}
   DiagLog('Output dir: ' + DiagOutputDir);
 
   if gDiagScene <> '' then

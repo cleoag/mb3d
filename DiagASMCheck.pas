@@ -231,11 +231,7 @@ begin
     Log('FPC ASM Block Spot-Check Report');
     Log('================================');
     Log('Generated: ' + DateTimeToStr(Now));
-    {$IFDEF FPC}
     Log('Compiler: FPC ' + {$I %FPCVERSION%});
-    {$ELSE}
-    Log('Compiler: Delphi');
-    {$ENDIF}
     Log('');
 
     TestAddVecWeight;

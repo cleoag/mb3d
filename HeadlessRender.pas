@@ -11,8 +11,6 @@ unit HeadlessRender;
 
 interface
 
-{$IFDEF FPC}
-
 uses Graphics;
 
 var
@@ -29,17 +27,7 @@ procedure HeadlessStart;
 procedure HeadlessOnRenderComplete(bmp: TBitmap);
 procedure HeadlessLog(const S: String);
 
-{$ELSE}
-
-{ Delphi stubs -- headless mode not supported }
-var
-  HeadlessMode: Boolean;
-
-{$ENDIF}
-
 implementation
-
-{$IFDEF FPC}
 
 uses
   Windows, SysUtils, Forms,
@@ -254,11 +242,5 @@ begin
   HeadlessLog('Done.');
   Halt(0);
 end;
-
-{$ELSE}
-
-{ Delphi: no implementation needed }
-
-{$ENDIF}
 
 end.

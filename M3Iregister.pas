@@ -122,7 +122,6 @@ begin
           Proportional := True;
           Stretch := True;
           Center := True;
-          {$IFNDEF FPC}IncrementalDisplay := True;{$ENDIF}
         end;
       end;
     end;
@@ -170,39 +169,14 @@ begin
 end;
 
 procedure TOpenPictureDialogM3D.DoShow;
-{$IFNDEF FPC}
-var PreviewRect, StaticRect: TRect;
-{$ENDIF}
 begin
-    {$IFNDEF FPC}
-    { Set preview area to entire dialog }
-    GetClientRect(Handle, PreviewRect);
-    StaticRect := GetStaticRect;
-    { Move preview area to right of static area }
-    PreviewRect.Left := StaticRect.Left + (StaticRect.Right - StaticRect.Left);
-    Inc(PreviewRect.Top, 4);
-    FPicturePanel.BoundsRect := PreviewRect;
-    FImageCtrl.Picture := nil;
-    FSavedFilename := '';
-    FPaintPanel.Caption := '';//srNone;
-    FPicturePanel.ParentWindow := Handle;
-    {$ENDIF}
     inherited DoShow;
 end;
 
-{$IFDEF FPC}
 function TOpenPictureDialogM3D.Execute: Boolean;
 begin
     Result := inherited Execute;
 end;
-{$ELSE}
-function TOpenPictureDialogM3D.Execute(ParentWnd: HWND): Boolean;
-begin
-    if NewStyleControls and not (ofOldStyleDialog in Options) then
-      Template := 'DLGTEMPLATEM3D' else Template := nil;
-    Result := inherited Execute(ParentWnd);
-end;
-{$ENDIF}
 
 function TOpenPictureDialogM3D.IsFilterStored: Boolean;
 begin

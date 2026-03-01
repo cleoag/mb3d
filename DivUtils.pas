@@ -130,11 +130,7 @@ implementation
 
 uses SysUtils, Math, formulas, Forms, HeaderTrafos, Mand, Graphics, MB3DMaps;
 
-{$IFDEF FPC}
-  {$CODEALIGN PROC=16}
-{$ELSE}
-  {$CODEALIGN 16}
-{$ENDIF}
+{$CODEALIGN PROC=16}
 
 procedure SaveHeaderPointers(Header: TPMandHeader10; var p6: TP6);
 var i: Integer;
@@ -1658,30 +1654,7 @@ Initialization
 
   {$IFNDEF DEBUG}
     set8087cw($133F);  // mask floating point errors
-    {$IFDEF FPC}
     SetSSECSR(GetSSECSR or $1F80);  // also mask SSE2 floating point exceptions
-    {$ENDIF}
-  {$ENDIF}
-
-  {$IFNDEF FPC}
-  // SSE2 assembly routines use Delphi-specific inline assembly conventions:
-  // - Stack params pushed in Delphi register order (differs from FPC)
-  // - COMISD+JC creates infinite loop on NaN (Pascal > handles NaN correctly)
-  // - MXCSR not configured (set8087cw only affects x87 FPU, not SSE2)
-  // Under FPC, use the Pascal fallback implementations instead.
-  if SupportSSE2 then
-  begin
-    fIsMemberAlternating := doHybridSSE2;
-    fIsMemberAlternatingDE := doHybridDESSE2;
-    fIsMemberAlternating4D := doHybrid4DSSE2;
-    fIsMemberIpol := doInterpolHybridSSE2;
-    fIsMemberIpolDE := doInterpolHybridDESSE2;
-    fHybridCubeDE := HybridCubeSSE2DE;
-    fHybridCube := HybridCubeSSE2;
-    fHybridQuat := HybridQuatSSE2;
-    fHybridItIntPow2 := HybridItIntPow2SSE2;
-    fHIntFunctions[2] := HybridItIntPow2SSE2;
-  end;
   {$ENDIF}
 
   QueryPerformanceFrequency(Fi64);

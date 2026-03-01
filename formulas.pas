@@ -3462,12 +3462,10 @@ begin
           if n > EndTo then n := iRepeatFrom;
           bTmp := nHybrid[n] and $7FFFFFFF;
           if bTmp > 0 then PVar := fHPVar[n];
-          {$IFDEF FPC}
           if (bTmp <= 0) and (n = iStartFrom) then begin
             ItResultI := maxIt;  // no valid formula, treat as inside
             Exit;
           end;
-          {$ENDIF}
         end;
         fHybrid[n](x, y, z, w, PIteration3D);
         Dec(bTmp);

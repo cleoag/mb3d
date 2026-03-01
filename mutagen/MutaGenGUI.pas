@@ -26,13 +26,6 @@ uses
   TrackBarEx, Buttons, PreviewRenderer;
 
 type
-{$IFNDEF FPC}
-  TCategoryPanel = class(ExtCtrls.TCategoryPanel)
-  protected
-    procedure DrawCollapsedPanel(ACanvas: TCanvas); override;
-  end;
-{$ENDIF}
-
   TMutaGenFrm = class(TForm)
     Panel1: TPanel;
     MainPnl: TPanel;
@@ -742,19 +735,6 @@ begin
   if FProbingImageRenderer<>nil then
     FProbingImageRenderer.SignalCancel;
 end;
-
-{$IFNDEF FPC}
-procedure TCategoryPanel.DrawCollapsedPanel(ACanvas: TCanvas);
-var
-  LRect: TRect;
-begin
-  LRect := ClientRect;
-  LRect.Top := HeaderHeight;
-  LRect.Bottom := GetCollapsedHeight;
-  ACanvas.Brush.Color := Color;
-  ACanvas.FillRect(LRect);
-end;
-{$ENDIF}
 
 end.
 

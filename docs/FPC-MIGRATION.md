@@ -1,5 +1,7 @@
 # Delphi to FPC/Lazarus Migration
 
+> **Note (2026-03):** Delphi support has been fully removed from the codebase. This document is retained as a historical reference for the migration process. All `{$IFDEF FPC}` / `{$IFNDEF FPC}` conditional guards have been removed and the code is now FPC-only. The Delphi project files (`.dproj`, `.dpr`), form files (`.dfm`), and FastMM4 memory manager have been deleted.
+
 This document describes the migration of Mandelbulb 3D from Embarcadero Delphi (VCL) to Free Pascal Compiler (FPC) with Lazarus Component Library (LCL).
 
 ## Overview

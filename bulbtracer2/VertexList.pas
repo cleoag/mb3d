@@ -21,17 +21,10 @@ interface
 
 uses
   SysUtils, Classes, Contnrs, VectorMath, SyncObjs
-  {$IFDEF FPC}
   , fgl
-  {$ELSE}
-  , Generics.Collections
-  {$ENDIF}
   ;
 
 type
-{$IFDEF FPC}
-  { FPC: TDictionary from Generics.Collections conflicts with SyncObjs.
-    Use TFPGMap-based wrapper with TDictionary-compatible API. }
   TStringIntDictionary = class(TFPGMap<string, integer>)
   public
     function ContainsKey(const Key: string): Boolean;
@@ -39,7 +32,7 @@ type
     function GetItem(const Key: string): integer;
     property Items[const Key: string]: integer read GetItem; default;
   end;
-{$ENDIF}
+
   TFace = packed record
     Vertex1, Vertex2, Vertex3: Integer;
   end;
@@ -134,11 +127,7 @@ type
     FVertices: TPS3VectorList;
     // TODO rename
     FVertexColors2: TPVertexColorList;
-{$IFDEF FPC}
     FVertexKeys: TStringIntDictionary;
-{$ELSE}
-    FVertexKeys: TDictionary<string, integer>;
-{$ENDIF}
     function GetCount: Integer;
     function MakeVertexKey(const X, Y, Z: Double): String; overload;
     function ValidateFace(const V1, V2, V3: Integer): Boolean;
@@ -217,8 +206,7 @@ implementation
 uses
   Windows, Math, DateUtils;
 
-{$IFDEF FPC}
-{ TStringIntDictionary - FPC TFPGMap wrapper with TDictionary-compatible API }
+{ TStringIntDictionary - TFPGMap wrapper with TDictionary-compatible API }
 function TStringIntDictionary.ContainsKey(const Key: string): Boolean;
 begin
   Result := IndexOf(Key) >= 0;
@@ -233,7 +221,6 @@ function TStringIntDictionary.GetItem(const Key: string): integer;
 begin
   Result := KeyData[Key];
 end;
-{$ENDIF}
 
 { ----------------------------------- Misc ----------------------------------- }
 procedure ShowDebugInfo(const Msg: String; const RefTime: Int64);
@@ -634,11 +621,7 @@ begin
   FFaces := TList.Create;
   FVertices := TPS3VectorList.Create;
   FVertexColors2 := TPVertexColorList.Create;
-{$IFDEF FPC}
   FVertexKeys := TStringIntDictionary.Create;
-{$ELSE}
-  FVertexKeys := TDictionary<string,integer>.Create;
-{$ENDIF}
 end;
 
 destructor TFacesList.Destroy;

@@ -935,7 +935,6 @@ end;
 
 function LoadLightMap(var LM: TLightMap; FileName: String; Smooth, Convert2Spherical, SetHGCursor: LongBool; fitBorder: Integer): LongBool;
 var BMP: TBitmap;
-    {$IFNDEF FPC}PNG: TPngObject;{$ENDIF}
     Pic: TPicture;
     x, y, xx: Integer;
     pc, pc2, pca: PCardinal;
@@ -956,69 +955,8 @@ begin
   try
     if SetHGCursor then Screen.Cursor := crHourGlass;
     x := Length(FileName);
-    {$IFNDEF FPC}
     if CompareText(Copy(FileName, x - 3, 4), '.png') = 0 then
-    begin
-      PNG := TPngObject.Create;
-      PNG.LoadFromFile(FileName);
-      if PNG.Header.BitDepth < 16 then x := 0 else
-      begin
-        bGrayScale := PNG.Header.ColorType in [0, 3];
-        LM.LMWidth := PNG.Width;
-        LM.LMHeight := PNG.Height;
-        Result := (LM.LMWidth > 4) and (LM.LMHeight > 4);
-        try
-          SetLength(LM.LMa, ((LM.LMWidth + 1) * (LM.LMHeight + 1) * 6 + 6) div 4); //+xx in case of 8 Bytes access (mmx) to 3 words at the end
-          LM.iMapType := 1;
-          LM.sIntensity := 1;
-          LM.iLMstart := Integer(@LM.LMa[0]);
-          LM.sLMXfactor := LM.LMWidth;
-          LM.sLMYfactor := LM.LMHeight;
-          pw := TP3Word(LM.iLMstart);
-          for y := 0 to LM.LMHeight do
-          begin
-            pb1 := PNG.ScanLine[y mod LM.LMHeight];
-            pb2 := PNG.ExtraScanline[y mod LM.LMHeight];
-            pc  := PCardinal(pb1);
-            pc2 := PCardinal(pb2);
-            for xx := 1 to LM.LMWidth do
-            begin
-              if bGrayScale then
-              begin
-                pw[0] := (Integer(pb1^) shl 8) or pb2^;
-                pw[1] := pw[0];
-                pw[2] := pw[0];
-                Inc(pb1);
-                Inc(pb2);
-              end
-              else
-              begin
-                Make3Word(PByteArray(pb1), PByteArray(pb2), pw);
-                Inc(pb1, 3);
-                Inc(pb2, 3);
-              end;
-              Inc(pw);
-            end;
-            if bGrayScale then
-            begin
-              pw[0] := (Integer(pb1^) shl 8) or pb2^;
-              pw[1] := pw[0];
-              pw[2] := pw[0];
-            end
-            else Make3Word(PByteArray(pc), PByteArray(pc2), pw);
-            Inc(pw);
-          end;
-        except
-          Result := False;
-          x := 0;
-        end;
-      end;
-      PNG.Free;
-    end
-    {$ELSE}
-    if CompareText(Copy(FileName, x - 3, 4), '.png') = 0 then
-      x := 0  // FPC: 16-bit PNG not supported, fallback to TPicture path
-    {$ENDIF}
+      x := 0  // 16-bit PNG not supported, fallback to TPicture path
     else if CompareText(Copy(FileName, x - 3, 4), '.pgm') = 0 then
     begin
       PGM16Reader := TPGM16Reader.Create;

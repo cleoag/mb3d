@@ -258,11 +258,7 @@ implementation
 
 uses DivUtils, TypeDefinitions;
 
-{$IFDEF FPC}
-  {$CODEALIGN PROC=16}
-{$ELSE}
-  {$CODEALIGN 16}
-{$ENDIF}
+{$CODEALIGN PROC=16}
 
 function MakeVec(d1, d2, d3: Double): TVec3D;
 begin
@@ -1815,11 +1811,7 @@ asm
     fstp  qword [eax]
 end;
 
-{$IFDEF FPC}
-  {$CODEALIGN PROC=16}
-{$ELSE}
-  {$CODEALIGN 16}
-{$ENDIF}
+{$CODEALIGN PROC=16}
 //{$ALIGN 16}
 procedure RotateSVectorReverseS(V: TPSVec; M: TPSMatrix3);
 asm

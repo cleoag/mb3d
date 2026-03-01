@@ -374,9 +374,7 @@ var x, y, c, x2, iThr, n: Integer;
     PB1, PB2, PBh: PByte;
     Buf: array of Byte;
     aLP: array[0..24] of Single;
-    {$IFDEF FPC}
     bmi: BITMAPINFO;
-    {$ENDIF}
 const cLP2: array[0..16] of Single = (129.447, 80.065, -1.5584, -24.16,
     0.793, 12.267, -0.1375, -7.096, -0.2744, 4.324, 0.472, -2.69, -0.526, 1.68,
     0.5, -1, -0.4);
@@ -526,7 +524,6 @@ begin
     end;
     SetLength(Buf, 0);
     Mand3DForm.Image1.Picture.Bitmap.Modified := True;
-    {$IFDEF FPC}
     // LCL: ScanLine writes go to RawImage.Data, NOT to the GDI HBITMAP.
     FillChar(bmi, SizeOf(bmi), 0);
     bmi.bmiHeader.biSize := SizeOf(bmi.bmiHeader);
@@ -541,7 +538,6 @@ begin
       0, 0, 0, Hheight,
       Pointer(StartSLhalfBMP),
       bmi, DIB_RGB_COLORS);
-    {$ENDIF}
     Mand3DForm.Image1.Invalidate;
   finally
     Screen.Cursor := crDefault;
@@ -554,9 +550,7 @@ var a, x, y, y2, wid, w2, itmp: Integer;
     PC1, PC2: PCardinal;
     b: Byte;
     Buf: array of Cardinal;
-    {$IFDEF FPC}
     bmi: BITMAPINFO;
-    {$ENDIF}
 begin
     if (ImageScale < 1) or (ImageScale > 10) then Exit;
     b := Sqr(ImageScale);
@@ -631,11 +625,7 @@ begin
         PC2 := PCardinal(PBh);
         for x := 1 to wid do
         begin
-          {$IFDEF FPC}
           PC2^ := PC1^ or $FF000000;  // Force alpha=0xFF for LCL (uses AlphaBlend for 32bpp)
-          {$ELSE}
-          PC2^ := PC1^;
-          {$ENDIF}
           Inc(PC2);
           Inc(PC1);
         end;
@@ -846,7 +836,6 @@ begin
       end;
     end;
     Mand3DForm.Image1.Picture.Bitmap.Modified := True;
-    {$IFDEF FPC}
     // LCL: ScanLine writes go to RawImage.Data, NOT to the GDI HBITMAP.
     // Use SetDIBitsToDevice to push pixel data directly to the Canvas DC.
     FillChar(bmi, SizeOf(bmi), 0);
@@ -865,7 +854,6 @@ begin
       Pointer(I1BMPstartSL + I1BMPoffset * StartYh),  // RawImage data (already has alpha+downscale)
       bmi, DIB_RGB_COLORS);
     Mand3DForm.Image1.Invalidate;
-    {$ENDIF}
     SetLength(Buf, 0);
 end;
 

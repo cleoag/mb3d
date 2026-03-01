@@ -275,7 +275,6 @@ end; }
 
 procedure QuickSortInt(count: Integer; var List: array of TSortItem);
 procedure QuickSort(const L, R: Integer; List: TPSortItem);
-{$IFDEF FPC}
 type TSortArray = array[0..MaxInt div SizeOf(TSortItem) - 1] of TSortItem;
 var LPos, RPos, ListR: Integer;
     Tmp: TSortItem;
@@ -295,68 +294,6 @@ begin
     if LPos - 1 > L then QuickSort(L, LPos - 1, List);
     if R > LPos + 1 then QuickSort(LPos + 1, R, List);
 end;
-{$ELSE}
-asm
-   push ebx
-   push esi
-   push edi
-   mov  ebx, eax     //Lpos := L
-   mov  esi, edx     //Rpos := R
-   dec  ebx
-   mov  edi, [ecx + edx * 8]  //ListR := List[R].iZ;    
-@@1:
-   inc  ebx
-   cmp  edi, [ecx + ebx * 8]
-   jg   @@1
-@@2:
-   dec  esi
-   cmp  esi, ebx
-   jle  @@4          //break
-   cmp  edi, [ecx + esi * 8]
-   jl   @@2
-   push eax
-   push edx
-   mov  eax, [ecx + ebx * 8]
-   mov  edx, [ecx + esi * 8]
-   mov  [ecx + esi * 8], eax
-   mov  [ecx + ebx * 8], edx
-   mov  eax, [ecx + ebx * 8 + 4]
-   mov  edx, [ecx + esi * 8 + 4]
-   mov  [ecx + esi * 8 + 4], eax
-   mov  [ecx + ebx * 8 + 4], edx
-   pop  edx
-   pop  eax
-   jmp  @@1
-@@4:  
-   mov  esi, [ecx + ebx * 8]
-  // mov  edi, [ecx + edx * 8]
-   mov  [ecx + edx * 8], esi
-   mov  [ecx + ebx * 8], edi
-   mov  esi, [ecx + ebx * 8 + 4]
-   mov  edi, [ecx + edx * 8 + 4]
-   mov  [ecx + edx * 8 + 4], esi
-   mov  [ecx + ebx * 8 + 4], edi
-   dec  ebx
-   cmp  ebx, eax
-   jle  @@5
-   mov  esi, edx
-   mov  edx, ebx
-   call QuickSort
-   mov  edx, esi
-@@5:
-   add  ebx, 2
-   cmp  ebx, edx
-   jge  @@6
-   mov  esi, eax
-   mov  eax, ebx
-   call QuickSort
-   mov  eax, esi
-@@6:
-   pop  edi
-   pop  esi
-   pop  ebx
-end;
-{$ENDIF}
 begin
    QuickSort(0, count - 1, @List[0]);
 end;

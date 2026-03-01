@@ -10,11 +10,9 @@ Many thanks to the people on FractalForums.com, especially to David Makin for he
 
 ## BUILDING FROM SOURCE
 
-Mandelbulb 3D can be built with two toolchains: the original Delphi and the free FPC/Lazarus. The FPC port is functional and passes 79/80 test scenes.
+Mandelbulb 3D is built with Free Pascal (FPC) and Lazarus.
 
 ### Prerequisites
-
-**Option A: Free Pascal / Lazarus (free, recommended)**
 
 | Tool | Version | Download |
 |------|---------|----------|
@@ -22,12 +20,6 @@ Mandelbulb 3D can be built with two toolchains: the original Delphi and the free
 | Lazarus IDE | 4.x+ | https://www.lazarus-ide.org/index.php?page=downloads |
 
 Install both for the **Win32 / i386** target. The project builds as a 32-bit Windows application.
-
-**Option B: Delphi (commercial)**
-
-| Tool | Version |
-|------|---------|
-| RAD Studio / Embarcadero Delphi | 10.x+ (Rio or later) |
 
 ### Build with FPC / Lazarus
 
@@ -57,23 +49,9 @@ Example with default installation paths on Windows:
 
 Output: `Mandelbulb3D.exe` in the project root directory.
 
-### Build with Delphi
+### Headless CLI Rendering
 
-**From the IDE:**
-
-1. Open `Mandelbulb3D.dproj` in RAD Studio
-2. Select platform: **Win32**
-3. Build: Shift+F9
-
-**From command line:**
-
-```bash
-msbuild Mandelbulb3D.dproj /p:Config=Release /p:Platform=Win32
-```
-
-### Headless CLI Rendering (FPC only)
-
-The FPC build includes a headless rendering mode for scripting and automation:
+Headless rendering mode for scripting and automation:
 
 ```bash
 Mandelbulb3D.exe --render input.m3p --output result.png [--width 1920] [--height 1080] [--threads 8]
@@ -85,14 +63,12 @@ Supported output formats: PNG, JPG, BMP.
 
 | File | Description |
 |------|-------------|
-| `Mandelbulb3D.lpi` | Lazarus / FPC project file |
-| `Mandelbulb3D.lpr` | Lazarus program source |
-| `Mandelbulb3D.dproj` | Delphi project file |
-| `Mandelbulb3D.dpr` | Delphi program source |
+| `Mandelbulb3D.lpi` | FPC / Lazarus project file |
+| `Mandelbulb3D.lpr` | Program source |
 
-### FPC Migration
+### History
 
-The project has been ported from Delphi to Free Pascal / Lazarus. See [docs/FPC-MIGRATION.md](docs/FPC-MIGRATION.md) for a detailed description of what was changed, known differences, and remaining work.
+The project was originally built with Delphi and has been fully ported to Free Pascal / Lazarus. Delphi support has been removed. See [docs/FPC-MIGRATION.md](docs/FPC-MIGRATION.md) for historical migration details.
 
 
 

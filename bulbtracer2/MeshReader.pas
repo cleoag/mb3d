@@ -57,13 +57,9 @@ var
   end;
 
 begin
-{$IFDEF FPC}
   FS := DefaultFormatSettings;
   FS.DecimalSeparator := '.';
   FS.ThousandSeparator := ',';
-{$ELSE}
-  FS := TFormatSettings.Create('en-US');
-{$ENDIF}
   Lines := TStringList.Create;
   try
     Lines.LoadFromFile( Filename );

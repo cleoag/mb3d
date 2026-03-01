@@ -72,20 +72,13 @@ http://www.efg2.com/Lab/Graphics/SphereInCubeMovie.htm
 interface
 
 uses
-  Windows, SysUtils, Graphics
-  {$IFNDEF FPC}
-  , GIFImage
-  {$ENDIF}
-  ;
+  Windows, SysUtils, Graphics;
 
-{$IFDEF FPC}
-{ FPC/LCL stub: Anders Melander's GIFImage is not available.
-  GIF animation export is disabled. Basic overloads are provided
-  so that calling code compiles, but they produce no output. }
+{ GIF animation export is disabled. Anders Melander's GIFImage is not available.
+  Basic overloads are provided so that calling code compiles, but they produce no output. }
 type
   TGIFImage = class(TGraphic)
   end;
-{$ENDIF}
 
 procedure GifAnimateBegin; overload;
 
@@ -102,21 +95,9 @@ function GifAnimateAddImage(Source: TGraphic; TransparentColor: TColor; DelayMS:
 // TransparentColor<>-1 uses that color as the transparent.
 // Note: There is no guaranteee that the color will actually be in the GIF's color palette.
 
-{$IFNDEF FPC}
-function GifAnimateAddImage(Source: TGraphic; pLeft, pTop: Word; NSLoop, GCExt: Boolean; Loops: Word; TransparentColor: TColor; DelayMS: Word; Disposal: TDisposalMethod): Integer; overload;
-// TransparentColor<>-1 uses that color as the transparent.
-// Note: There is no guaranteee that the color will actually be in the GIF's color palette.
-
-function GifAnimateAddImage(pSource: TGraphic; pLeft, pTop: Word; TransparentColor: TColor; pLoopExt: TGIFAppExtNSLoop; pGCExt: TGIFGraphicControlExtension): Integer; overload;
-
-function GetColorIndex(GIF: TGIFSubImage; Color: TColor): Integer;
-{$ENDIF}
-
 implementation
 
-{$IFDEF FPC}
-
-{ FPC stub implementations - GIF animation not available }
+{ Stub implementations - GIF animation not available }
 
 procedure GifAnimateBegin;
 begin
@@ -148,214 +129,4 @@ begin
   Result := -1;
 end;
 
-{$ELSE}
-
-{ Delphi implementation using Anders Melander's GIFImage }
-
-var
-  GIF: TGIFImage;
-
-function TransparentIndex(GIF: TGIFSubImage): byte;
-begin
-  // Use the lower left pixel as the transparent color
-  Result := GIF.Pixels[0, GIF.Height-1];
-end;
-
-function GifAnimateAddImage(Source: TGraphic; Transparent: Boolean; DelayMS: Word): Integer;
-var
-  Ext		 : TGIFGraphicControlExtension;
-  LoopExt: TGIFAppExtNSLoop;
-begin
-  // Add the source image to the animation
-  Result := GIF.Add(Source);
-  // Netscape Loop extension must be the first extension in the first frame!
-  if (Result = 0) then
-  begin
-    LoopExt := TGIFAppExtNSLoop.Create(GIF.Images[Result]);
-    LoopExt.Loops := 0; // Number of loops (0 = forever)
-    GIF.Images[Result].Extensions.Add(LoopExt);
-  end;
-  // Add Graphic Control Extension
-  Ext := TGIFGraphicControlExtension.Create(GIF.Images[Result]);
-  Ext.Delay := DelayMS div 10;  // 30; // Animation delay (30 = 300 mS)
-//  if (Result > 0) then
-  if (Transparent) then
-  begin
-    Ext.Transparent := True;
-    Ext.TransparentColorIndex := TransparentIndex(GIF.Images[Result]);
-  end;
-  GIF.Images[Result].Extensions.Add(Ext);
-end;
-
-function GetColorIndex(GIF: TGIFSubImage; Color: TColor): Integer;
-var
-  idx, x, y: Integer;
-begin
-  // Find index for color in the colormap.
-  // The same color can be in the colormap more than once.
-  // Not all color indexes may be in use, so check if this index is being used.
-  // Return only an index which is actually being used in the image.
-  // If the index is not being used in the image,
-  // try to find the next index for the color in the colormap.
-  for idx := 0 to GIF.ActiveColorMap.Count - 1 do
-    if GIF.ActiveColorMap.Colors[idx] = Color then
-    begin
-      // Found an index, is it being used in the image?
-      for y := 0 to GIF.Height-1 do
-        for x := 0 to GIF.Width-1 do
-          if GIF.Pixels[x, y] = idx then
-          begin
-            Result := idx;  // Index is used in image.
-            Exit;
-          end;
-      // Index not used in the image, try next index.
-    end;
-  Result := -1;  // didn't find index for the color
-end;
-
-function GifAnimateAddImage(Source: TGraphic; TransparentColor: TColor; DelayMS: Word): Integer;
-var
-  Ext		 : TGIFGraphicControlExtension;
-  LoopExt: TGIFAppExtNSLoop;
-  idx: Integer;
-begin
-  // Add the source image to the animation
-  Result := GIF.Add(Source);
-  // Netscape Loop extension must be the first extension in the first frame!
-  if (Result = 0) then
-  begin
-    LoopExt := TGIFAppExtNSLoop.Create(GIF.Images[Result]);
-    LoopExt.Loops := 0; // Number of loops (0 = forever)
-    GIF.Images[Result].Extensions.Add(LoopExt);
-  end;
-  // Add Graphic Control Extension
-  Ext := TGIFGraphicControlExtension.Create(GIF.Images[Result]);
-  Ext.Delay := DelayMS div 10;  // 30; // Animation delay (30 = 300 mS)
-  if TransparentColor <> -1 then
-  begin
-    idx := GetColorIndex(GIF.Images[Result], TransparentColor);
-    if idx in [0..255] then
-    begin
-      Ext.Transparent := True;
-      Ext.TransparentColorIndex := idx;
-    end;
-  end;
-  GIF.Images[Result].Extensions.Add(Ext);
-end;
-
-function GifAnimateAddImage(Source: TGraphic; pLeft, pTop: Word; NSLoop, GCExt: Boolean; Loops: Word; TransparentColor: TColor; DelayMS: Word; Disposal: TDisposalMethod): Integer;
-var
-  Ext		 : TGIFGraphicControlExtension;
-  LoopExt: TGIFAppExtNSLoop;
-  idx: Integer;
-begin
-  // Add the source image to the animation
-  Result := GIF.Add(Source);
-  GIF.Images[Result].Left := pLeft;
-  GIF.Images[Result].Top  := pTop;
-  // Netscape Loop extension must be the first extension in the first frame!
-  if {(Result = 0) and} NSLoop then
-  begin
-    LoopExt := TGIFAppExtNSLoop.Create(GIF.Images[Result]);
-    LoopExt.Loops := Loops; // Number of loops (0 = forever)
-    GIF.Images[Result].Extensions.Add(LoopExt);
-  end;
-  // Add Graphic Control Extension
-  if GCExt then
-  begin
-    Ext := TGIFGraphicControlExtension.Create(GIF.Images[Result]);
-    Ext.Delay := DelayMS div 10;  // 30; // Animation delay (30 = 300 mS)
-    Ext.Disposal := Disposal;
-    if TransparentColor <> -1 then
-    begin
-      idx := GetColorIndex(GIF.Images[Result], TransparentColor);
-      if idx in [0..255] then
-      begin
-        Ext.Transparent := True;
-        Ext.TransparentColorIndex := idx;
-      end;
-    end;
-    GIF.Images[Result].Extensions.Add(Ext);
-  end;
-end;
-
-function GifAnimateAddImage(pSource: TGraphic; pLeft, pTop: Word; TransparentColor: TColor; pLoopExt: TGIFAppExtNSLoop; pGCExt: TGIFGraphicControlExtension): Integer;
-var
-  GCExt: TGIFGraphicControlExtension;
-  LoopExt: TGIFAppExtNSLoop;
-  idx: Integer;
-begin
-  // Add the source image to the animation
-  Result := GIF.Add(pSource);
-  GIF.Images[Result].Left := pLeft;
-  GIF.Images[Result].Top  := pTop;
-  // Netscape Loop extension must be the first extension in the first frame!
-  if {(Result = 0) and} Assigned(pLoopExt) then
-  begin
-    LoopExt := TGIFAppExtNSLoop.Create(GIF.Images[Result]);
-    LoopExt.Loops := pLoopExt.Loops; // Number of loops (0 = forever)
-    GIF.Images[Result].Extensions.Add(LoopExt);
-  end;
-  // Add Graphic Control Extension
-  if Assigned(pGCExt) then
-  begin
-    GCExt := TGIFGraphicControlExtension.Create(GIF.Images[Result]);
-    GCExt.Delay := pGCExt.Delay;
-    GCExt.Disposal := pGCExt.Disposal;
-    if pGCExt.Transparent or (TransparentColor <> -1) then
-    begin
-      idx := GetColorIndex(GIF.Images[Result], TransparentColor);
-      if idx in [0..255] then
-      begin
-        GCExt.Transparent := True;
-        GCExt.TransparentColorIndex := idx;
-      end;
-    end;
-    GIF.Images[Result].Extensions.Add(GCExt);
-  end;
-end;
-
-procedure GifAnimateBegin;
-begin
-  GIF.Free;
-  GIF := TGIFImage.Create;
-  GIF.ColorReduction := rmQuantizeWindows;
-  //  GIF.DitherMode := dmNearest;  // no dither, use nearest color in palette
-  GIF.DitherMode := dmFloydSteinberg;
-  GIF.Compression := gcLZW;
-end;
-
-procedure GifAnimateBegin(Width, Height: Integer);
-begin
-  GIF.Free;
-  GIF := TGIFImage.Create;
-  GIF.Width := Width;
-  GIF.Height := Height;
-  GIF.ColorReduction := rmQuantizeWindows;
-  //  GIF.DitherMode := dmNearest;  // no dither, use nearest color in palette
-  GIF.DitherMode := dmFloydSteinberg;
-  GIF.Compression := gcLZW;
-end;
-
-function GifAnimateEndPicture: TPicture;
-begin
-  Result := TPicture.Create;
-  Result.Assign(GIF);
-  GIF.Free;
-  GIF := nil;
-end;
-
-function GifAnimateEndGif: TGIFImage;
-begin
-  Result := TGIFImage.Create;
-  Result.Assign(GIF);
-  GIF.Free;
-  GIF := nil;
-end;
-
-initialization
-  GIF := nil;
-finalization
-  GIF.Free;
-{$ENDIF}
 end.
