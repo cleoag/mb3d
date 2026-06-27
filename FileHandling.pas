@@ -1155,10 +1155,13 @@ begin
     tmpBMP := TBitmap.Create;
     try
       tmpBMP.Assign(bmp);
-      tmpBMP.PixelFormat := pf;
-   //   if pf = pf8Bit then Make8bitGreyscalePalette(tmpBMP);
+      // FIX: on LCL/FPC (esp. headless, no real GUI handle) assigning PixelFormat
+      // AFTER Assign recreates the bitmap handle and drops the pixel data -> the
+      // saved BMP is all black. SavePNG works precisely because it does NOT touch
+      // PixelFormat. Only convert when actually downsizing to an 8-bit palette;
+      // for 24/32-bit just save the assigned bitmap as-is (matches the PNG output).
+      if pf = pf8bit then tmpBMP.PixelFormat := pf;
       tmpBMP.SaveToFile(ChangeFileExtSave(FileName, '.bmp'));
-   //   if pf <> pf8Bit then SetSaveDialogNames(FileName);
     finally
       tmpBMP.Free;
     end;
