@@ -46,6 +46,11 @@ procedure DiagLog(const S: String);
 { Check if diagnostic mode is active }
 function DiagIsActive: Boolean;
 
+{ Headless dump: enable the diag dumps (mctparas + siLight5) from the clean headless
+  --render path WITHOUT activating the GUI diag render. Gated by env MB3D_DIAGDUMP. }
+procedure DiagEnableHeadlessDump(const Dir, Scene: String);
+function DiagDumpActive: Boolean;
+
 { Get the current scene file being tested }
 function DiagCurrentScene: String;
 
@@ -58,6 +63,7 @@ uses Windows, Graphics, Forms, Types, DiagASMCheck;
 
 var
   gDiagActive: Boolean = False;
+  gDiagHeadlessDump: Boolean = False;
   gDiagScene: String = '';
   gDiagLogFile: TextFile;
   gDiagLogOpen: Boolean = False;
@@ -100,6 +106,24 @@ end;
 function DiagIsActive: Boolean;
 begin
   Result := gDiagActive;
+end;
+
+function DiagDumpActive: Boolean;
+begin
+  Result := gDiagActive or gDiagHeadlessDump;
+end;
+
+procedure DiagEnableHeadlessDump(const Dir, Scene: String);
+begin
+  gDiagHeadlessDump := True;
+  gDiagScene := ExtractFileName(Scene);   // bare name: SafeName must not contain path sep / ':'
+  DiagOutputDir := Dir;
+  if (DiagOutputDir <> '') and not DirectoryExists(DiagOutputDir) then
+    ForceDirectories(DiagOutputDir);
+  gDiagStartTick := GetTickCount;
+  DiagOpenLog;
+  DiagLog('=== Headless diag dump enabled (MB3D_DIAGDUMP) ===');
+  DiagLog('Scene: ' + Scene);
 end;
 
 function DiagCurrentScene: String;
@@ -164,7 +188,7 @@ var
   i: Integer;
   SafeName: String;
 begin
-  if not gDiagActive then Exit;
+  if not DiagDumpActive then Exit;
 
   SafeName := StringReplace(SceneName, ' ', '_', [rfReplaceAll]);
   SafeName := StringReplace(SafeName, '.m3p', '', [rfReplaceAll, rfIgnoreCase]);
@@ -314,7 +338,7 @@ var
   n: Integer;
   SX, SY: array[0..8] of Integer;
 begin
-  if not gDiagActive then Exit;
+  if not DiagDumpActive then Exit;
   if (pSiLight = nil) or (Width <= 0) or (Height <= 0) then Exit;
 
   SafeName := StringReplace(SceneName, ' ', '_', [rfReplaceAll]);

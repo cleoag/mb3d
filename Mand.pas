@@ -2418,6 +2418,16 @@ begin
               UpdateScaledImageFull;
             if HeadlessMode then
             begin
+              {$IFDEF FPC_DIAG}
+              // MB3D_DIAGDUMP oracle: dump siLight5 (Zpos etc.) at post-proc completion (c=4)
+              // for scenes with AO/HS — this is their headless completion path (not 3403).
+              if DiagHarness.DiagDumpActive then
+              begin
+                DiagHarness.DiagLog('Headless completion(c=4): Length(siLight5)=' + IntToStr(Length(siLight5)));
+                if Length(siLight5) > 0 then
+                  DiagHarness.DiagLogSiLight5Sample(@siLight5[0], MHeader.Width, MHeader.Height, DiagHarness.DiagCurrentScene);
+              end;
+              {$ENDIF}
               RepaintMand3DnoThread;   //sync re-shade fullSizeImage with post-proc (AO/HS) applied
               UpdateScaledImageFull;   //fullSizeImage -> Image1 (Timer8 was off during the re-shade)
               SdoAA;                   //AA-downscale fullSizeImage -> Image1 for ImageScale 2..3
@@ -3402,6 +3412,17 @@ begin
         StoreUndoLight;
         if HeadlessMode and (MCalcThreadStats.iProcessingType = 0) then
         begin
+          {$IFDEF FPC_DIAG}
+          // MB3D_DIAGDUMP oracle: dump siLight5 (Zpos/normals/SIgradient/OTrap) from the
+          // clean headless path before the AA-downscale + Halt. No GUI involved.
+          if DiagHarness.DiagDumpActive then
+          begin
+            DiagHarness.DiagLog('Headless completion: Length(siLight5)=' + IntToStr(Length(siLight5)) +
+              ' Width=' + IntToStr(MHeader.Width) + ' Height=' + IntToStr(MHeader.Height));
+            if Length(siLight5) > 0 then
+              DiagHarness.DiagLogSiLight5Sample(@siLight5[0], MHeader.Width, MHeader.Height, DiagHarness.DiagCurrentScene);
+          end;
+          {$ENDIF}
           SdoAA;
           HeadlessOnRenderComplete(Image1.Picture.Bitmap);
         end;

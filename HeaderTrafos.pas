@@ -991,6 +991,9 @@ begin                                //calcHybridFormulas -> usage of own calcfo
       end;
     end;
     {$IFDEF FPC_DIAG}
+    // GUI --diag only (DiagIsActive): the headless MB3D_DIAGDUMP oracle skips this — it
+    // touches many MCT fields (fHybrid/fHPVar) that can fault for internal-formula scenes,
+    // which aborted thread creation. siLight5 dump (the oracle data we need) is enough.
     if DiagHarness.DiagIsActive then
       DiagHarness.DiagLogMCTparasRecord(Result, DiagHarness.DiagCurrentScene);
     {$ENDIF}

@@ -31,7 +31,7 @@ implementation
 
 uses
   Windows, SysUtils, Forms,
-  FileHandling;
+  FileHandling, DiagHarness;
 
 procedure EnsureConsole;
 const
@@ -194,6 +194,12 @@ begin
     HeadlessFormat := FormatFromExtension(HeadlessOutputFile);
 
   HeadlessMode := True;
+  {$IFDEF FPC_DIAG}
+  // Oracle: when MB3D_DIAGDUMP is set, enable the diag dumps (mctparas + siLight5) via
+  // the clean headless path (no GUI). Output to <exe dir>\diag_output\.
+  if GetEnvironmentVariable('MB3D_DIAGDUMP') <> '' then
+    DiagEnableHeadlessDump(ExtractFilePath(ParamStr(0)) + 'diag_output' + PathDelim, HeadlessInputFile);
+  {$ENDIF}
   HeadlessLog('Headless render mode');
   HeadlessLog('  Input:   ' + HeadlessInputFile);
   HeadlessLog('  Output:  ' + HeadlessOutputFile);
