@@ -65,7 +65,7 @@ begin
         end;
       end;
     end;
-    ThreadCount := Min(Mand3DForm.UpDown3.Position, Header.Height);
+    ThreadCount := Min(Max(1, Mand3DForm.UpDown3.Position), Header.Height); //headless: UpDown3.Position may be 0
     MCTparas := getMCTparasFromHeader(Header^, True);
     Result   := MCTparas.bMCTisValid;
     if Result then

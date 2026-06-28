@@ -2418,7 +2418,9 @@ begin
               UpdateScaledImageFull;
             if HeadlessMode then
             begin
-              SdoAA;
+              RepaintMand3DnoThread;   //sync re-shade fullSizeImage with post-proc (AO/HS) applied
+              UpdateScaledImageFull;   //fullSizeImage -> Image1 (Timer8 was off during the re-shade)
+              SdoAA;                   //AA-downscale fullSizeImage -> Image1 for ImageScale 2..3
               HeadlessOnRenderComplete(Image1.Picture.Bitmap);
             end;
           end;

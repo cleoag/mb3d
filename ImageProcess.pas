@@ -1023,7 +1023,7 @@ begin
     Result      := False;
     MWidth      := Header.Width;
     MHeight     := Header.Height;
-    ThreadCount := Min(Mand3DForm.UpDown3.Position, MHeight);
+    ThreadCount := Min(Max(1, Mand3DForm.UpDown3.Position), MHeight); //headless: UpDown3.Position may be 0
     bT0calc     := (Header.bCalcAmbShadowAutomatic and 2) > 0;
     if bT0calc then SetLength(ascThreadT0, ThreadCount)
                else SetLength(ascThread, ThreadCount);
