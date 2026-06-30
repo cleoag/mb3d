@@ -159,6 +159,38 @@ begin
     end;
 end;
 
+// dIFS DE ORACLE probe (runtime env MB3D_IFS_PROBE; no FPC_DIAG needed). Evaluates the
+// real CalcDEanalytic/doHybridIFS3D at fixed world coords so the C++ port's chainIFSrun
+// can be diffed point-for-point. Authorized reference instrumentation (dIFS DE localisation).
+procedure DumpIFSprobe(mctp: PMCTparameter);
+const px: array[0..6] of Double = (0,    0,    0,    0.1,  0.3,  0.5,  -0.4);
+      py: array[0..6] of Double = (0,    0,    0,    0.1,  0.2, -0.3,   0.2);
+      pz: array[0..6] of Double = (0.5,  1.0,  2.0,  0.1,  0.4,  0.8,   1.2);
+var It3Dex: TIteration3Dext; de, minDE: Double; i: Integer; F: TextFile;
+begin
+  AssignFile(F, 'C:\mb3d_port\difs_probe_pascal.txt');
+  {$I-} Rewrite(F); {$I+}
+  if IOResult <> 0 then Exit;
+  with mctp^ do
+    Writeln(F, Format('PARAMS msDEstop=%.12g dDEscale=%.12g sStepWm103=%.12g StepWidth=%.12g maxIt=%d DEopt=%d wEndTo=%d RepeatFrom1=%d StartFrom1=%d inside=%d',
+      [msDEstop, dDEscale, sStepWm103, StepWidth, iMaxIt, DEoption, wEndTo, RepeatFrom1, StartFrom1, Ord(bInsideRendering)]));
+  for i := 0 to 6 do
+  begin
+    FillChar(It3Dex, SizeOf(It3Dex), 0);
+    IniIt3D(mctp, @It3Dex);                          // copies fHybrid/nHybrid/fHPVar (168B FastMove)
+    with mctp^ do begin                              // window/maxIt/DEoption (as RestoreF1DEcomb)
+      It3Dex.MaxIt := iMaxIt; It3Dex.DEoption := DEoption; It3Dex.EndTo := wEndTo;
+      PInteger(@It3Dex.iRepeatFrom)^ := PInteger(@RepeatFrom1)^;
+    end;
+    It3Dex.C1 := px[i]; It3Dex.C2 := py[i]; It3Dex.C3 := pz[i];
+    de := CalcDEanalytic(@It3Dex, mctp);
+    if mctp^.dDEscale <> 0 then minDE := de / mctp^.dDEscale else minDE := de;
+    Writeln(F, Format('PASCAL cx=%.4f cy=%.4f cz=%.4f de=%.12g minDE=%.12g itc=%d OTrap=%.12g',
+      [px[i], py[i], pz[i], de, minDE, It3Dex.ItResultI, It3Dex.OTrap]));
+  end;
+  CloseFile(F);
+end;
+
 function CalcMandT(Header: TPMandHeader10; PLightVals: TPLightVals; PCTS: TPCalcThreadStats;
                    PsiLight5: TPsiLight5; hSLoffset, FSIstart, FSIoffset: Integer; hRect: TRect): Boolean;
 var x, ThreadCount: Integer;
@@ -179,6 +211,8 @@ begin
       MCTparas.PLVals    := PLightVals;
       MCTparas.PCalcThreadStats := PCTS;
       MCTparas.CalcRect := hRect;
+      if (MCTparas.DEoption = 20) and (GetEnvironmentVariable('MB3D_IFS_PROBE') <> '') then
+        DumpIFSprobe(@MCTparas);                          // dIFS DE oracle (authorized instrumentation)
       if MCTparas.calc3D then SetLength(MandCalcThread, ThreadCount)
                          else SetLength(MandCalcThread2D, ThreadCount);
     end;
