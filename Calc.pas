@@ -211,8 +211,8 @@ begin
       MCTparas.PLVals    := PLightVals;
       MCTparas.PCalcThreadStats := PCTS;
       MCTparas.CalcRect := hRect;
-      if (MCTparas.DEoption = 20) and (GetEnvironmentVariable('MB3D_IFS_PROBE') <> '') then
-        DumpIFSprobe(@MCTparas);                          // dIFS DE oracle (authorized instrumentation)
+      if GetEnvironmentVariable('MB3D_IFS_PROBE') <> '' then
+        DumpIFSprobe(@MCTparas);                          // dIFS DE oracle (dumps DEoption; fires any DEopt)
       if MCTparas.calc3D then SetLength(MandCalcThread, ThreadCount)
                          else SetLength(MandCalcThread2D, ThreadCount);
     end;
