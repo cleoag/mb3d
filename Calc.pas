@@ -303,9 +303,17 @@ begin
     PCTS.HandleType := 1;
     if MCTparas.calc3D then
     begin
-      for x := 0 to ThreadCount - 1 do MandCalcThread[x].MCTparas.iThreadCount := ThreadCount;
-    end else begin
-      for x := 0 to ThreadCount - 1 do MandCalcThread2D[x].MCTparas.iThreadCount := ThreadCount;
+      for x := 0 to ThreadCount - 1 do
+      begin
+        MandCalcThread[x].MCTparas.iThreadCount := ThreadCount;
+        MandCalcThread[x].MCTparas.iThreadId    := x + 1;   // FIX(2026-07-01): getMCTparasFromHeader re-fetch
+      end;                                                  // (PARAMS_PER_THREAD) clobbers iThreadId under FPC
+    end else begin                                          // (record-return temp-copy, unlike Delphi RVO) ->
+      for x := 0 to ThreadCount - 1 do                      // all threads got id 0 -> wrong CTrecords slot / y=-1
+      begin
+        MandCalcThread2D[x].MCTparas.iThreadCount := ThreadCount;
+        MandCalcThread2D[x].MCTparas.iThreadId    := x + 1; // FIX(2026-07-01): same, 2D branch
+      end;
     end;
     PCTS.iTotalThreadCount := ThreadCount;
     PCTS.cCalcTime         := GetTickCount;
