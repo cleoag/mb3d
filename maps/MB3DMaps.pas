@@ -342,7 +342,7 @@ begin
       end;
       if not Result then Exit;
 
-      ThreadCount := Min(Mand3DForm.UpDown3.Position, VolumeLightMap.CubeSize);
+      ThreadCount := Min(Max(1, Mand3DForm.UpDown3.Position), VolumeLightMap.CubeSize);  //headless: UpDown3=0 -> no threads -> empty map
       SetLength(CVLMThread, ThreadCount);
       for x := 1 to ThreadCount do
       begin
