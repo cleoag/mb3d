@@ -166,14 +166,37 @@ procedure DumpIFSprobe(mctp: PMCTparameter);
 const px: array[0..6] of Double = (0,    0,    0,    0.1,  0.3,  0.5,  -0.4);
       py: array[0..6] of Double = (0,    0,    0,    0.1,  0.2, -0.3,   0.2);
       pz: array[0..6] of Double = (0.5,  1.0,  2.0,  0.1,  0.4,  0.8,   1.2);
-var It3Dex: TIteration3Dext; de, minDE: Double; i: Integer; F: TextFile;
+var It3Dex: TIteration3Dext; de, minDE: Double; i, k, kmax, ec: Integer; F: TextFile;
+    sAt: String;
 begin
+  sAt := SysUtils.GetEnvironmentVariable('MB3D_PROBE_AT');   // "x;y;z" (Val, locale-safe) -> point 0
+  if sAt <> '' then
+  begin
+    i := Pos(';', sAt);
+    if i > 0 then
+    begin
+      Val(Copy(sAt, 1, i - 1), de, ec);
+      if ec = 0 then px[0] := de;
+      sAt := Copy(sAt, i + 1, MaxInt);
+      i := Pos(';', sAt);
+      if i > 0 then
+      begin
+        Val(Copy(sAt, 1, i - 1), de, ec);
+        if ec = 0 then py[0] := de;
+        Val(Copy(sAt, i + 1, MaxInt), de, ec);
+        if ec = 0 then pz[0] := de;
+      end;
+    end;
+  end;
   AssignFile(F, 'C:\mb3d_port\difs_probe_pascal.txt');
   {$I-} Rewrite(F); {$I+}
   if IOResult <> 0 then Exit;
   with mctp^ do
-    Writeln(F, Format('PARAMS msDEstop=%.12g dDEscale=%.12g sStepWm103=%.12g StepWidth=%.12g maxIt=%d DEopt=%d wEndTo=%d RepeatFrom1=%d StartFrom1=%d inside=%d',
-      [msDEstop, dDEscale, sStepWm103, StepWidth, iMaxIt, DEoption, wEndTo, RepeatFrom1, StartFrom1, Ord(bInsideRendering)]));
+    Writeln(F, Format('PARAMS msDEstop=%.12g dDEscale=%.12g sStepWm103=%.12g StepWidth=%.12g maxIt=%d DEopt=%d wEndTo=%d RepeatFrom1=%d StartFrom1=%d inside=%d DEstopFactor=%.12g Zend=%.12g sZstepDiv=%.12g iMinIt=%d',
+      [msDEstop, dDEscale, sStepWm103, StepWidth, iMaxIt, DEoption, wEndTo, RepeatFrom1, StartFrom1, Ord(bInsideRendering), mctDEstopFactor, Zend, sZstepDiv, iMinIt]));
+  with mctp^ do
+    Writeln(F, Format('CAM Xmit=(%.12g,%.12g,%.12g) Vg0=(%.9g,%.9g,%.9g) Vg1=(%.9g,%.9g,%.9g) Vg2=(%.9g,%.9g,%.9g) FOVXoff=%.9g FOVXmul=%.9g FOVy=%.9g',
+      [Xmit, Ymit, Zmit, Vgrads[0,0], Vgrads[0,1], Vgrads[0,2], Vgrads[1,0], Vgrads[1,1], Vgrads[1,2], Vgrads[2,0], Vgrads[2,1], Vgrads[2,2], FOVXoff, FOVXmul, FOVy]));
   for i := 0 to 6 do
   begin
     FillChar(It3Dex, SizeOf(It3Dex), 0);
@@ -187,6 +210,29 @@ begin
     if mctp^.dDEscale <> 0 then minDE := de / mctp^.dDEscale else minDE := de;
     Writeln(F, Format('PASCAL cx=%.4f cy=%.4f cz=%.4f de=%.12g minDE=%.12g itc=%d OTrap=%.12g',
       [px[i], py[i], pz[i], de, minDE, It3Dex.ItResultI, It3Dex.OTrap]));
+  end;
+  // ORBIT TRACE (env MB3D_ORBIT_PROBE): golden trajectories. For each probe point run the
+  // scene iterator with MaxIt capped at k=1..min(iMaxIt,40) and dump the END state — the
+  // trajectory is reconstructed without touching the iterators. First divergent k vs the
+  // port trace pinpoints the guilty slot/step.
+  if SysUtils.GetEnvironmentVariable('MB3D_ORBIT_PROBE') <> '' then
+  with mctp^ do
+  for i := 0 to 6 do
+  begin
+    Writeln(F, Format('ORBIT point %d (%.4f,%.4f,%.4f)', [i, px[i], py[i], pz[i]]));
+    if iMaxIt < 40 then kmax := iMaxIt else kmax := 40;
+    for k := 1 to kmax do
+    begin
+      FillChar(It3Dex, SizeOf(It3Dex), 0);
+      IniIt3D(mctp, @It3Dex);
+      It3Dex.MaxIt := k; It3Dex.DEoption := DEoption; It3Dex.EndTo := wEndTo;
+      PInteger(@It3Dex.iRepeatFrom)^ := PInteger(@RepeatFrom1)^;
+      It3Dex.C1 := px[i]; It3Dex.C2 := py[i]; It3Dex.C3 := pz[i];
+      mMandFunctionDE(@It3Dex.C1);   // the DE-iterate (tracks w/Deriv1) — matches the port's chainW
+      Writeln(F, Format('  k=%d itc=%d x=%.12g y=%.12g z=%.12g w=%.12g Rout=%.12g',
+        [k, It3Dex.ItResultI, It3Dex.x, It3Dex.y, It3Dex.z, It3Dex.w, It3Dex.Rout]));
+      if It3Dex.ItResultI < k then Break;   // escaped before the cap: trace complete
+    end;
   end;
   CloseFile(F);
 end;
