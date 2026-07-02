@@ -329,6 +329,34 @@ begin
   DiagLog('PostProc step: ' + StepName + ' (code=' + IntToStr(StepCode) + ')');
 end;
 
+procedure DiagDumpSiLight5FullBin(pSiLight: Pointer; Width, Height: Integer; const SafeName: String);
+{ Full-frame binary dump of the siLight5 buffer, gated by env MB3D_DUMPSI_FULL.
+  Layout: 'SIL5' magic (4B) + Int32 Width + Int32 Height + Int32 SizeOf(TsiLight5)
+  followed by Width*Height raw TsiLight5 records (18B each). }
+var
+  FB: file;
+  FPath: String;
+  Magic: array[0..3] of AnsiChar;
+  RecSz: Integer;
+begin
+  if SysUtils.GetEnvironmentVariable('MB3D_DUMPSI_FULL') = '' then Exit;
+  FPath := DiagOutputDir + 'silight5_' + SafeName + '.bin';
+  Magic[0] := 'S'; Magic[1] := 'I'; Magic[2] := 'L'; Magic[3] := '5';
+  RecSz := SizeOf(TsiLight5);
+  AssignFile(FB, FPath);
+  Rewrite(FB, 1);
+  try
+    BlockWrite(FB, Magic, 4);
+    BlockWrite(FB, Width, 4);
+    BlockWrite(FB, Height, 4);
+    BlockWrite(FB, RecSz, 4);
+    BlockWrite(FB, PByte(pSiLight)^, Width * Height * RecSz);
+  finally
+    CloseFile(FB);
+  end;
+  DiagLog('siLight5 FULL binary dump saved to: ' + FPath);
+end;
+
 procedure DiagLogSiLight5Sample(pSiLight: Pointer; Width, Height: Integer; const SceneName: String);
 var
   F: TextFile;
@@ -344,6 +372,7 @@ begin
   SafeName := StringReplace(SceneName, ' ', '_', [rfReplaceAll]);
   SafeName := StringReplace(SafeName, '.m3p', '', [rfReplaceAll, rfIgnoreCase]);
   if SafeName = '' then SafeName := 'default';
+  DiagDumpSiLight5FullBin(pSiLight, Width, Height, SafeName);
   FPath := DiagOutputDir + 'silight5_' + SafeName + '.txt';
 
   // 9 sample points: corners + edge midpoints + center

@@ -183,7 +183,7 @@ begin
       PInteger(@It3Dex.iRepeatFrom)^ := PInteger(@RepeatFrom1)^;
     end;
     It3Dex.C1 := px[i]; It3Dex.C2 := py[i]; It3Dex.C3 := pz[i];
-    de := CalcDEanalytic(@It3Dex, mctp);
+    de := mctp^.CalcDE(@It3Dex, mctp);   // the scene's actual DE (analytic/numeric/DEcomb)
     if mctp^.dDEscale <> 0 then minDE := de / mctp^.dDEscale else minDE := de;
     Writeln(F, Format('PASCAL cx=%.4f cy=%.4f cz=%.4f de=%.12g minDE=%.12g itc=%d OTrap=%.12g',
       [px[i], py[i], pz[i], de, minDE, It3Dex.ItResultI, It3Dex.OTrap]));
