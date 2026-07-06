@@ -673,6 +673,10 @@ lab3:
             [Rit, NewVec[0], NewVec[1], NewVec[2], tAbsorb[0], tAbsorb[1], tAbsorb[2], tmpAmb[0], tmpAmb[1], tmpAmb[2], ZZ2, siLight.SIgradient, siLight.AmbShadow]));
         {$ENDIF}
         tAmb := AddSVectors(tAmb, MultiplySVectors(tAbsorb, tmpAmb));
+        {$IFDEF FPC_DIAG}
+        if gSRtracePix then
+          DiagHarness.DiagLog(Format('  tAmb now=(%.5f,%.5f,%.5f)', [tAmb[0], tAmb[1], tAmb[2]]));
+        {$ENDIF}
         if (not bCalcT) or (not bTransFlipInside xor bInsideRendering) then
           MultiplySVectorsV(@tAbsorb, @tmpSpec);
 
@@ -688,6 +692,11 @@ lab3:
         if bCalcT then ScaleSVectorV(@tAbsorb, SDsvecs[0][3])
                   else MultiplySVectorsV(@tAbsorb, @SDsvecs[0]);
         CalcOpenAir(siLight, SDsvecs, tAbsorb, bCalcT, MinCD(ZZ2, MaxL));
+        {$IFDEF FPC_DIAG}
+        if gSRtracePix then
+          DiagHarness.DiagLog(Format('  OPENAIR rit=%d absorb=(%.5f,%.5f,%.5f) tAmb now=(%.5f,%.5f,%.5f)',
+            [Rit, tAbsorb[0], tAbsorb[1], tAbsorb[2], tAmb[0], tAmb[1], tAmb[2]]));
+        {$ENDIF}
       end;
       if bCalcT then
       begin
