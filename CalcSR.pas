@@ -57,6 +57,10 @@ uses Mand, Math, DivUtils, formulas, Forms, ImageProcess, CustomFormulas,
      HeaderTrafos, LightAdjust, PaintThread, Calc, CalcAmbShadowDE, MB3DMaps
      {$IFDEF FPC_DIAG}, SysUtils, DiagHarness{$ENDIF};
 
+{$IFDEF FPC_DIAG}
+var gSRtracePix: Boolean = False;
+{$ENDIF}
+
 function CalcSRT(Header: TPMandHeader10; PLightVals: TPLightVals; PCTS: TPCalcThreadStats;
                  PsiLight5: TPsiLight5; FSIstart, FSIoffset: Integer; CalcR: TRect): Boolean;
 var x, ThreadCount: Integer;
@@ -658,6 +662,11 @@ lab3:
       //  if bCalcT then
           tmpSpec := CalcPixelColorSvecTrans(@tmpAmb, SDsvecs, @siLight, @LVals, @PLV);
       //  else tmpSpec := CalcPixelColorSvec(@tmpAmb, SDsvecs, @siLight, @LVals, @PLV);
+        {$IFDEF FPC_DIAG}
+        if gSRtracePix then
+          DiagHarness.DiagLog(Format('SR_BOUNCE rit=%d dir=(%.5f,%.5f,%.5f) absorb=(%.5f,%.5f,%.5f) shade=(%.5f,%.5f,%.5f) ZZ2=%.5f sig=%d amb=%d',
+            [Rit, NewVec[0], NewVec[1], NewVec[2], tAbsorb[0], tAbsorb[1], tAbsorb[2], tmpAmb[0], tmpAmb[1], tmpAmb[2], ZZ2, siLight.SIgradient, siLight.AmbShadow]));
+        {$ENDIF}
         tAmb := AddSVectors(tAmb, MultiplySVectors(tAbsorb, tmpAmb));
         if (not bCalcT) or (not bTransFlipInside xor bInsideRendering) then
           MultiplySVectorsV(@tAbsorb, @tmpSpec);
@@ -801,8 +810,12 @@ begin
               DiagHarness.DiagLog(Format('SR_PIXEL(%d,%d) base=(%.5f,%.5f,%.5f) absorb=(%.5f,%.5f,%.5f) spec=(%.5f,%.5f,%.5f) diff=(%.5f,%.5f,%.5f) alpha=%.5f zz=%.5f',
                 [x, y, tAmb[0], tAmb[1], tAmb[2], sv[0], sv[1], sv[2], SDsv[0][0], SDsv[0][1], SDsv[0][2], SDsv[1][0], SDsv[1][1], SDsv[1][2], SDsv[0][3], mZZ]));
             {$ENDIF}
+            {$IFDEF FPC_DIAG}
+            gSRtracePix := (SysUtils.GetEnvironmentVariable('MB3D_SR_PIXEL') = IntToStr(x) + ';' + IntToStr(y));
+            {$ENDIF}
             CalcRay(mZZ, mVgradsFOV, sv, SDsv, 1);  //recursive reflection + transmission calculation
             {$IFDEF FPC_DIAG}
+            gSRtracePix := False;
             if (SysUtils.GetEnvironmentVariable('MB3D_SR_PIXEL') = IntToStr(x) + ';' + IntToStr(y)) then
               DiagHarness.DiagLog(Format('SR_PIXEL(%d,%d) final tAmb=(%.5f,%.5f,%.5f)', [x, y, tAmb[0], tAmb[1], tAmb[2]]));
             {$ENDIF}

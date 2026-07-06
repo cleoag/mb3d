@@ -14,3 +14,7 @@ lib/
 *.exe
 .worktrees/
 diag_output/
+M3Maps_bmp/
+mb3d_startup.log
+M3Parameter/mb3d_startup.log
+diag_output/
