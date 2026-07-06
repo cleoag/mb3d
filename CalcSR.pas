@@ -652,6 +652,11 @@ lab3:
         LVals.bDivOptions := 0;
         LVals.bScaleAmbDiffDown := bCalcTransR and (Rit < MaxReflections);
 
+        {$IFDEF FPC_DIAG}
+        if gSRtracePix then
+          DiagHarness.DiagLog(Format('  PRE645 rit=%d bCalcT=%d absorb=(%.5f,%.5f,%.5f) SD0=(%.5f,%.5f,%.5f,%.5f)',
+            [Rit, Ord(bCalcT), tAbsorb[0], tAbsorb[1], tAbsorb[2], SDsvecs[0][0], SDsvecs[0][1], SDsvecs[0][2], SDsvecs[0][3]]));
+        {$ENDIF}
         if bCalcT then ScaleSVectorV(@tAbsorb, SDsvecs[0][3])
                   else MultiplySVectorsV(@tAbsorb, @SDsvecs[0]);
 
