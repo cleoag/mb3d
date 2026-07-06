@@ -426,6 +426,11 @@ lab2:
         OpenAir := False;
         RSFmul := 1;
         dTmp := CalcDE(@Iteration3Dext, @MCTparas);
+        {$IFDEF FPC_DIAG}
+        if gSRtracePix then
+          DiagHarness.DiagLog(Format('SRM first: de=%.6g itc=%d ms=%.6g',
+            [dTmp, Iteration3Dext.ItResultI, msDEstop]));
+        {$ENDIF}
         RLastStepWidth := dTmp * sZstepDiv;
         RMStepCount := 0;
         if dTmp > s1em10 then
