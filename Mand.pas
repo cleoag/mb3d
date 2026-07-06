@@ -1548,7 +1548,7 @@ procedure TMand3DForm.CalcMand(bMakeHeader: LongBool);
 var stmp: String;
     TileSize: TPoint;
     b: LongBool;
-    iHL, iaHL: Integer;              // headless vol-light-map wait loop
+    iHL, iaHL, iprogHL, ymHL: Integer;   // headless vol-light-map wait loop + progress
     VLMstatsHL: TCalcThreadStats;    // headless vol-light-map thread stats
 begin
     if AnimationForm.AniOption = 3 then
@@ -1629,20 +1629,36 @@ begin
         // e.g. KochSurf, Lenord "Between Dark and Light"). Build it directly, like the window's
         // FormShow (uMapCalcWindow.pas:53-61): launch the threads, then poll until all finish.
         HeadlessLog('Building volume light map (headless)...');
-        MCalcStop := not MakeVolumicLightMapThreads(@MHeader, @HeaderLightVals, @VLMstatsHL);
-        if not MCalcStop then
-        begin
-          repeat
-            delay(50);
-            iaHL := 0;
-            for iHL := 1 to VLMstatsHL.iTotalThreadCount do
-              if VLMstatsHL.CTrecords[iHL].isActive <> 0 then Inc(iaHL);
-          until iaHL = 0;
-          bSRVolLightMapCalculated := True;
-          HeadlessLog('Volume light map done (CubeSize=' + IntToStr(VolumeLightMap.CubeSize) + ')');
-        end
-        else
-          HeadlessLog('Volume light map build FAILED');
+        try
+          MCalcStop := not MakeVolumicLightMapThreads(@MHeader, @HeaderLightVals, @VLMstatsHL);
+          HeadlessLog('  MakeVolumicLightMapThreads ret ok=' + IntToStr(Ord(not MCalcStop))
+            + ' threadCount=' + IntToStr(VLMstatsHL.iTotalThreadCount));
+          if not MCalcStop then
+          begin
+            // Wait WITHOUT pumping the message loop: delay()/ProcessMessages re-enter the
+            // headless render-completion timers and Halt the process before the map is ready.
+            // The vol-map threads run on their own OS threads (no Synchronize in Execute), so a
+            // plain Windows Sleep lets them finish and clear isActive.
+            iaHL := 1; iprogHL := 0;
+            while iaHL > 0 do
+            begin
+              Sleep(20);
+              iaHL := 0;
+              for iHL := 1 to VLMstatsHL.iTotalThreadCount do
+                if VLMstatsHL.CTrecords[iHL].isActive <> 0 then Inc(iaHL);
+              Inc(iprogHL);
+              if iprogHL > 30000 then begin HeadlessLog('  vol-map TIMEOUT'); Break; end;
+            end;
+            bSRVolLightMapCalculated := True;
+            HeadlessLog('Volume light map done (CubeSize=' + IntToStr(VolumeLightMap.CubeSize)
+              + ' iter=' + IntToStr(iprogHL) + ')');
+          end
+          else
+            HeadlessLog('Volume light map build FAILED');
+        except
+          on E: Exception do
+            HeadlessLog('Volume light map EXCEPTION: ' + E.Message);
+        end;
       end;
       if not HeadlessMode then
       begin
