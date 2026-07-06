@@ -2311,6 +2311,7 @@ begin
                     HeadlessLog('CalcSRT failed, skipping reflections');
                     MCalcThreadStats.iProcessingType := 0;
                     SdoAA;
+                    HeadlessLog('completion site: SRT-failed');
                     HeadlessOnRenderComplete(Image1.Picture.Bitmap);
                   end
                   ;
@@ -2428,9 +2429,15 @@ begin
                   DiagHarness.DiagLogSiLight5Sample(@siLight5[0], MHeader.Width, MHeader.Height, DiagHarness.DiagCurrentScene);
               end;
               {$ENDIF}
-              RepaintMand3DnoThread;   //sync re-shade fullSizeImage with post-proc (AO/HS) applied
+              // FIX(headless SR, 2026-07-06): after Reflections/DOF (c>5) the pass has already
+              // painted fullSizeImage directly - a re-shade would ERASE it (the GUI paths do
+              // UpdateScaledImageFull only, see the 'if c > 5' ani/tile branches above).
+              // Re-shade only for HS/AO (c<=5), matching RepaintMand3D semantics.
+              if c <= 5 then
+                RepaintMand3DnoThread; //sync re-shade fullSizeImage with post-proc (AO/HS) applied
               UpdateScaledImageFull;   //fullSizeImage -> Image1 (Timer8 was off during the re-shade)
               SdoAA;                   //AA-downscale fullSizeImage -> Image1 for ImageScale 2..3
+              HeadlessLog('completion site: Timer4 post-proc (c=' + IntToStr(c) + ' opts=' + IntToStr(MCalcThreadStats.iAllProcessingOptions) + ')');
               HeadlessOnRenderComplete(Image1.Picture.Bitmap);
             end;
           end;
@@ -3410,7 +3417,13 @@ begin
       if Timer3.Enabled then Timer3Timer(Self) else
       begin
         StoreUndoLight;
-        if HeadlessMode and (MCalcThreadStats.iProcessingType = 0) then
+        // FIX(headless SR, 2026-07-06): this Timer8 repaint-completion used to race Timer4
+        // (interval 1000ms) and Halt the process in the PAUSE between the main calc and the
+        // next post-processing stage (iProcessingType=0 there), so fast/small headless renders
+        // saved BEFORE NsOnZ/HS/AO/SR/DOF ever started. Gate on the pending post-proc bits:
+        // when any stage (2..64) is scheduled, completion belongs to the Timer4 path instead.
+        if HeadlessMode and (MCalcThreadStats.iProcessingType = 0) and
+           ((MCalcThreadStats.iAllProcessingOptions and $FE) = 0) then
         begin
           {$IFDEF FPC_DIAG}
           // MB3D_DIAGDUMP oracle: dump siLight5 (Zpos/normals/SIgradient/OTrap) from the
@@ -3424,6 +3437,7 @@ begin
           end;
           {$ENDIF}
           SdoAA;
+          HeadlessLog('completion site: Timer8 repaint (opts=' + IntToStr(MCalcThreadStats.iAllProcessingOptions) + ')');
           HeadlessOnRenderComplete(Image1.Picture.Bitmap);
         end;
         {$IFDEF FPC_DIAG}
