@@ -1548,6 +1548,8 @@ procedure TMand3DForm.CalcMand(bMakeHeader: LongBool);
 var stmp: String;
     TileSize: TPoint;
     b: LongBool;
+    iHL, iaHL: Integer;              // headless vol-light-map wait loop
+    VLMstatsHL: TCalcThreadStats;    // headless vol-light-map thread stats
 begin
     if AnimationForm.AniOption = 3 then
     begin
@@ -1619,7 +1621,29 @@ begin
       ((MHeader.Light.Lights[Min(5, (MHeader.bVolLightNr and 7) - 1)].Loption and 3) = 0) then
     begin
       if HeadlessMode then
-        HeadlessLog('Skipping volume light map (headless)');
+      begin
+        // FIX(headless vol-light, 2026-07-06): the old code SKIPPED the cube-map build in
+        // headless (it required the modal MapCalcWindow), leaving VolumeLightMap uninitialised.
+        // The DFogOnIt=65535 march then reads garbage from the empty map and terminates every
+        // ray as background -> the whole scene renders EMPTY (only the light overlay shows;
+        // e.g. KochSurf, Lenord "Between Dark and Light"). Build it directly, like the window's
+        // FormShow (uMapCalcWindow.pas:53-61): launch the threads, then poll until all finish.
+        HeadlessLog('Building volume light map (headless)...');
+        MCalcStop := not MakeVolumicLightMapThreads(@MHeader, @HeaderLightVals, @VLMstatsHL);
+        if not MCalcStop then
+        begin
+          repeat
+            delay(50);
+            iaHL := 0;
+            for iHL := 1 to VLMstatsHL.iTotalThreadCount do
+              if VLMstatsHL.CTrecords[iHL].isActive <> 0 then Inc(iaHL);
+          until iaHL = 0;
+          bSRVolLightMapCalculated := True;
+          HeadlessLog('Volume light map done (CubeSize=' + IntToStr(VolumeLightMap.CubeSize) + ')');
+        end
+        else
+          HeadlessLog('Volume light map build FAILED');
+      end;
       if not HeadlessMode then
       begin
       MapCalcWindow.pMap := @VolumeLightMap;
