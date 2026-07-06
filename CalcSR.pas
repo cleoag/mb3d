@@ -54,7 +54,8 @@ function CalcSRT(Header: TPMandHeader10; PLightVals: TPLightVals; PCTS: TPCalcTh
 implementation
 
 uses Mand, Math, DivUtils, formulas, Forms, ImageProcess, CustomFormulas,
-     HeaderTrafos, LightAdjust, PaintThread, Calc, CalcAmbShadowDE, MB3DMaps;
+     HeaderTrafos, LightAdjust, PaintThread, Calc, CalcAmbShadowDE, MB3DMaps
+     {$IFDEF FPC_DIAG}, SysUtils, DiagHarness{$ENDIF};
 
 function CalcSRT(Header: TPMandHeader10; PLightVals: TPLightVals; PCTS: TPCalcThreadStats;
                  PsiLight5: TPsiLight5; FSIstart, FSIoffset: Integer; CalcR: TRect): Boolean;
@@ -795,7 +796,16 @@ begin
             LVals.bScaleAmbDiffDown := bCalcTransR;// and (MaxReflections > 1);
             sv := ScaleSVector(CalcPixelColorSvec(@tAmb, SDsv, srPsiLight, @LVals, @PLV), SRLightAmount);
             tAmb[3] := 0;         //sv=light absorption so far
+            {$IFDEF FPC_DIAG}
+            if (SysUtils.GetEnvironmentVariable('MB3D_SR_PIXEL') = IntToStr(x) + ';' + IntToStr(y)) then
+              DiagHarness.DiagLog(Format('SR_PIXEL(%d,%d) base=(%.5f,%.5f,%.5f) absorb=(%.5f,%.5f,%.5f) spec=(%.5f,%.5f,%.5f) diff=(%.5f,%.5f,%.5f) alpha=%.5f zz=%.5f',
+                [x, y, tAmb[0], tAmb[1], tAmb[2], sv[0], sv[1], sv[2], SDsv[0][0], SDsv[0][1], SDsv[0][2], SDsv[1][0], SDsv[1][1], SDsv[1][2], SDsv[0][3], mZZ]));
+            {$ENDIF}
             CalcRay(mZZ, mVgradsFOV, sv, SDsv, 1);  //recursive reflection + transmission calculation
+            {$IFDEF FPC_DIAG}
+            if (SysUtils.GetEnvironmentVariable('MB3D_SR_PIXEL') = IntToStr(x) + ';' + IntToStr(y)) then
+              DiagHarness.DiagLog(Format('SR_PIXEL(%d,%d) final tAmb=(%.5f,%.5f,%.5f)', [x, y, tAmb[0], tAmb[1], tAmb[2]]));
+            {$ENDIF}
             tAmb := mMinMaxSVec(0, 1, tAmb);
             if LVals.bCalcPixColSqr then tAmb := mSqrtSVec(tAmb);
 
