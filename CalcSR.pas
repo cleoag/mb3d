@@ -345,6 +345,7 @@ var itmp: Integer;
     RMStepCount: Integer;
     tmpSDsvecs: TLightSD;
     tmpPSV: TPSVec;
+    {$IFDEF FPC_DIAG}tmpAmb2: TSVec;{$ENDIF}
 label lab1, lab2, lab3;
 begin
     with MCTparas do
@@ -660,6 +661,14 @@ lab3:
           tmpSpec := tAbsorb;
           sTmp := (1 - YofSVec(@tmpAmb)) * sLightScatteringMul;
           MultiplySVectorsV(@tAbsorb, @tmpAmb);
+          {$IFDEF FPC_DIAG}
+          if gSRtracePix then
+          begin
+            tmpAmb2 := AddLight(SDsvecs[1]);
+            DiagHarness.DiagLog(Format('  INSCATTER rit=%d AddLight=(%.5f,%.5f,%.5f) sTmp=%.6f absorbPost=(%.5f,%.5f,%.5f) specPre=(%.5f,%.5f,%.5f) len=%.4f',
+              [Rit, tmpAmb2[0], tmpAmb2[1], tmpAmb2[2], sTmp, tAbsorb[0], tAbsorb[1], tAbsorb[2], tmpSpec[0], tmpSpec[1], tmpSpec[2], MinCD(ZZ2, MaxL)]));
+          end;
+          {$ENDIF}
           tAmb := Add2SVecsWeight2(tAmb, MultiplySVectors(AddLight(SDsvecs[1]),
                             LinInterpolate2SVecs(tAbsorb, tmpSpec, s05)), sTmp);
           LVals.bDivOptions := 1;
