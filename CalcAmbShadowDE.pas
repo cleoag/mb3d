@@ -49,10 +49,14 @@ function CalcAmbShadowDET(Header: TPMandHeader10; PCTS: TPCalcThreadStats;
 procedure CalcAmbShadowDEfor1pos(PMCT: PMCTparameter; It3Dex: TPIteration3Dext;
           mPsiLight: TPsiLight5; Quality, xx, yy: Integer);
 
+{$IFDEF FPC_DIAG}
+var gAOtrace: Boolean = False;
+{$ENDIF}
+
 implementation
 
 uses Mand, Math, DivUtils, formulas, Forms, ImageProcess, CustomFormulas,
-     HeaderTrafos, LightAdjust, Calc;
+     HeaderTrafos, LightAdjust, Calc{$IFDEF FPC_DIAG}, SysUtils, DiagHarness{$ENDIF};
 
 
 function CalcAmbShadowDET(Header: TPMandHeader10; PCTS: TPCalcThreadStats;
@@ -602,6 +606,7 @@ var itmp, ix, iy, RayCount: Integer;
     Quat: TQuaternion;
     RotV, RotW: TSMatrix3;
     RotM: array[0..32] of TSVec;
+    {$IFDEF FPC_DIAG}DiagStr: String;{$ENDIF}
 begin
     mPsiLight.AmbShadow := 0;
 
@@ -760,6 +765,14 @@ begin
 
         end;
 
+        {$IFDEF FPC_DIAG}
+        if gAOtrace then
+        begin
+          DiagStr := Format('AO1POS q=%d rays=%d ms=%.5g StepAO=%.5g maxD=%.5g DEmul=%.4g minRA=[', [Quality, RayCount, msDEstop, StepAO, MaxDist, DEmul]);
+          for ix := 0 to RayCount - 1 do DiagStr := DiagStr + Format('%.3f ', [minRA[ix]]);
+          DiagHarness.DiagLog(DiagStr + Format('] dAmount=%.4f amb=%d', [dAmount, Max(0, Round(16383 * (1 - dAmount / RayCount)))]));
+        end;
+        {$ENDIF}
         mPsiLight.AmbShadow := Max(0, Round(16383 * (1 - dAmount / RayCount)));
         mCopyVec(@It3Dex.C1, @IC);
     end;

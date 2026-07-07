@@ -644,7 +644,9 @@ lab3:
           else  itmp := 0;
           end;
           mZZ := Abs(ZZ);
+          {$IFDEF FPC_DIAG}CalcAmbShadowDE.gAOtrace := gSRtracePix;{$ENDIF}
           CalcAmbShadowDEfor1pos(@MCTparas, @Iteration3Dext, @siLight, itmp, 0, 0);
+          {$IFDEF FPC_DIAG}CalcAmbShadowDE.gAOtrace := False;{$ENDIF}
           siLight.AmbShadow := (siLight.AmbShadow * 8) div (8 + Rit);
         end
         else siLight.AmbShadow := 5000;
