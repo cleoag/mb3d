@@ -3279,8 +3279,16 @@ begin
       if HeadlessThreads > 0 then
         UpDown3.Position := HeadlessThreads;
       HeadlessLog('Rendering ' + Edit11.Text + 'x' + Edit12.Text + '...');
-      MHeader.bCalc3D := 1;
-      MHeader.bStereoMode := 0;
+      // FIX(headless modes, 2026-07-07): honor the scene's bCalc3D/bStereoMode when
+      // MB3D_HONOR_MODE=1 (test 2D/stereo). Default keeps the forced-3D behaviour so the
+      // corpus (all bCalc3D=1) is unchanged.
+      if GetEnvironmentVariable('MB3D_HONOR_MODE') = '' then
+      begin
+        MHeader.bCalc3D := 1;
+        MHeader.bStereoMode := 0;
+      end
+      else
+        HeadlessLog('  honor-mode: bCalc3D=' + IntToStr(MHeader.bCalc3D) + ' bStereoMode=' + IntToStr(MHeader.bStereoMode));
       CalcMand(True);
       Exit;
     end;
