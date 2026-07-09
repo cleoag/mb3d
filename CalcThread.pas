@@ -36,6 +36,13 @@ implementation
 
 uses Mand, Math, DivUtils, formulas, CustomFormulas, LightAdjust, Calc, MB3DMaps;
 
+// DIAGNOSTIC (MB3D_DETRNG=1): make the first-step-random seed a PURE per-pixel function
+// identical to the C++ port (seed := 214013*(y*iMandWidth+x)+2531011, port render.h:229),
+// so first-step jitter is byte-reproducible across both engines. Default OFF = original
+// per-thread Random()-seeded behavior. See goal: deterministic-RNG unification.
+var gDetRNG: LongBool = False;
+    gDetRNGChk: LongBool = False;
+
 //{$CODEALIGN 8}
 
 function TMandCalcThread.VLMinStepSize(LightPos, LastPos, ActPos: TPVec3D): Single;
@@ -143,6 +150,10 @@ begin
           mZZ        := 0;
           msDEstop   := DEstop;
           bFirstStep := bMCTFirstStepRandom;
+          if not gDetRNGChk then begin gDetRNG := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGChk := True; end;
+{$IFDEF DEBUG} {$Q-} {$R-} {$ENDIF}
+          if gDetRNG then seed := 214013 * (y * iMandWidth + x) + 2531011;   // DIAG: per-pixel seed == C++ port (render.h:229)
+{$IFDEF DEBUG} {$Q+} {$R+} {$ENDIF}
           if iCutOptions > 0 then   // move to begin of cutting planes todo: check on which side, modify zend if step towards cutplane
           begin
             RMmaxLengthToCutPlane(MCTparas, dT1, itmp, @pIt3Dext.C1);
@@ -453,6 +464,10 @@ begin
           mZZ        := 0;
           msDEstop   := DEstop;
           bFirstStep := bMCTFirstStepRandom;
+          if not gDetRNGChk then begin gDetRNG := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGChk := True; end;
+{$IFDEF DEBUG} {$Q-} {$R-} {$ENDIF}
+          if gDetRNG then seed := 214013 * (y * iMandWidth + x) + 2531011;   // DIAG: per-pixel seed == C++ port (render.h:229)
+{$IFDEF DEBUG} {$Q+} {$R+} {$ENDIF}
           if iCutOptions > 0 then   // move to begin of cutting planes todo: check on which side, modify zend if step towards cutplane
           begin
             RMmaxLengthToCutPlane(MCTparas, dT1, itmp, @pIt3Dext.C1);
@@ -796,6 +811,10 @@ begin
           mZZ        := 0;
           msDEstop   := DEstop;
           bFirstStep := bMCTFirstStepRandom;
+          if not gDetRNGChk then begin gDetRNG := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGChk := True; end;
+{$IFDEF DEBUG} {$Q-} {$R-} {$ENDIF}
+          if gDetRNG then seed := 214013 * (y * iMandWidth + x) + 2531011;   // DIAG: per-pixel seed == C++ port (render.h:229)
+{$IFDEF DEBUG} {$Q+} {$R+} {$ENDIF}
           if iCutOptions > 0 then   // move to begin of cutting planes todo: check on which side, modify zend if step towards cutplane
           begin
             RMmaxLengthToCutPlane(@MCTparas, dT1, itmp, @Iteration3Dext.C1);

@@ -56,7 +56,13 @@ var gAOtrace: Boolean = False;
 implementation
 
 uses Mand, Math, DivUtils, formulas, Forms, ImageProcess, CustomFormulas,
-     HeaderTrafos, LightAdjust, Calc{$IFDEF FPC_DIAG}, SysUtils, DiagHarness{$ENDIF};
+     HeaderTrafos, LightAdjust, Calc, SysUtils{$IFDEF FPC_DIAG}, DiagHarness{$ENDIF};
+
+// DIAGNOSTIC (MB3D_DETRNG=1): replace the Randomize+thread-seeded AO-DE seed (and the
+// raw-Random first-step jitter) with a fixed deterministic seed so AO-DE (aoType 3) is
+// byte-reproducible run-to-run. Default (env unset) is byte-identical to the original.
+var gDetRNGsr: LongBool = False;
+    gDetRNGsrChk: LongBool = False;
 
 
 function CalcAmbShadowDET(Header: TPMandHeader10; PCTS: TPCalcThreadStats;
@@ -330,7 +336,9 @@ begin
 {$Q-}
 {$R-}
 {$ENDIF}
-      seed := Round(Random * (iThreadId + 1) * $324594A1 + $24563487);
+      if not gDetRNGsrChk then begin gDetRNGsr := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGsrChk := True; end;
+      if gDetRNGsr then seed := $24563487
+                   else seed := Round(Random * (iThreadId + 1) * $324594A1 + $24563487);
 {$IFDEF DEBUG}
 {$Q+}
 {$R+}
@@ -607,7 +615,12 @@ var itmp, ix, iy, RayCount: Integer;
     RotV, RotW: TSMatrix3;
     RotM: array[0..32] of TSVec;
     {$IFDEF FPC_DIAG}DiagStr: String;{$ENDIF}
+    lseed: LongWord;
 begin
+    if not gDetRNGsrChk then begin gDetRNGsr := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGsrChk := True; end;
+    // DIAG (MB3D_DETRNG=1): per-pixel deterministic seed for the first-step jitter below
+    // (mirrors CalcThread's per-pixel seed 214013*(y*W+x)+2531011 so reflection-AO is reproducible).
+    lseed := LongWord(214013 * (yy * PMCT^.iMandWidth + xx) + 2531011);
     mPsiLight.AmbShadow := 0;
 
              //option AO on BG             //inside, no Shadow  (if cut-option "and" other cutplanes, this has to be considered)
@@ -704,7 +717,12 @@ begin
             if bFirstStep then
             begin
               bFirstStep := False;
-              dT1 := dT1 * (Random * 1.5 + s05);
+              if gDetRNGsr then
+              begin
+                lseed := 214013 * lseed + 2531011;
+                dT1 := dT1 * ((((lseed shr 8) and $7FFFFF) * (1 / $7FFFFF)) * 1.5 + s05);
+              end
+              else dT1 := dT1 * (Random * 1.5 + s05);
             end
             else if dT1 > maxDist then
             begin
@@ -894,7 +912,9 @@ begin
       DEstop := msDEstop;
       Iteration3Dext.CalcSIT := False;
    //   seed := Round(Random * $324594A1 + $24563487);
-      seed := Round(Random * (iThreadId + 1) * $324594A1 + $24563487);
+      if not gDetRNGsrChk then begin gDetRNGsr := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGsrChk := True; end;
+      if gDetRNGsr then seed := $24563487
+                   else seed := Round(Random * (iThreadId + 1) * $324594A1 + $24563487);
       iDEAddSteps := 5;
 
       RayCount := (1 shl Quality) * 8;  //Build ray vectors  8, 16, 32, 64

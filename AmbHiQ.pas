@@ -90,6 +90,12 @@ implementation
 
 uses Math, Mand, Math3D, DivUtils, ImageProcess, SysUtils, Forms;
 
+// DIAGNOSTIC (MB3D_DETRNG=1): replace the time+thread-seeded HiQ-rand AO seed with a fixed
+// deterministic constant, so aoType-2 (TAmbHiQCalcR/RT0) renders are reproducible run-to-run
+// under single-thread (removes the global Random() dependence). Default OFF = original.
+var gDetRNGao: LongBool = False;
+    gDetRNGaoChk: LongBool = False;
+
 procedure DelayATRet(ThreadCount: Integer; PCTS: TPCalcThreadStats);
 var Tick: Double;
     x, y, Milliseconds: Integer;
@@ -1367,7 +1373,9 @@ begin
 {$Q-}
 {$R-}
 {$ENDIF}
-      seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
+      if not gDetRNGaoChk then begin gDetRNGao := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGaoChk := True; end;
+      if gDetRNGao then seed := $24563487
+                   else seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
 {$IFDEF DEBUG}
 {$Q+}
 {$R+}
@@ -1633,7 +1641,9 @@ begin
         StepCount := 3;
       end;
       sMinRad[1] := sMinRad[0];
-      seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
+      if not gDetRNGaoChk then begin gDetRNGao := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGaoChk := True; end;
+      if gDetRNGao then seed := $24563487
+                   else seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
       iand := iStep - 1;
       ssub[0] := iand * 0.5;
       ssub[1] := ssub[0];
@@ -1978,7 +1988,9 @@ begin
         StepCount := 3;
       end;
       sMinRad[1] := sMinRad[0];
-      seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
+      if not gDetRNGaoChk then begin gDetRNGao := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGaoChk := True; end;
+      if gDetRNGao then seed := $24563487
+                   else seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
       iand := iStep * 2 - 1;  //1,2,4,8,...  1,  3,  7,   15
       ssub[0] := iand * 0.5;             // .5  1.5  3.5  7.5
       ssub[1] := ssub[0];
@@ -2228,7 +2240,9 @@ begin
         StepCount := 3;
       end;
       sMinRad[1] := sMinRad[0];
-      seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
+      if not gDetRNGaoChk then begin gDetRNGao := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGaoChk := True; end;
+      if gDetRNGao then seed := $24563487
+                   else seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
       iand := iStep * 2 - 1;  //1,2,4,8,...  1,  3,  7,   15
       ssub[0] := iand * 0.5;             // .5  1.5  3.5  7.5
       ssub[1] := ssub[0];
@@ -2460,7 +2474,9 @@ begin
       HHi := MHeight - 1 - HLo;
       sit := ASCpar.aZScaleFactor / 22000.0 * 4096; //aZScaleFactor := (Sqr(256 / ZcMul + 1) - 1) / Zcorr;
       y   := ASCpar.aYStart;
-      seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
+      if not gDetRNGaoChk then begin gDetRNGao := SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1'; gDetRNGaoChk := True; end;
+      if gDetRNGao then seed := $24563487
+                   else seed := Round(Random * (ASCpar.aThreadId + 1) * $324594A1 + $24563487);
   //    sZRT := ASCpar.aZRThreshold * 0.7 * 4096 / sit * Sqrt(Sqrt(ASCpar.aATlevelCount / ASCpar.aCurrentLevel));  //Threshold depends on level
       sit := sit * 0.00001;
       StepCount := Round(Sqrt(Sqr(MWidth) + Sqr(MHeight)) * 0.1) + 1;

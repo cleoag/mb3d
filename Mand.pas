@@ -1551,6 +1551,13 @@ var stmp: String;
     iHL, iaHL, iprogHL, ymHL: Integer;   // headless vol-light-map wait loop + progress
     VLMstatsHL: TCalcThreadStats;    // headless vol-light-map thread stats
 begin
+    // DIAGNOSTIC (MB3D_DETRNG=1): belt-and-suspenders catch-all. Reset the FPC global
+    // RandSeed (System) to a FIXED value once per render invocation, BEFORE any calc/
+    // post-proc thread is spawned, so ANY ungated Random() site (2D/stereo, exotic modes,
+    // anything we missed) becomes byte-reproducible run-to-run. Gated: default (env unset)
+    // leaves RandSeed untouched => byte-identical to prior behavior.
+    if SysUtils.GetEnvironmentVariable('MB3D_DETRNG') = '1' then
+      RandSeed := 1234567;
     if AnimationForm.AniOption = 3 then
     begin
       AniFileAlreadyExists(stmp);
