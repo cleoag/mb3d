@@ -229,24 +229,34 @@ end;
 procedure HeadlessOnRenderComplete(bmp: Graphics.TBitmap);
 var OutputDir: String;
 begin
-  HeadlessLog('Render complete. Saving output...');
+  try
+    HeadlessLog('Render complete. Saving output...');
 
-  { Ensure output directory exists }
-  OutputDir := ExtractFilePath(ExpandFileName(HeadlessOutputFile));
-  if (OutputDir <> '') and not DirectoryExists(OutputDir) then
-    ForceDirectories(OutputDir);
+    { Ensure output directory exists }
+    OutputDir := ExtractFilePath(ExpandFileName(HeadlessOutputFile));
+    if (OutputDir <> '') and not DirectoryExists(OutputDir) then
+      if not ForceDirectories(OutputDir) then
+        raise Exception.Create('cannot create output directory: ' + OutputDir);
 
-  { bmp is Image1.Picture.Bitmap, already AA-downscaled by the
-    caller (SdoAA in Mand.pas before calling us). Save it. }
-  case HeadlessFormat of
-    0: SavePNG(HeadlessOutputFile, bmp, False);
-    1: SaveJPEGfromBMP(HeadlessOutputFile, bmp, 95);
-    2: SaveBMP(HeadlessOutputFile, bmp, Graphics.pf24bit);
+    { bmp is Image1.Picture.Bitmap, already AA-downscaled by the
+      caller (SdoAA in Mand.pas before calling us). Save it. }
+    case HeadlessFormat of
+      0: SavePNG(HeadlessOutputFile, bmp, False);
+      1: SaveJPEGfromBMP(HeadlessOutputFile, bmp, 95);
+      2: SaveBMP(HeadlessOutputFile, bmp, Graphics.pf24bit);
+    end;
+
+    HeadlessLog('Saved: ' + HeadlessOutputFile);
+    HeadlessLog('Done.');
+    Halt(0);
+  except
+    on E: Exception do
+    begin
+      { Never let Application.HandleException turn a headless I/O error into a modal popup. }
+      WriteLn(StdErr, '[MB3D] Headless save failed: ' + E.ClassName + ': ' + E.Message);
+      Halt(1);
+    end;
   end;
-
-  HeadlessLog('Saved: ' + HeadlessOutputFile);
-  HeadlessLog('Done.');
-  Halt(0);
 end;
 
 end.

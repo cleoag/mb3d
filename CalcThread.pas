@@ -775,13 +775,23 @@ begin
 end;
 
 procedure TMandCalcThread.Execute;
-var itmp, x, y, seed: Integer;
+var itmp, x, y, seed, traceX, traceY, traceSep: Integer;
+    traceSpec: String;
     pCTR: TPCTrecord;
     DElimited, bFirstStep, bInsideTmp: LongBool;
     RSFmul, StepCount: Single;
     RLastStepWidth, dTmp, dT1, RLastDE: Double;
 label label1;
 begin
+    traceX := -1;
+    traceY := -1;
+    traceSpec := SysUtils.GetEnvironmentVariable('MB3D_COLTRACE');
+    traceSep := Pos(';', traceSpec);
+    if traceSep > 0 then
+    begin
+      traceX := StrToIntDef(Copy(traceSpec, 1, traceSep - 1), -1);
+      traceY := StrToIntDef(Copy(traceSpec, traceSep + 1, MaxInt), -1);
+    end;
     with MCTparas do    // MainProcedure CalcMand
     try
       pCTR := @PCalcThreadStats.CTrecords[iThreadID];
@@ -953,10 +963,22 @@ label1:   begin
 
                 TCalculateNormalsFunc(pCalcNormals)(@MCTparas, RSFmul);
 
+                if (x = traceX) and (y = traceY) then
+                  WriteLn(StdErr, Format(
+                    'COLSTATE-REF(%d,%d) hp=(%.12g,%.12g,%.12g) xyz=(%.12g,%.12g,%.12g) '+
+                    'it=%d OT=%.12g Dfree2=%.12g ColorOnIt=%d',
+                    [x, y, Iteration3Dext.C1, Iteration3Dext.C2, Iteration3Dext.C3,
+                     Iteration3Dext.x, Iteration3Dext.y, Iteration3Dext.z,
+                     Iteration3Dext.ItResultI, Iteration3Dext.OTrap, Iteration3Dext.Dfree2,
+                     ColorOnIt]));
+
                 if DElimited then RSFmul := 32767 - (RSFmul + dColPlus + mctColVarDEstopMul * ln(MaxCS(DEstop, msDEstop) * StepWidth)) * mctsM
                              else RSFmul := 32767 - RSFmul * mctsM; //in DEcomb mctsM for min or max result!!!  mctsM := 32767 / (iMaxIt2 + 1);
                 MinMaxClip15bit(RSFmul, mPsiLight.SIgradient);                                                             //->   MaxItsResult
                 if ColorOnIt <> 0 then doColorOnIt;
+                if (x = traceX) and (y = traceY) then
+                  WriteLn(StdErr, Format('COLSTATE-REF-AFTER-COI(%d,%d) it=%d OT=%.12g Dfree2=%.12g',
+                    [x, y, Iteration3Dext.ItResultI, Iteration3Dext.OTrap, Iteration3Dext.Dfree2]));
                 RMdoColor(@MCTparas);
                 CalcZposAndRough(mPsiLight, @MCTparas, mZZ);   //roughness after normals calc
 

@@ -309,7 +309,8 @@ asm
 end;
 
 procedure TCalcAmbShadowDEThreadGeneral.Execute;
-var itmp, itmp2, x, y, RayCount: Integer;
+var itmp, itmp2, x, y, RayCount, traceX, traceY, traceSep: Integer;
+    traceSpec: String;
     mPsiLight: TPsiLight5;
     DElimited, bEnd, bFirstStep, bInsideTmp: LongBool;
     StepAO, DEmul, DStepMul, sMaxD, MDd10, Amul, Apow: Single;
@@ -327,6 +328,15 @@ var itmp, itmp2, x, y, RayCount: Integer;
     RotM: array[0..32] of TSVec;
     RowCount: array[1..4] of Integer;
 begin
+    traceX := -1;
+    traceY := -1;
+    traceSpec := SysUtils.GetEnvironmentVariable('MB3D_COLTRACE');
+    traceSep := Pos(';', traceSpec);
+    if traceSep > 0 then
+    begin
+      traceX := StrToIntDef(Copy(traceSpec, 1, traceSep - 1), -1);
+      traceY := StrToIntDef(Copy(traceSpec, traceSep + 1, MaxInt), -1);
+    end;
     with MCTparas do
     try
       IniIt3D(@MCTparas, @Iteration3Dext);
@@ -443,6 +453,11 @@ begin
             end;
             msDEstop := MinCS(msDEstop, 1e6);
             mCopyVec(@IC, @Iteration3Dext.C1);
+            if (x = traceX) and (y = traceY) then
+              WriteLn(StdErr, Format(
+                'AO-START-REF(%d,%d) DElimited=%d pos=(%.12g,%.12g,%.12g) ms=%.12g zz=%.12g inside=%d',
+                [x, y, Ord(DElimited), IC[0], IC[1], IC[2], msDEstop, ZZ,
+                 Ord(bInsideRendering)]));
             StepAO := msDEstop / DEstop;
             MaxDist := sMaxD * Sqrt(StepAO);
             if bVaryDEstop then
@@ -511,7 +526,13 @@ begin
             begin
               SVec := RotM[itmp];
               RotateSVectorReverseS(@SVec, @RotW); //rotate halfsphere vec to normal vec
+              if (x = traceX) and (y = traceY) and (itmp = 0) then
+                WriteLn(StdErr, Format('AO_DIR_REF_LOCAL n=(%.9g;%.9g;%.9g)',
+                  [SVec[0], SVec[1], SVec[2]]));
               RotateSVectorS(@SVec, @RotV);     //rotate to abs vec with vgrads
+              if (x = traceX) and (y = traceY) and (itmp = 0) then
+                WriteLn(StdErr, Format('AO_DIR_REF_WORLD rw=(%.9g;%.9g;%.9g)',
+                  [SVec[0], SVec[1], SVec[2]]));
 
            //   MaxDistV := MaxDist;
           //    if iCutOptions > 0 then MaxDistV := MaxCD(0, MinCD(MaxDistV, MinLengthToCutPlane(@MCTparas, @SVec, @IC)));
@@ -534,6 +555,11 @@ begin
                 CopyAddSVecWeight(@Iteration3Dext.C1, @IC, @SVec, dT1);
                 if (iCutOptions > 0) and AtCutPlane2(@MCTparas, @Iteration3Dext.C1, dT1 * sDT1mul) then Break;
                 dT2 := CalcDE(@Iteration3Dext, @MCTparas);   //  @SVec{      rotv[2] = midpos viewvec?
+                if (x = traceX) and (y = traceY) then
+                  WriteLn(StdErr, Format(
+                    'AO_RAY_REF r=%d t=%.12g p=(%.15g;%.15g;%.15g) de=%.15g ms=%.15g',
+                    [itmp, dT1, Iteration3Dext.C1, Iteration3Dext.C2,
+                     Iteration3Dext.C3, dT2, msDEstop]));
                 if bInsideRendering and not bIsIFS then      //Result := ((C1 - dCOX) / Vec[0]) - plusD < 0;
                 begin                                        //MinLengthToCutPlane(MCTparas: PMCTparameter; Vec: TPSVec; vPos: TPPos3D): Double;
                   if dT2 < msDEstop then
