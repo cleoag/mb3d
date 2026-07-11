@@ -407,6 +407,7 @@ begin
         while x <= CalcRect.Right do
         begin
           PCalcThreadStats.CTrecords[iThreadID].iActualXpos := x;
+          if gDetRNGsr then seed := 214013 * (y * iMandWidth + x) + 2531011;
           mPsiLight.AmbShadow := 0;
                  //option AO on BG             //inside, no Shadow  (if cut-option "and" other cutplanes, this has to be considered)
           if (mPsiLight.Zpos < 32768) and (mPsiLight.SIgradient < 32768) then
@@ -985,6 +986,7 @@ begin
         while x <= CalcRect.Right do
         begin
           PCalcThreadStats.CTrecords[iThreadID].iActualXpos := x;
+          if gDetRNGsr then seed := 214013 * (y * iMandWidth + x) + 2531011;
           mPsiLight.AmbShadow := 0;
                  //option AO on BG             //inside, no Shadow  (if cut-option "and" other cutplanes, this has to be considered)
           if (mPsiLight.Zpos < 32768) and (mPsiLight.SIgradient < 32768) then
